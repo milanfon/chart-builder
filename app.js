@@ -10,6 +10,8 @@ writer.startDocument();
 writer.startElement('svg');
 writer.writeAttribute('width', 2000);
 writer.writeAttribute('height', 1000);
+writer.writeAttribute('xmlns', "http://www.w3.org/2000/svg");
+writer.writeAttribute('xmlns:xlink', "http://www.w3.org/1999/xlink");
 writer.startElement('text');
 writer.writeAttribute('x', "50%");
 writer.writeAttribute('y', "5%");
