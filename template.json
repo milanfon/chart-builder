@@ -1,7 +1,35 @@
 {
   "pages": [
     {
-      "name": "CoD: MW II – 1080p – Balanced preset [FPS]"
+      "name": "CoD: MW II – 1080p – Balanced preset [FPS]",
+      "keys": [
+        {
+          "name": "Průměr",
+          "key": "avg",
+          "color": "red"
+        },
+        {
+          "name": "1% Percentil",
+          "key": "percentile",
+          "color": "orange"
+        }
+      ],
+      "series": [
+        {
+          "name": "Arc A750",
+          "values": {
+            "avg": 69.9,
+            "percentile": 42
+          }
+        },
+        {
+          "name": "RX 7600",
+          "values": {
+            "avg": 23,
+            "percentile": 13
+          }
+        }
+      ]
     }
   ]
 }
