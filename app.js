@@ -1,7 +1,7 @@
 const fs = require('fs');
 const XMLWriter = require('xml-writer');
 
-const input = require('./template.json');
+const input = require('./template.json').pages[0];
 
 const stream = fs.createWriteStream('./output.svg');
 const writer = new XMLWriter(true, (str, enc) => stream.write(str, enc));
