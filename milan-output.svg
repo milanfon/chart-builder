@@ -39,7 +39,7 @@
                     y="50%"
                     font-size="25pt"
                     text-anchor="start"
-                    dominant-baseline="hanging">Bla</text>
+                    dominant-baseline="middle">Bla</text>
         </g>
     </g>
 </svg>
