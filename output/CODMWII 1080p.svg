@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="2000" height="1000" version="1.1"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:svg="http://www.w3.org/2000/svg">
+    <text x="50%" y="5%" text-anchor="middle" dominant-baseline="hanging"
+    font-family="Roboto Medium" font-size="26pt"
+    id="text513">CoD: MW II – 1080p – Balanced preset [FPS]</text> 
+    <g transform="scale(0.9) translate(100 100)">
+        
+            <text x="0" y="33.3%" font-size="25pt" text-anchor="start" dominant-baseline="middle">
+            Arc A750
+            </text>
+        
+            <text x="0" y="66.7%" font-size="25pt" text-anchor="start" dominant-baseline="middle">
+            RX 7600
+            </text>
+        
+    </g>
+</svg>

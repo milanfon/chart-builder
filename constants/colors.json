@@ -1,0 +1,22 @@
+{
+    "general": {
+        "background": "5A5A5A",
+        "outline": "FFFFFF",
+        "font-primary": "FFFFFF",
+        "font-secondary": "B6B6B6"
+    },
+    "avg-percentile": {
+        "general": {
+            "primary": "0288E8",
+            "secondary": "0062BC"
+        },
+        "primary": {
+            "primary": "E61C00",
+            "secondary": "8F2300"
+        },
+        "secondary": {
+            "primary": "F97700",
+            "secondary": "AD5400"
+        }
+    }
+}
