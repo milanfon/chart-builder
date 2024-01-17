@@ -5,6 +5,7 @@ const {getCurrentDateMonth, imageToBase64} = require("../includes/aux");
 class Page {
     constructor(props) {
         this.props = props;
+        this.calcMaxScale();
     }
 
     betterMap = {
@@ -26,7 +27,15 @@ class Page {
         ]
     }
 
-    
+    calcMaxScale() {
+        this.max = 0;
+        this.props.values.forEach(i => {
+            const m = Math.max(...i.val);
+            if (m > this.max)
+                this.max = m;
+        });
+        this.max = this.max * 1.1;
+    }
 
     renderHeader() {
         const imageHref = `data:image/png;base64,${imageToBase64("./assets/logo.png")}`;
@@ -81,6 +90,48 @@ class Page {
         `;
     }
 
+    scaleBar(val) {
+        const unit = dimensions["bar-length"] / this.max;
+        return val * unit;
+    }
+
+    renderSeries() {
+        const h = 100;
+        const n = this.props.values.length;
+        const height = 860;
+        const one = (height / n);
+        const d = (one - h) / 2;
+        const mapped = this.props.values.map((val, index) => {
+                const iconHref = val?.icon ? `<image xlink:href="data:image/png;base64,${imageToBase64("./assets/icons/"+val.icon+".png")}" x="0" y="0" width="40" height="40"/>` : undefined;
+                return `
+                <g transform="translate(10 ${index * one + d})">
+                    ${iconHref || ""}
+                    <text x="${iconHref ? 50 : 0}" y="20" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="40" dominant-baseline="central">${val.name}</text>
+                    <text x="0" y="50" fill="#${colors.general["font-secondary"]}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="28" dominant-baseline="hanging">${val.date}</text>
+                    <text x="95" y="50" fill="#${colors.general["font-secondary"]}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="28" dominant-baseline="hanging">${val.model}</text>
+                </g>
+            `});
+        const bars = this.props.values.map((val, index) => {
+            const variant = val?.variant || "general";
+            return `
+                <g transform="translate(0 ${index * one + d})">
+                    <rect x="0" y="0" width="${this.scaleBar(val.val[0])}" height="40" fill="#${colors[this.props.type][variant].primary}"/>
+                    <text x="${this.scaleBar(val.val[0]) - 15}" y="20" fill="#${colors.general["font-primary"]}" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">${val.val[0]}</text>
+                    <rect x="0" y="40" width="${this.scaleBar(val.val[1])}" height="40" fill="#${colors[this.props.type][variant].secondary}"/>
+                    <text x="${this.scaleBar(val.val[1]) - 15}" y="60" fill="#${colors.general["font-primary"]}" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">${val.val[1]}</text>
+                </g>
+            `});
+        return `
+            <g transform="translate(60, 150)">
+                ${mapped}
+            </g>
+            <g transform="translate(520, 150)">
+                ${bars}
+            </g>
+            <line x1="520" y1="150" x2="520" y2="1010" stroke="#${colors.general.outline}" stroke-width="2"/>
+        `;
+    }
+
     render() {
         return `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg width="${dimensions.canvas.width}" height="${dimensions.canvas.height}" version="1.1"
@@ -90,6 +141,7 @@ class Page {
     <rect x="30" y="30" width="2100" height="1020" fill="none" stroke="#${colors.general.outline}" stroke-width="2"/>
     ${this.renderHeader()}
     ${this.renderFooter()}
+    ${this.renderSeries()}
 </svg>`;
     }
 }

@@ -12,16 +12,14 @@
             "date": "06/23",
             "model": "GIGABYTE GAMING",
             "icon": "nvidia",
-            "avg": 60.1,
-            "percentile": 40
+            "val": [60.1, 40]
         },
         {
             "name": "RTX 4070 SUPER",
             "date": "01/24",
             "model": "ASUS TUF",
             "icon": "nvidia",
-            "avg": 58.5,
-            "percentile": 44,
+            "val": [58.5, 44],
             "variant": "primary"
         },
         {
@@ -29,16 +27,14 @@
             "date": "08/23",
             "model": "PALIT JetStream",
             "icon": "nvidia",
-            "avg": 46.7,
-            "percentile": 30
+            "val": [46.7, 30]
         },
         {
             "name": "RX 7800 XT",
             "date": "10/23",
             "model": "SAPPHIRE NITRO+",
             "icon": "amd",
-            "avg": 46.7,
-            "percentile": 30,
+            "val": [43.8, 35],
             "variant": "secondary"
         }
     ]

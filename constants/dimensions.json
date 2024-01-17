@@ -2,5 +2,6 @@
     "canvas": {
         "width": 2160,
         "height": 1080
-    }
+    },
+    "bar-length": 1580
 }
