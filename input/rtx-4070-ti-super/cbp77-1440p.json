@@ -1,0 +1,112 @@
+{
+    "name": "Cyberpunk 2077 - 1440p",
+    "settings": "High, DLSS 2 Balanced",
+    "driver": "551.15",
+    "version": "2.1",
+    "type": "avg-percentile",
+    "units": "FPS",
+    "better": "higher",
+    "values": [
+        {
+            "name": "RTX 4090",
+            "date": "08/24",
+            "model": "MSI SUPRIM X",
+            "icon": "nvidia",
+            "val": [172, 155.4]
+        },
+        {
+            "name": "RTX 4070 Ti",
+            "date": "03/23",
+            "model": "GIGABYTE GAMING",
+            "icon": "nvidia",
+            "val": [132.1, 76.9],
+            "variant": "secondary"
+        },
+        {
+            "name": "RTX 4070 Ti SUPER",
+            "date": "01/24",
+            "model": "MSI Ventus 3X",
+            "icon": "nvidia",
+            "val": [131.5, 86.7],
+            "variant": "primary"
+        },
+        {
+            "name": "RTX 4070 SUPER",
+            "date": "01/24",
+            "model": "ASUS TUF",
+            "icon": "nvidia",
+            "val": [127.3, 85.4]
+        },
+        {
+            "name": "RX 7900 XT",
+            "date": "10/23",
+            "model": "ASUS TUF",
+            "icon": "amd",
+            "val": [125.6, 79],
+            "variant": "secondary"
+        },
+        {
+            "name": "RX 7800 XT",
+            "date": "10/23",
+            "model": "SAPPHIRE NITRO+",
+            "icon": "amd",
+            "val": [119.9, 77.6]
+        },
+        {
+            "name": "RTX 3080",
+            "date": "01/23",
+            "model": "NVIDIA FE",
+            "icon": "nvidia",
+            "val": [119.5, 82.8]
+        },
+        {
+            "name": "RTX 4070",
+            "date": "01/24",
+            "model": "PALIT JetStream",
+            "icon": "nvidia",
+            "val": [113.1, 68.8]
+        },
+        {
+            "name": "RTX 4060 Ti",
+            "date": "06/23",
+            "model": "NVIDIA FE",
+            "icon": "nvidia",
+            "val": [104.4, 63.5]
+        },
+        {
+            "name": "RTX 3070",
+            "date": "01/23",
+            "model": "MSI Gaming Z",
+            "icon": "nvidia",
+            "val": [103.9, 70.1]
+        },
+        {
+            "name": "RTX 3060 Ti",
+            "date": "01/23",
+            "model": "GIGABYTE GAMING",
+            "icon": "nvidia",
+            "val": [103.6, 42.6]
+        },
+        {
+            "name": "RTX 4060",
+            "date": "07/23",
+            "model": "MSI Ventus 2X",
+            "icon": "nvidia",
+            "val": [94.7, 69.1]
+        },
+        {
+            "name": "RX 7600",
+            "date": "07/23",
+            "model": "ASUS STRIX",
+            "icon": "amd",
+            "val": [91.1, 74.3]
+        },
+        {
+            "name": "ARC A750",
+            "date": "07/23",
+            "model": "Intel LE",
+            "icon": "intel",
+            "val": [76.7, 54.6]
+        }
+    ]
+}

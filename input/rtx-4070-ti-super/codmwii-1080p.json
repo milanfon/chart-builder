@@ -12,37 +12,45 @@
             "date": "10/23",
             "model": "ASUS TUF",
             "icon": "amd",
-            "val": [217.9, 171.1]
+            "val": [217.9, 171.1],
+            "variant": "secondary"
         },
         {
             "name": "RTX 4070 Ti",
-            "date": "06/23",
+            "date": "01/24",
             "model": "GIGABYTE GAMING",
             "icon": "nvidia",
-            "val": [60.1, 40]
+            "val": [210.1, 172.4],
+            "variant": "secondary"
         },
         {
-            "name": "RTX 4070 SUPER",
+            "name": "RTX 4070 Ti SUPER",
             "date": "01/24",
-            "model": "ASUS TUF",
+            "model": "MSI Ventus 3X",
             "icon": "nvidia",
-            "val": [58.5, 44],
+            "val": [204.8, 164.4],
             "variant": "primary"
-        },
-        {
-            "name": "RTX 4070",
-            "date": "08/23",
-            "model": "PALIT JetStream",
-            "icon": "nvidia",
-            "val": [46.7, 30]
         },
         {
             "name": "RX 7800 XT",
             "date": "10/23",
             "model": "SAPPHIRE NITRO+",
             "icon": "amd",
-            "val": [43.8, 35],
-            "variant": "secondary"
+            "val": [183.8, 143.1]
+        },
+        {
+            "name": "RTX 4070",
+            "date": "01/24",
+            "model": "PALIT JetStream",
+            "icon": "nvidia",
+            "val": [173.3, 134.5]
+        },
+        {
+            "name": "RTX 4070 SUPER",
+            "date": "01/24",
+            "model": "ASUS TUF",
+            "icon": "nvidia",
+            "val": [172.2, 135.1]
         }
     ]
 }

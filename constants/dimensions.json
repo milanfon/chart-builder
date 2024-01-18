@@ -3,5 +3,8 @@
         "width": 2160,
         "height": 1080
     },
-    "bar-length": 1580
+    "bar-length": 1580,
+    "font-size": {
+        "unit": 26
+    }
 }

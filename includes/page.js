@@ -95,37 +95,46 @@ class Page {
         return val * unit;
     }
 
-    renderSeries() {
-        const h = 100;
-        const n = this.props.values.length;
-        const height = 860;
-        const one = (height / n);
-        const d = (one - h) / 2;
-        const mapped = this.props.values.map((val, index) => {
-                const iconHref = val?.icon ? `<image xlink:href="data:image/png;base64,${imageToBase64("./assets/icons/"+val.icon+".png")}" x="0" y="0" width="40" height="40"/>` : undefined;
+    getDescriptions(one, d, scale) {
+        return this.props.values.map((val, index) => {
+                const iconHref = val?.icon ? `<image xlink:href="data:image/png;base64,${imageToBase64("./assets/icons/"+val.icon+".png")}" x="0" y="0" width="${40 * scale}" height="${40 * scale}"/>` : undefined;
                 return `
-                <g transform="translate(10 ${index * one + d})">
+                <g transform="translate(0 ${index * one + d})">
                     ${iconHref || ""}
-                    <text x="${iconHref ? 50 : 0}" y="20" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="40" dominant-baseline="central">${val.name}</text>
-                    <text x="0" y="50" fill="#${colors.general["font-secondary"]}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="28" dominant-baseline="hanging">${val.date}</text>
-                    <text x="95" y="50" fill="#${colors.general["font-secondary"]}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="28" dominant-baseline="hanging">${val.model}</text>
+                    <text x="${iconHref ? 50 : 0}" y="${20 * scale}" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="${40 * scale}" dominant-baseline="central">${val.name}</text>
+                    <text x="0" y="${50 * scale}" fill="#${colors.general["font-secondary"]}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="${28 * scale}" dominant-baseline="hanging">${val.date}</text>
+                    <text x="95" y="${50 * scale}" fill="#${colors.general["font-secondary"]}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="${28 * scale}" dominant-baseline="hanging">${val.model}</text>
                 </g>
             `});
-        const bars = this.props.values.map((val, index) => {
+    }
+
+    getBars(one, d, scale) {
+        return this.props.values.map((val, index) => {
             const variant = val?.variant || "general";
             return `
                 <g transform="translate(0 ${index * one + d})">
-                    <rect x="0" y="0" width="${this.scaleBar(val.val[0])}" height="40" fill="#${colors[this.props.type][variant].primary}"/>
-                    <text x="${this.scaleBar(val.val[0]) - 15}" y="20" fill="#${colors.general["font-primary"]}" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">${val.val[0]}</text>
-                    <rect x="0" y="40" width="${this.scaleBar(val.val[1])}" height="40" fill="#${colors[this.props.type][variant].secondary}"/>
-                    <text x="${this.scaleBar(val.val[1]) - 15}" y="60" fill="#${colors.general["font-primary"]}" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">${val.val[1]}</text>
+                    <rect x="0" y="0" width="${this.scaleBar(val.val[0])}" height="${40 * scale}" fill="#${colors[this.props.type][variant].primary}"/>
+                    <text x="${this.scaleBar(val.val[0]) - 15}" y="${20 * scale}" fill="#${colors.general["font-primary"]}" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="${dimensions["font-size"].unit * scale}" dominant-baseline="central">${val.val[0]}</text>
+                    <rect x="0" y="${40 * scale}" width="${this.scaleBar(val.val[1])}" height="${40 * scale}" fill="#${colors[this.props.type][variant].secondary}"/>
+                    <text x="${this.scaleBar(val.val[1]) - 15}" y="${60 * scale}" fill="#${colors.general["font-primary"]}" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="${dimensions["font-size"].unit * scale}" dominant-baseline="central">${val.val[1]}</text>
                 </g>
             `});
+    }
+
+    renderSeries() {
+        const h = 100;
+        const n = this.props.values.length;
+        const height = 840;
+        const one = (height / n);
+        const d = (one - h) / 2;
+        const scale = n > 8 ? (one/h) : 1;
+        const mapped = this.getDescriptions(one, d, scale);
+        const bars = this.getBars(one, d, scale);
         return `
-            <g transform="translate(60, 150)">
+            <g transform="translate(60, 175)">
                 ${mapped}
             </g>
-            <g transform="translate(520, 150)">
+            <g transform="translate(520, 175)">
                 ${bars}
             </g>
             <line x1="520" y1="150" x2="520" y2="1010" stroke="#${colors.general.outline}" stroke-width="2"/>
