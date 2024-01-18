@@ -1,17 +1,18 @@
 {
-    "name": "Cyberpunk 2077 - 1080p",
-    "settings": "High, DLSS 2 Balanced",
-    "driver": "502.11",
-    "version": "2.1",
+    "name": "CoD: MW II - 1080p",
+    "settings": "Extreme",
+    "driver": "551.15",
+    "version": "9.29.17006949",
     "type": "avg-percentile",
     "units": "FPS",
     "better": "higher",
     "values": [
         {
             "name": "RX 7900 XT",
-            "date": "03/23",
+            "date": "10/23",
             "model": "ASUS TUF",
-            "val": [75.6, 50]
+            "icon": "amd",
+            "val": [217.9, 171.1]
         },
         {
             "name": "RTX 4070 Ti",

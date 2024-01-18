@@ -13,15 +13,15 @@
             <line x1="1320" y1="70" x2="1820" y2="70" stroke="#FFFFFF" stroke-width="2"/>
             <line x1="1320" y1="110" x2="1820" y2="110" stroke="#FFFFFF" stroke-width="2"/>
             <rect x="240" y="30" width="1080" height="120" fill="#FFFFFF"/>
-            <text x="270" y="90" fill="#5A5A5A" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="40" dominant-baseline="central">Cyberpunk 2077 - 1080p</text>
+            <text x="270" y="90" fill="#5A5A5A" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="40" dominant-baseline="central">CoD: MW II - 1080p</text>
 
             <text x="1340" y="50" fill="#FFFFFF" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">Nastavení</text>
             <text x="1340" y="90" fill="#FFFFFF" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">Driver</text>
             <text x="1340" y="130" fill="#FFFFFF" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">Verze</text>
             
-            <text x="1540" y="50" fill="#FFFFFF" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">High, DLSS 2 Balanced</text>
-            <text x="1540" y="90" fill="#FFFFFF" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">502.11</text>
-            <text x="1540" y="130" fill="#FFFFFF" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">2.1</text>
+            <text x="1540" y="50" fill="#FFFFFF" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">Extreme</text>
+            <text x="1540" y="90" fill="#FFFFFF" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">551.15</text>
+            <text x="1540" y="130" fill="#FFFFFF" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">9.29.17006949</text>
 
             <text x="1975" y="90" fill="#FFFFFF" text-anchor="middle" align-baseline="middle" font-family="Russo One" font-size="40" dominant-baseline="central">01/2024</text>
 
@@ -54,9 +54,9 @@
             <g transform="translate(60, 150)">
                 
                 <g transform="translate(10 36)">
-                    
-                    <text x="0" y="20" fill="#FFFFFF" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="40" dominant-baseline="central">RX 7900 XT</text>
-                    <text x="0" y="50" fill="#B6B6B6" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="28" dominant-baseline="hanging">03/23</text>
+                    <image xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAFoCAYAAAB65WHVAAAACXBIWXMAAAsTAAALEwEAmpwYAAAE9GlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgOS4wLWMwMDAgNzkuMTcxYzI3ZmFiLCAyMDIyLzA4LzE2LTIyOjM1OjQxICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1sbnM6cGhvdG9zaG9wPSJodHRwOi8vbnMuYWRvYmUuY29tL3Bob3Rvc2hvcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RFdnQ9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgMjQuMCAoTWFjaW50b3NoKSIgeG1wOkNyZWF0ZURhdGU9IjIwMjQtMDEtMTdUMjA6NDg6MzIrMDE6MDAiIHhtcDpNb2RpZnlEYXRlPSIyMDI0LTAxLTE3VDIwOjQ5OjA2KzAxOjAwIiB4bXA6TWV0YWRhdGFEYXRlPSIyMDI0LTAxLTE3VDIwOjQ5OjA2KzAxOjAwIiBkYzpmb3JtYXQ9ImltYWdlL3BuZyIgcGhvdG9zaG9wOkNvbG9yTW9kZT0iMyIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpjN2MzOGM3YS02Y2Q5LTQ5ZWUtYTBhZi0wZDQyYzllMzg2NDciIHhtcE1NOkRvY3VtZW50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" x="0" y="0" width="40" height="40"/>
+                    <text x="50" y="20" fill="#FFFFFF" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="40" dominant-baseline="central">RX 7900 XT</text>
+                    <text x="0" y="50" fill="#B6B6B6" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="28" dominant-baseline="hanging">10/23</text>
                     <text x="95" y="50" fill="#B6B6B6" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="28" dominant-baseline="hanging">ASUS TUF</text>
                 </g>
             ,
@@ -93,37 +93,37 @@
                 
                 <g transform="translate(0 36)">
                     <rect x="0" y="0" width="1436.3636363636363" height="40" fill="#0288E8"/>
-                    <text x="1421.3636363636363" y="20" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">75.6</text>
-                    <rect x="0" y="40" width="949.97594997595" height="40" fill="#0062BC"/>
-                    <text x="934.97594997595" y="60" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">50</text>
+                    <text x="1421.3636363636363" y="20" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">217.9</text>
+                    <rect x="0" y="40" width="1127.8651591639198" height="40" fill="#0062BC"/>
+                    <text x="1112.8651591639198" y="60" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">171.1</text>
                 </g>
             ,
                 <g transform="translate(0 208)">
-                    <rect x="0" y="0" width="1141.871091871092" height="40" fill="#0288E8"/>
-                    <text x="1126.871091871092" y="20" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">60.1</text>
-                    <rect x="0" y="40" width="759.98075998076" height="40" fill="#0062BC"/>
-                    <text x="744.98075998076" y="60" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">40</text>
+                    <rect x="0" y="0" width="396.1700529851057" height="40" fill="#0288E8"/>
+                    <text x="381.1700529851057" y="20" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">60.1</text>
+                    <rect x="0" y="40" width="263.6739121365096" height="40" fill="#0062BC"/>
+                    <text x="248.6739121365096" y="60" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">40</text>
                 </g>
             ,
                 <g transform="translate(0 380)">
-                    <rect x="0" y="0" width="1111.4718614718615" height="40" fill="#E61C00"/>
-                    <text x="1096.4718614718615" y="20" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">58.5</text>
-                    <rect x="0" y="40" width="835.9788359788361" height="40" fill="#8F2300"/>
-                    <text x="820.9788359788361" y="60" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">44</text>
+                    <rect x="0" y="0" width="385.6230964996453" height="40" fill="#E61C00"/>
+                    <text x="370.6230964996453" y="20" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">58.5</text>
+                    <rect x="0" y="40" width="290.04130335016055" height="40" fill="#8F2300"/>
+                    <text x="275.04130335016055" y="60" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">44</text>
                 </g>
             ,
                 <g transform="translate(0 552)">
-                    <rect x="0" y="0" width="887.2775372775374" height="40" fill="#0288E8"/>
-                    <text x="872.2775372775374" y="20" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">46.7</text>
-                    <rect x="0" y="40" width="569.98556998557" height="40" fill="#0062BC"/>
-                    <text x="554.98556998557" y="60" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">30</text>
+                    <rect x="0" y="0" width="307.839292419375" height="40" fill="#0288E8"/>
+                    <text x="292.839292419375" y="20" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">46.7</text>
+                    <rect x="0" y="40" width="197.7554341023822" height="40" fill="#0062BC"/>
+                    <text x="182.7554341023822" y="60" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">30</text>
                 </g>
             ,
                 <g transform="translate(0 724)">
-                    <rect x="0" y="0" width="832.1789321789322" height="40" fill="#F97700"/>
-                    <text x="817.1789321789322" y="20" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">43.8</text>
-                    <rect x="0" y="40" width="664.983164983165" height="40" fill="#AD5400"/>
-                    <text x="649.983164983165" y="60" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">35</text>
+                    <rect x="0" y="0" width="288.722933789478" height="40" fill="#F97700"/>
+                    <text x="273.722933789478" y="20" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">43.8</text>
+                    <rect x="0" y="40" width="230.7146731194459" height="40" fill="#AD5400"/>
+                    <text x="215.7146731194459" y="60" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">35</text>
                 </g>
             
             </g>
