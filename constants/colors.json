@@ -5,7 +5,7 @@
         "font-primary": "FFFFFF",
         "font-secondary": "B6B6B6"
     },
-    "avg-percentile": {
+    "bars": {
         "general": {
             "primary": "0288E8",
             "secondary": "0062BC"

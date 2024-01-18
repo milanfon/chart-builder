@@ -99,45 +99,63 @@
             <g transform="translate(520, 175)">
                 
                 <g transform="translate(0 20)">
-                    <rect x="0" y="0" width="1436.3636363636363" height="40" fill="#F97700"/>
-                    <text x="1421.3636363636363" y="20" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="26" dominant-baseline="central">217.9</text>
-                    <rect x="0" y="40" width="1127.8651591639198" height="40" fill="#AD5400"/>
-                    <text x="1112.8651591639198" y="60" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="26" dominant-baseline="central">171.1</text>
+                    
+                <rect x="0" y="0" width="1436.3636363636363" height="40" fill="#F97700"/>
+                <text x="1421.3636363636363" y="20" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="26" dominant-baseline="central">217.9</text>
+            
+                <rect x="0" y="40" width="1127.8651591639198" height="40" fill="#AD5400"/>
+                <text x="1112.8651591639198" y="60" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="26" dominant-baseline="central">171.1</text>
+            
                 </g>
             ,
                 <g transform="translate(0 160)">
-                    <rect x="0" y="0" width="1384.9472234970167" height="40" fill="#F97700"/>
-                    <text x="1369.9472234970167" y="20" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="26" dominant-baseline="central">210.1</text>
-                    <rect x="0" y="40" width="1136.4345613083565" height="40" fill="#AD5400"/>
-                    <text x="1121.4345613083565" y="60" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="26" dominant-baseline="central">172.4</text>
+                    
+                <rect x="0" y="0" width="1384.9472234970167" height="40" fill="#F97700"/>
+                <text x="1369.9472234970167" y="20" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="26" dominant-baseline="central">210.1</text>
+            
+                <rect x="0" y="40" width="1136.4345613083565" height="40" fill="#AD5400"/>
+                <text x="1121.4345613083565" y="60" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="26" dominant-baseline="central">172.4</text>
+            
                 </g>
             ,
                 <g transform="translate(0 300)">
-                    <rect x="0" y="0" width="1350.0104301389292" height="40" fill="#E61C00"/>
-                    <text x="1335.0104301389292" y="20" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="26" dominant-baseline="central">204.8</text>
-                    <rect x="0" y="40" width="1083.6997788810545" height="40" fill="#8F2300"/>
-                    <text x="1068.6997788810545" y="60" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="26" dominant-baseline="central">164.4</text>
+                    
+                <rect x="0" y="0" width="1350.0104301389292" height="40" fill="#E61C00"/>
+                <text x="1335.0104301389292" y="20" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="26" dominant-baseline="central">204.8</text>
+            
+                <rect x="0" y="40" width="1083.6997788810545" height="40" fill="#8F2300"/>
+                <text x="1068.6997788810545" y="60" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="26" dominant-baseline="central">164.4</text>
+            
                 </g>
             ,
                 <g transform="translate(0 440)">
-                    <rect x="0" y="0" width="1211.5816262672618" height="40" fill="#0288E8"/>
-                    <text x="1196.5816262672618" y="20" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="26" dominant-baseline="central">183.8</text>
-                    <rect x="0" y="40" width="943.2934206683631" height="40" fill="#0062BC"/>
-                    <text x="928.2934206683631" y="60" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="26" dominant-baseline="central">143.1</text>
+                    
+                <rect x="0" y="0" width="1211.5816262672618" height="40" fill="#0288E8"/>
+                <text x="1196.5816262672618" y="20" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="26" dominant-baseline="central">183.8</text>
+            
+                <rect x="0" y="40" width="943.2934206683631" height="40" fill="#0062BC"/>
+                <text x="928.2934206683631" y="60" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="26" dominant-baseline="central">143.1</text>
+            
                 </g>
             ,
                 <g transform="translate(0 580)">
-                    <rect x="0" y="0" width="1142.367224331428" height="40" fill="#0288E8"/>
-                    <text x="1127.367224331428" y="20" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="26" dominant-baseline="central">173.3</text>
-                    <rect x="0" y="40" width="886.6035295590136" height="40" fill="#0062BC"/>
-                    <text x="871.6035295590136" y="60" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="26" dominant-baseline="central">134.5</text>
+                    
+                <rect x="0" y="0" width="1142.367224331428" height="40" fill="#0288E8"/>
+                <text x="1127.367224331428" y="20" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="26" dominant-baseline="central">173.3</text>
+            
+                <rect x="0" y="40" width="886.6035295590136" height="40" fill="#0062BC"/>
+                <text x="871.6035295590136" y="60" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="26" dominant-baseline="central">134.5</text>
+            
                 </g>
             ,
                 <g transform="translate(0 720)">
-                    <rect x="0" y="0" width="1135.1161917476738" height="40" fill="#0288E8"/>
-                    <text x="1120.1161917476738" y="20" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="26" dominant-baseline="central">172.2</text>
-                    <rect x="0" y="40" width="890.5586382410612" height="40" fill="#0062BC"/>
-                    <text x="875.5586382410612" y="60" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="26" dominant-baseline="central">135.1</text>
+                    
+                <rect x="0" y="0" width="1135.1161917476738" height="40" fill="#0288E8"/>
+                <text x="1120.1161917476738" y="20" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="26" dominant-baseline="central">172.2</text>
+            
+                <rect x="0" y="40" width="890.5586382410612" height="40" fill="#0062BC"/>
+                <text x="875.5586382410612" y="60" fill="#FFFFFF" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="26" dominant-baseline="central">135.1</text>
+            
                 </g>
             
             </g>

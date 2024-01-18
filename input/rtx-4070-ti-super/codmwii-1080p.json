@@ -3,9 +3,13 @@
     "settings": "Extreme",
     "driver": "551.15",
     "version": "9.29.17006949",
-    "type": "avg-percentile",
+    "type": "bars",
     "units": "FPS",
     "better": "higher",
+    "bars": [
+        "Průměr",
+        "1% Percentil"
+    ],
     "values": [
         {
             "name": "RX 7900 XT",

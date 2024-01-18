@@ -20,12 +20,10 @@ class Page {
         ]
     }
 
-    typesColors = {
-        "avg-percentile": [
-            "primary",
-            "secondary"
-        ]
-    }
+    barKeys = [
+        "primary",
+        "secondary"
+    ]
 
     calcMaxScale() {
         this.max = 0;
@@ -66,10 +64,11 @@ class Page {
 
     renderLegend() {
         const startX = 240;
-        return this.typesColors[this.props.type].map((val, index) => `
+        console.log(this.props.type);
+        return this.barKeys.map((val, index) => `
                 <g transform="translate(${startX + index * 150}, 1010)">
                     <rect x="5" y="5" width="30" height="30" fill="#${colors[this.props.type].general[val]}"/>
-                    <text x="${45}" y="20" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">${this.typesKeys[this.props.type][index]}</text>
+                    <text x="${45}" y="20" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">${this.props.bars[index]}</text>
                 </g>
             `);
     }
@@ -109,14 +108,22 @@ class Page {
     }
 
     getBars(one, d, scale) {
+        const h = 80;
+        const count = this.props.bars.length;
+        const unit = h/count;
+        console.log(unit);
         return this.props.values.map((val, index) => {
             const variant = val?.variant || "general";
+            let bars = "";
+            for (let i = 0; i < count; i++){
+                bars += `
+                <rect x="0" y="${i * unit * scale}" width="${this.scaleBar(val.val[i])}" height="${unit * scale}" fill="#${colors[this.props.type][variant][this.barKeys[i]]}"/>
+                <text x="${this.scaleBar(val.val[i]) - 15}" y="${(i+0.5) * unit * scale}" fill="#${colors.general["font-primary"]}" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="${dimensions["font-size"].unit * scale}" dominant-baseline="central">${val.val[i]}</text>
+            `;
+            }
             return `
                 <g transform="translate(0 ${index * one + d})">
-                    <rect x="0" y="0" width="${this.scaleBar(val.val[0])}" height="${40 * scale}" fill="#${colors[this.props.type][variant].primary}"/>
-                    <text x="${this.scaleBar(val.val[0]) - 15}" y="${20 * scale}" fill="#${colors.general["font-primary"]}" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="${dimensions["font-size"].unit * scale}" dominant-baseline="central">${val.val[0]}</text>
-                    <rect x="0" y="${40 * scale}" width="${this.scaleBar(val.val[1])}" height="${40 * scale}" fill="#${colors[this.props.type][variant].secondary}"/>
-                    <text x="${this.scaleBar(val.val[1]) - 15}" y="${60 * scale}" fill="#${colors.general["font-primary"]}" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="${dimensions["font-size"].unit * scale}" dominant-baseline="central">${val.val[1]}</text>
+                    ${bars}
                 </g>
             `});
     }

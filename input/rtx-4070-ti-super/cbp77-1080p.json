@@ -3,10 +3,13 @@
     "settings": "High, DLSS 2 Balanced",
     "driver": "551.15",
     "version": "2.1",
-    "type": "avg-percentile",
+    "type": "bars",
     "units": "FPS",
     "better": "higher",
-    "bars": 2,
+    "bars": [
+        "Průměr",
+        "1% Percentil"
+    ],
     "values": [
         {
             "name": "RTX 4090",
