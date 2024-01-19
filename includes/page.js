@@ -6,6 +6,7 @@ class Page {
     constructor(props) {
         this.props = props;
         this.calcMaxScale();
+        this.sortValues();
     }
 
     betterMap = {
@@ -33,6 +34,15 @@ class Page {
                 this.max = m;
         });
         this.max = this.max * 1.1;
+    }
+
+    sortValues() {
+        const sort = this.props?.sort;
+        if (!sort)
+            return;
+        this.props.values = this.props.values.sort((a, b) => a.val[0] - b.val[0]);
+        if (sort === 'desc')
+            this.props.values = this.props.values.reverse();
     }
 
     renderHeader() {
@@ -65,10 +75,10 @@ class Page {
     renderLegend() {
         const startX = 240;
         console.log(this.props.type);
-        return this.barKeys.map((val, index) => `
+        return this.props.bars.map((val, index) => `
                 <g transform="translate(${startX + index * 150}, 1010)">
-                    <rect x="5" y="5" width="30" height="30" fill="#${colors[this.props.type].general[val]}"/>
-                    <text x="${45}" y="20" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">${this.props.bars[index]}</text>
+                    <rect x="5" y="5" width="30" height="30" fill="#${colors[this.props.type].general[this.barKeys[index]]}"/>
+                    <text x="${45}" y="20" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">${val}</text>
                 </g>
             `);
     }
@@ -118,7 +128,7 @@ class Page {
             for (let i = 0; i < count; i++){
                 bars += `
                 <rect x="0" y="${i * unit * scale}" width="${this.scaleBar(val.val[i])}" height="${unit * scale}" fill="#${colors[this.props.type][variant][this.barKeys[i]]}"/>
-                <text x="${this.scaleBar(val.val[i]) - 15}" y="${(i+0.5) * unit * scale}" fill="#${colors.general["font-primary"]}" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="${dimensions["font-size"].unit * scale}" dominant-baseline="central">${val.val[i]}</text>
+                <text x="${this.scaleBar(val.val[i]) - 15}" y="${(i+0.5) * unit * scale}" fill="#${colors.general["font-primary"]}" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="${dimensions["font-size"].unit * scale * 1 / count}" dominant-baseline="central">${val.val[i]}</text>
             `;
             }
             return `
