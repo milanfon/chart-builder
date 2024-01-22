@@ -5,6 +5,10 @@
         "font-primary": "FFFFFF",
         "font-secondary": "B6B6B6"
     },
+    "specs": {
+        "lighter": "D9D9D9",
+        "darker": "383838"
+    },
     "bars": {
         "general": {
             "primary": "0288E8",

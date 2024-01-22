@@ -3,8 +3,9 @@ const dimensions = require("../constants/dimensions.json");
 const {getCurrentDateMonth, imageToBase64} = require("../includes/aux");
 
 class Page {
-    constructor(props) {
+    constructor(props, inputName) {
         this.props = props;
+        this.inputName = inputName;
         this.calcMaxScale();
         this.sortValues();
     }
@@ -29,7 +30,7 @@ class Page {
     calcMaxScale() {
         this.max = 0;
         this.props.values.forEach(i => {
-            const m = Math.max(...i.val);
+            const m = Math.max(...i.val.map(v => this.getAbsValue(v)));
             if (m > this.max)
                 this.max = m;
         });
@@ -40,13 +41,25 @@ class Page {
         const sort = this.props?.sort;
         if (!sort)
             return;
-        this.props.values = this.props.values.sort((a, b) => a.val[0] - b.val[0]);
+        this.props.values = this.props.values.sort((a, b) => this.getAbsValue(a.val[0]) - this.getAbsValue(b.val[0]));
         if (sort === 'desc')
             this.props.values = this.props.values.reverse();
     }
 
+    getAbsValue(val) {
+        if (this.props.units === 'min') {
+            const time = val.split(":");
+            return parseInt(time[0]) * 60 + parseInt(time[1]);
+        }
+        return val;
+    }
+
+    getEmbeddedLogo() {
+        return `data:image/png;base64,${imageToBase64("./assets/logo.png")}`;
+    }
+
     renderHeader() {
-        const imageHref = `data:image/png;base64,${imageToBase64("./assets/logo.png")}`;
+        const settingsFontSize = this.props.sizes?.["settings-font"] || 20;
         return `
             <line x1="240" y1="30" x2="240" y2="150" stroke="#${colors.general.outline}" stroke-width="2"/>
             <line x1="30" y1="150" x2="2130" y2="150" stroke="#${colors.general.outline}" stroke-width="2"/>
@@ -62,19 +75,18 @@ class Page {
             <text x="1340" y="90" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">Driver</text>
             <text x="1340" y="130" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">Verze</text>
             
-            <text x="1540" y="50" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">${this.props.settings}</text>
+            <text x="1540" y="50" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="${settingsFontSize}" dominant-baseline="central">${this.props.settings}</text>
             <text x="1540" y="90" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">${this.props.driver}</text>
             <text x="1540" y="130" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">${this.props.version}</text>
 
             <text x="1975" y="90" fill="#${colors.general.outline}" text-anchor="middle" align-baseline="middle" font-family="Russo One" font-size="40" dominant-baseline="central">${getCurrentDateMonth()}</text>
 
-            <image xlink:href="${imageHref}" x="36" y="47" width="210" height="90"/>
+            <image xlink:href="${this.getEmbeddedLogo()}" x="33" y="47" width="210" height="90"/>
         `;
     }
 
     renderLegend() {
         const startX = 240;
-        console.log(this.props.type);
         return this.props.bars.map((val, index) => `
                 <g transform="translate(${startX + index * 150}, 1010)">
                     <rect x="5" y="5" width="30" height="30" fill="#${colors[this.props.type].general[this.barKeys[index]]}"/>
@@ -100,8 +112,9 @@ class Page {
     }
 
     scaleBar(val) {
+        const converted = this.getAbsValue(val);
         const unit = dimensions["bar-length"] / this.max;
-        return val * unit;
+        return converted * unit;
     }
 
     getDescriptions(one, d, scale) {
@@ -121,7 +134,6 @@ class Page {
         const h = 80;
         const count = this.props.bars.length;
         const unit = h/count;
-        console.log(unit);
         return this.props.values.map((val, index) => {
             const variant = val?.variant || "general";
             let bars = "";
@@ -158,16 +170,77 @@ class Page {
         `;
     }
 
+    renderChart() {
+        return `
+            ${this.renderHeader()}
+            ${this.renderFooter()}
+            ${this.renderSeries()}
+        `;
+    }
+
+    renderParameters(paramLine, headLine) {
+        const paramCount = this.props.parameters.length;
+        const columnCount = this.props.values.length;
+        const totalHeight = dimensions.canvas.height - (2*dimensions.specs.padding + dimensions.specs["head-line"]);
+        const unitHeight = totalHeight / (paramCount + 1);
+        const valArea = dimensions.canvas.width - dimensions.specs.padding - paramLine;
+        const valUnit = valArea / columnCount;
+        let params = `
+            <rect x="${dimensions.specs.padding}" y="${headLine}" width="${dimensions.specs["param-line"]}" height="${totalHeight}" fill="#${colors.specs.darker}"/>
+            <rect x="${dimensions.specs.padding}" y="${headLine}" width="${dimensions.canvas.width - dimensions.specs.padding * 2}" height="${unitHeight}" fill="#${colors.specs.lighter}"/>
+        `;
+        for (let i = 0; i < paramCount + 1; i++) {
+            const yPos = headLine + i * unitHeight;
+            if (i % 2 != 0) {
+                params += `<rect x="${paramLine}" y="${headLine + i * unitHeight}" width="${dimensions.canvas.width - paramLine - dimensions.specs.padding}" height="${unitHeight}" fill="#${colors.specs.darker}"/>`
+            }
+            params += `<line x1="${dimensions.specs.padding}" y1="${yPos}" x2="${dimensions.canvas.width - dimensions.specs.padding}" y2="${yPos}" stroke="#${colors.general.outline}" stroke-width="2"/>`;
+            for (let c = 0; c < columnCount + 1; c++) {
+                if (i < 1 && c < 1) {
+                    params += `<text x="${dimensions.specs["param-line"] / 2 + dimensions.specs.padding}" y="${headLine + (i+0.5) * unitHeight}" fill="#${colors.general.background}" text-anchor="middle" align-baseline="middle" font-family="Russo One" font-size="${dimensions.specs["font-size"]}" dominant-baseline="central">Parametr</text>`
+                }  else if (c < 1) {
+                    params += `<text x="${dimensions.specs.padding + dimensions.specs["param-line"] / 2}" y="${headLine + (i+0.5) * unitHeight}" fill="#${colors.general.outline}" text-anchor="middle" align-baseline="middle" font-family="Russo One" font-size="${dimensions.specs["font-size"]}" dominant-baseline="central">${this.props.parameters[i - 1]}</text>`;
+                } else if (i > 0) {
+                    params += `<text x="${paramLine + (c - 0.5) * valUnit}" y="${headLine + (i+0.5) * unitHeight}" fill="#${colors.general.outline}" text-anchor="middle" align-baseline="middle" font-family="Russo One" font-size="${dimensions.specs["font-size"]}" dominant-baseline="central">${this.props.values[c - 1].val[i - 1]}</text>`;
+                }
+            }
+        }
+        for (let c = 1; c < columnCount + 1; c++) {
+            params += `<text x="${paramLine + (c - 0.5) * valUnit}" y="${headLine + (0.5) * unitHeight}" fill="#${colors.general.background}" text-anchor="middle" align-baseline="middle" font-family="Russo One" font-size="${dimensions.specs["font-size"]}" dominant-baseline="central">${this.props.values[c - 1].name}</text>
+                        <line x1="${paramLine + c * valUnit}" y1="${dimensions.specs.padding}" x2="${paramLine + c * valUnit}" y2="${dimensions.canvas.height - dimensions.specs.padding}" stroke="#${colors.general.outline}" stroke-width="2"/>
+                        <image xlink:href="../../input/${this.inputName}/${this.props.values[c-1].pic.path}" x="${paramLine + (c - 0.9) * valUnit}" y="${dimensions.specs.padding + dimensions.specs["head-line"] * 0.1}" width="${valUnit * 0.8}" height="${dimensions.specs["head-line"] * 0.8}"/>`;
+        }
+        return params;
+    }
+
+    renderSpecs() {
+        const headLine = dimensions.specs.padding + dimensions.specs["head-line"];
+        const headLineHalf = dimensions.specs.padding + (dimensions.specs["head-line"] / 2);
+        const paramLine = dimensions.specs["param-line"] + dimensions.specs.padding;
+        return `
+            <rect x="30" y="30" width="${dimensions.specs["param-line"]}" height="${dimensions.specs["head-line"]/2}" fill="#${colors.general.outline}"/>
+            <line x1="30" y1="${headLine}" x2="2130" y2="${headLine}" stroke="#${colors.general.outline}" stroke-width="2"/>
+            <line x1="30" y1="${headLineHalf}" x2="${paramLine}" y2="${headLineHalf}" stroke="#${colors.general.outline}" stroke-width="2"/>
+            <text x="${dimensions.specs.padding + dimensions.specs["param-line"]/2}" y="${dimensions.specs.padding + dimensions.specs["head-line"] / 4}" fill="#${colors.general.background}" text-anchor="middle" align-baseline="middle" font-family="Russo One" font-size="${40}" dominant-baseline="central">${this.props.name}</text>
+            <image xlink:href="${this.getEmbeddedLogo()}" x="${dimensions.specs.padding}" y="${dimensions.specs["head-line"] * 0.55 + dimensions.specs.padding}" width="${dimensions.specs["param-line"]}" height="${dimensions.specs["head-line"]/2 * 0.8}"/>
+            ${this.renderParameters(paramLine, headLine)}
+            <line x1="${paramLine}" y1="30" x2="${paramLine}" y2="1050" stroke="#${colors.general.outline}" stroke-width="2"/>
+        `;
+    }
+
     render() {
+        let body = "";
+        if (this.props.type === 'bars')
+            body = this.renderChart();
+        if (this.props.type === 'specs')
+            body = this.renderSpecs();
         return `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg width="${dimensions.canvas.width}" height="${dimensions.canvas.height}" version="1.1"
     xmlns="http://www.w3.org/2000/svg"
     xmlns:svg="http://www.w3.org/2000/svg">
     <rect width="100%" height="100%" fill="#${colors.general.background}"/>
     <rect x="30" y="30" width="2100" height="1020" fill="none" stroke="#${colors.general.outline}" stroke-width="2"/>
-    ${this.renderHeader()}
-    ${this.renderFooter()}
-    ${this.renderSeries()}
+    ${body}
 </svg>`;
     }
 }

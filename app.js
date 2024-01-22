@@ -22,15 +22,19 @@ if (args.m === 'single') {
 } else if (args.m === 'batch') {
     const dirPath = './input/'+args.i;
     const outPath = './output/'+args.i;
-    const files = fs.readdirSync(dirPath).map(f => path.join(dirPath, f));
+    const files = fs.readdirSync(dirPath).filter(f => path.extname(f) === '.json').map(f => path.join(dirPath, f));
     if (!fs.existsSync(outPath))
         fs.mkdirSync(outPath, {recursive: true});
     files.forEach(f => {
-        const page = new Page(require('./'+f));
+        const page = new Page(require('./'+f), args.i);
         const name = path.parse(f).name;
         fs.writeFileSync(outPath+"/"+name+".svg", page.render());
         if (args.e === 'png') {
-            exec(`${inkscape} ./${outPath}/${name}.svg --export-filename=./${outPath}/${name}.png --export-dpi=200`, (e, stdout, stderr) => console.log("PNG "+name+" generated."));
+            exec(`${inkscape} ./${outPath}/${name}.svg --export-filename=./${outPath}/${name}.png --export-dpi=200`, 
+                (e, stdout, stderr) => {
+                    console.log("PNG "+name+" generated.");
+                    fs.unlinkSync(`./${outPath}/${name}.svg`);
+            });
         }
     });
 }

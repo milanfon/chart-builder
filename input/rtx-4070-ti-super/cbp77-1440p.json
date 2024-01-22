@@ -10,6 +10,7 @@
         "Průměr",
         "1% Percentil"
     ],
+    "sort": "desc",
     "values": [
         {
             "name": "RTX 4090",
@@ -20,10 +21,10 @@
         },
         {
             "name": "RTX 4070 Ti",
-            "date": "03/23",
+            "date": "01/24",
             "model": "GIGABYTE GAMING",
             "icon": "nvidia",
-            "val": [132.1, 76.9],
+            "val": [120.1, 77.5],
             "variant": "secondary"
         },
         {

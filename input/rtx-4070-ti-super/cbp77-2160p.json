@@ -10,6 +10,7 @@
         "Průměr",
         "1% Percentil"
     ],
+    "sort": "desc",
     "values": [
         {
             "name": "RTX 4070 Ti SUPER",
@@ -39,7 +40,7 @@
             "date": "01/24",
             "model": "GIGABYTE GAMING",
             "icon": "nvidia",
-            "val": [89.2, 77.6],
+            "val": [100.7, 69.2],
             "variant": "secondary"
         },
         {
