@@ -81,7 +81,7 @@ class Page {
 
             <text x="1975" y="90" fill="#${colors.general.outline}" text-anchor="middle" align-baseline="middle" font-family="Russo One" font-size="40" dominant-baseline="central">${getCurrentDateMonth()}</text>
 
-            <image xlink:href="${this.getEmbeddedLogo()}" x="33" y="47" width="210" height="90"/>
+            <image xlink:href="${this.getEmbeddedLogo()}" x="30" y="47" width="210" height="90"/>
         `;
     }
 
