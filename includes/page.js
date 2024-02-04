@@ -24,7 +24,8 @@ class Page {
 
     barKeys = [
         "primary",
-        "secondary"
+        "secondary",
+        "triary"
     ]
 
     calcMaxScale() {
@@ -39,9 +40,10 @@ class Page {
 
     sortValues() {
         const sort = this.props?.sort;
+        const index = this.props?.sortIndex || 0;
         if (!sort)
             return;
-        this.props.values = this.props.values.sort((a, b) => this.getAbsValue(a.val[0]) - this.getAbsValue(b.val[0]));
+        this.props.values = this.props.values.sort((a, b) => this.getAbsValue(a.val[index]) - this.getAbsValue(b.val[index]));
         if (sort === 'desc')
             this.props.values = this.props.values.reverse();
     }
@@ -89,7 +91,7 @@ class Page {
         const startX = 240;
         return this.props.bars.map((val, index) => `
                 <g transform="translate(${startX + index * 150}, 1010)">
-                    <rect x="5" y="5" width="30" height="30" fill="#${colors[this.props.type].general[this.barKeys[index]]}"/>
+                    <rect x="5" y="5" width="30" height="30" fill="#${colors[this.props.type][this.props.legendBy || "general"][this.barKeys[index]]}"/>
                     <text x="${45}" y="20" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">${val}</text>
                 </g>
             `);
@@ -114,7 +116,8 @@ class Page {
     scaleBar(val) {
         const converted = this.getAbsValue(val);
         const unit = dimensions["bar-length"] / this.max;
-        return converted * unit;
+        const ret = converted * unit;
+        return ret > 55 ? ret : 55;
     }
 
     getDescriptions(one, d, scale) {
@@ -159,14 +162,15 @@ class Page {
         const scale = n > 8 ? (one/h) : 1;
         const mapped = this.getDescriptions(one, d, scale);
         const bars = this.getBars(one, d, scale);
+        const barsX = this.props.barsX || dimensions.canvas.barsX;
         return `
-            <g transform="translate(60, 175)">
+            <g transform="translate(60, 180)">
                 ${mapped}
             </g>
-            <g transform="translate(520, 175)">
+            <g transform="translate(${barsX}, 180)">
                 ${bars}
             </g>
-            <line x1="520" y1="150" x2="520" y2="1010" stroke="#${colors.general.outline}" stroke-width="2"/>
+            <line x1="${barsX}" y1="150" x2="${barsX}" y2="1010" stroke="#${colors.general.outline}" stroke-width="2"/>
         `;
     }
 

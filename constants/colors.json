@@ -21,6 +21,16 @@
         "secondary": {
             "primary": "F97700",
             "secondary": "AD5400"
+        },
+        "unhighlighted": {
+            "primary": "8F2300",
+            "secondary": "007C05",
+            "triary": "0062BC"
+        }, 
+        "highlighted": {
+            "primary": "E61C00",
+            "secondary": "00BC08",
+            "triary": "0288E8"
         }
     }
 }

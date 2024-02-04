@@ -1,7 +1,8 @@
 {
     "canvas": {
         "width": 2160,
-        "height": 1080
+        "height": 1080,
+        "barsX": 520
     },
     "bar-length": 1580,
     "font-size": {
