@@ -115,7 +115,8 @@ class Page {
 
     scaleBar(val) {
         const converted = this.getAbsValue(val);
-        const unit = dimensions["bar-length"] / this.max;
+        const corr = this.props.barsX ? (dimensions.canvas.barsX - this.props.barsX) : 0;
+        const unit = (dimensions["bar-length"] + corr) / this.max;
         const ret = converted * unit;
         return ret > 55 ? ret : 55;
     }
