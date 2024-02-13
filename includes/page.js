@@ -6,8 +6,10 @@ class Page {
     constructor(props, inputName) {
         this.props = props;
         this.inputName = inputName;
-        this.calcMaxScale();
-        this.sortValues();
+        if (props.type === 'bars') {
+            this.calcMaxScale();
+            this.sortValues();
+        }
     }
 
     betterMap = {
@@ -118,7 +120,8 @@ class Page {
         const corr = this.props.barsX ? (dimensions.canvas.barsX - this.props.barsX) : 0;
         const unit = (dimensions["bar-length"] + corr) / this.max;
         const ret = converted * unit;
-        return ret > 55 ? ret : 55;
+        const min = this.props.units === 'min' ? 150 : 60;
+        return ret > min ? ret : min;
     }
 
     getDescriptions(one, d, scale) {
@@ -129,7 +132,7 @@ class Page {
                     ${iconHref || ""}
                     <text x="${iconHref ? 50 : 0}" y="${20 * scale}" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="${40 * scale}" dominant-baseline="central">${val.name}</text>
                     <text x="0" y="${50 * scale}" fill="#${colors.general["font-secondary"]}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="${28 * scale}" dominant-baseline="hanging">${val.date}</text>
-                    <text x="95" y="${50 * scale}" fill="#${colors.general["font-secondary"]}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="${28 * scale}" dominant-baseline="hanging">${val.model}</text>
+                    <text x="95" y="${50 * scale}" fill="#${colors.general["font-secondary"]}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="${28 * scale}" dominant-baseline="hanging">${val.model || ""}</text>
                 </g>
             `});
     }
@@ -218,6 +221,11 @@ class Page {
         return params;
     }
 
+    renderLineHWi() {
+        const left = this.props.values.filter(i => i.position === 'left');
+        return "";
+    }
+
     renderSpecs() {
         const headLine = dimensions.specs.padding + dimensions.specs["head-line"];
         const headLineHalf = dimensions.specs.padding + (dimensions.specs["head-line"] / 2);
@@ -237,6 +245,8 @@ class Page {
         let body = "";
         if (this.props.type === 'bars')
             body = this.renderChart();
+        if (this.props.type === 'line-hwi')
+            body = this.renderLineHWi();
         if (this.props.type === 'specs')
             body = this.renderSpecs();
         return `<?xml version="1.0" encoding="UTF-8" standalone="no"?>

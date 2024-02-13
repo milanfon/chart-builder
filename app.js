@@ -2,7 +2,7 @@ const Page = require("./includes/page");
 const fs = require('fs');
 const path = require('path');
 const {ArgumentParser} = require('argparse');
-const {exec} = require('child_process');
+import {$} from "bun";
 
 const argparser = new ArgumentParser({
     description: "MML Chart render service"
@@ -30,11 +30,9 @@ if (args.m === 'single') {
         const name = path.parse(f).name;
         fs.writeFileSync(outPath+"/"+name+".svg", page.render());
         if (args.e === 'png') {
-            exec(`${inkscape} ./${outPath}/${name}.svg --export-filename=./${outPath}/${name}.png --export-dpi=200`, 
-                (e, stdout, stderr) => {
-                    console.log("PNG "+name+" generated.");
-                    fs.unlinkSync(`./${outPath}/${name}.svg`);
-            });
+            const res = $`${inkscape} ./${outPath}/${name}.svg --export-filename=./${outPath}/${name}.png --export-dpi=200`;
+            console.log("PNG "+name+" generated.");
+            fs.unlinkSync(`./${outPath}/${name}.svg`);
         }
     });
 }
