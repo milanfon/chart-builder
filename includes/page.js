@@ -221,9 +221,20 @@ class Page {
         return params;
     }
 
+    renderVerticalAxis(data, order) {
+        return `
+            <rect x="30" y="150" width="${dimensions.stats.axisWidth}" height="860" stroke="#${colors.general.outline}" fill="none" stroke-width="2"/>
+        `;
+    }
+
     renderLineHWi() {
         const left = this.props.values.filter(i => i.position === 'left');
-        return "";
+        const right = this.props.values.filter(i => i.position === 'right');
+        const leftAxes = left.map((v,i) => this.renderVerticalAxis(v, i));
+        return `
+            ${this.renderHeader()}
+            ${leftAxes}
+        `;
     }
 
     renderSpecs() {

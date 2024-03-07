@@ -13,5 +13,9 @@
         "param-line": 400,
         "head-line": 230,
         "font-size": 26
+    },
+    "stats": {
+        "axisWidth": 70,
+        "axisPadding": 5
     }
 }
