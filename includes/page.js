@@ -10,6 +10,7 @@ class Page {
             this.calcMaxScale();
             this.sortValues();
         }
+        this.props.values = this.props.values.filter(i => i?.show === undefined || i.show);
     }
 
     betterMap = {
