@@ -76,9 +76,9 @@ class Page {
             <rect x="240" y="30" width="1080" height="120" fill="#${colors.general.outline}"/>
             <text x="270" y="90" fill="#${colors.general.background}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="40" dominant-baseline="central">${this.props.name}</text>
 
-            <text x="1340" y="50" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">Nastavení</text>
-            <text x="1340" y="90" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">Driver</text>
-            <text x="1340" y="130" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">Verze</text>
+            <text x="1340" y="50" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">${this.props?.settings ? "Nastavení" : this.props?.info[0].title}</text>
+            <text x="1340" y="90" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">${this.props?.driver ? "Driver" : this.props?.info[1].title}</text>
+            <text x="1340" y="130" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">${this.props?.version ? "Verze" : this.props?.info[2].title}</text>
             
             <text x="1540" y="50" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="${settingsFontSize}" dominant-baseline="central">${this.props?.settings || this.props?.info[0].value}</text>
             <text x="1540" y="90" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">${this.props?.driver || this.props?.info[1].value}</text>

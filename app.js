@@ -12,6 +12,7 @@ const argparser = new ArgumentParser({
 argparser.add_argument('-m', {help: 'Mode', type: 'str', choices: ['batch', 'single']});
 argparser.add_argument('-i', {help: 'Input file/directory'});
 argparser.add_argument('-e', {help: 'Export', choices: ['svg', 'png'], default: 'svg'});
+argparser.add_argument('-f', {help: 'Force update', action: 'store_true'});
 const args = argparser.parse_args();
 
 const inkscape = process.platform === 'darwin' ? '/Applications/Inkscape.app/Contents/MacOS/inkscape' : 'inkscape';
@@ -32,7 +33,7 @@ if (args.m === 'single') {
         index[args.i] = {};
     const processFile = async (f) => {
         const checksum = await $`shasum -a 512 ${f}`.text().then(i => i.split('  ')[0]);
-        if (index?.[args.i]?.[f] === checksum)
+        if (index?.[args.i]?.[f] === checksum && !args.f)
             return;
         else 
             index[args.i][f] = checksum;
