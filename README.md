@@ -12,4 +12,6 @@ Currently this software was tested and developed under MacOS, for which compatib
 
 ## Usage
 
-TBD
+### Generate charts
+
+

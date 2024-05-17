@@ -4,6 +4,7 @@ const path = require('path');
 const {ArgumentParser} = require('argparse');
 import {$} from "bun";
 import { getIndex, writeIndex } from "./includes/files";
+import { saveAsPNG } from "./includes/export";
 
 const argparser = new ArgumentParser({
     description: "MML Chart render service"
@@ -15,17 +16,20 @@ argparser.add_argument('-e', {help: 'Export', choices: ['svg', 'png'], default: 
 argparser.add_argument('-f', {help: 'Force update', action: 'store_true'});
 const args = argparser.parse_args();
 
-const inkscape = process.platform === 'darwin' ? '/Applications/Inkscape.app/Contents/MacOS/inkscape' : 'inkscape';
 const index = getIndex();
 let filesChanged = 0;
 
+const dirPath = './input/'+args.i;
+const outPath = './output/'+args.i;
+
 if (args.m === 'single') {
-    const input = require('./template_new.json');
-    const page = new Page(input);
-    fs.writeFileSync("./output/"+page.props.fileName+".svg", page.render());
+    const input = require(dirPath);
+    const page = new Page(input, args.i);
+    const name = path.parse(dirPath).name;
+    fs.writeFileSync("./output/"+name+".svg", page.render());
+    if (args.e === 'png') 
+        saveAsPNG('./output/', name);
 } else if (args.m === 'batch') {
-    const dirPath = './input/'+args.i;
-    const outPath = './output/'+args.i;
     const files = fs.readdirSync(dirPath).filter(f => path.extname(f) === '.json').map(f => path.join(dirPath, f));
     if (!fs.existsSync(outPath))
         fs.mkdirSync(outPath, {recursive: true});
@@ -41,11 +45,8 @@ if (args.m === 'single') {
         const page = new Page(require('./'+f), args.i);
         const name = path.parse(f).name;
         fs.writeFileSync(outPath+"/"+name+".svg", page.render());
-        if (args.e === 'png') {
-            const res = await $`${inkscape} ./${outPath}/${name}.svg --export-filename=./${outPath}/${name}.png --export-dpi=200`.quiet();
-            console.log("PNG "+name+" generated.");
-            fs.unlinkSync(`./${outPath}/${name}.svg`);
-        }
+        if (args.e === 'png')
+            saveAsPNG(outPath, name);
     };
     Promise.all(files.map(processFile)).then(() => {
         if (filesChanged > 0)
