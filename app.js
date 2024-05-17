@@ -1,4 +1,4 @@
-const Page = require("./includes/page");
+import { Page } from "./includes/page";
 const fs = require('fs');
 const path = require('path');
 const {ArgumentParser} = require('argparse');

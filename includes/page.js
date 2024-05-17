@@ -1,8 +1,9 @@
 const colors = require("../constants/colors.json");
 const dimensions = require("../constants/dimensions.json");
-const {getCurrentDateMonth, imageToBase64} = require("../includes/aux");
+import {getCurrentDateMonth, imageToBase64} from "../includes/aux";
+import { renderVerticalAxis } from "./chart-types/line";
 
-class Page {
+export class Page {
     constructor(props, inputName) {
         this.props = props;
         this.inputName = inputName;
@@ -222,16 +223,10 @@ class Page {
         return params;
     }
 
-    renderVerticalAxis(data, order) {
-        return `
-            <rect x="30" y="150" width="${dimensions.stats.axisWidth}" height="860" stroke="#${colors.general.outline}" fill="none" stroke-width="2"/>
-        `;
-    }
-
-    renderLineHWi() {
+    renderLine() {
         const left = this.props.values.filter(i => i.position === 'left');
         const right = this.props.values.filter(i => i.position === 'right');
-        const leftAxes = left.map((v,i) => this.renderVerticalAxis(v, i));
+        const leftAxes = left.map((v,i) => renderVerticalAxis(v, i));
         return `
             ${this.renderHeader()}
             ${leftAxes}
@@ -257,8 +252,8 @@ class Page {
         let body = "";
         if (this.props.type === 'bars')
             body = this.renderChart();
-        if (this.props.type === 'line-hwi')
-            body = this.renderLineHWi();
+        if (this.props.type === 'line')
+            body = this.renderLine();
         if (this.props.type === 'specs')
             body = this.renderSpecs();
         return `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
@@ -271,5 +266,3 @@ class Page {
 </svg>`;
     }
 }
-
-module.exports = Page;
