@@ -16,6 +16,8 @@
     },
     "stats": {
         "axisWidth": 70,
+        "tickMinorWidth": 15,
+        "tickMajorWidth": 30,
         "axisPadding": 5
     }
 }
