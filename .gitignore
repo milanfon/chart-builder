@@ -2,3 +2,6 @@ input/*
 output/*
 output.svg
 node_modules/
+index.json
+input/.DS_Store
+output/.DS_Store
