@@ -36,7 +36,7 @@ if (args.m === 'single') {
     if (!index?.[args.i])
         index[args.i] = {};
     const processFile = async (f) => {
-        const checksum = $`shasum -a 512 ${f}`.text().then(i => i.split('  ')[0]);
+        const checksum = await $`shasum -a 512 ${f}`.text().then(i => i.split('  ')[0]);
         if (index?.[args.i]?.[f] === checksum && !args.f)
             return;
         else 
