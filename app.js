@@ -24,7 +24,7 @@ const outPath = './output/'+args.i;
 
 if (args.m === 'single') {
     const input = require(dirPath);
-    const page = new Page(input, args.i);
+    const page = new Page(input, path.dirname(args.i));
     const name = path.parse(dirPath).name;
     fs.writeFileSync("./output/"+name+".svg", page.render());
     if (args.e === 'png') 
