@@ -1,6 +1,7 @@
-export async function parseUniformityTest(filePath, inputName) {
-    const file = Bun.file("input/"+inputName+"/"+filePath);
-    const text = await file.text();
+import fs from "node:fs";
+
+export function parseUniformityTest(filePath, inputName) {
+    const text = fs.readFileSync("input/"+inputName+"/"+filePath, 'utf8');
 
     const resMatch = text.match(/.*results = \{.*$/gm);
     const resultsLine = resMatch[0];
