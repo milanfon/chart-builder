@@ -11,3 +11,9 @@ export function getCurrentDateMonth() {
   const year = date.getFullYear();
   return month + '/' + year;
 }
+
+export function percentageToString(percent) {
+    if (percent === 0)
+        return "0%";
+    return (percent > 0 ? "+" : "-") + Math.abs(percent) + "%";
+}

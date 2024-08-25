@@ -32,5 +32,8 @@
             "secondary": "00BC08",
             "triary": "0288E8"
         }
+    },
+    "brightness": {
+        "background": ["52FC03", "FF8D22", "FF0000"]
     }
 }

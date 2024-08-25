@@ -19,5 +19,12 @@
         "tickMinorWidth": 15,
         "tickMajorWidth": 30,
         "axisPadding": 5
+    },
+    "brightness": {
+        "padding": 80,
+        "top": 180,
+        "bottom": 980,
+        "brightnessText": 50,
+        "diffText": 20
     }
 }
