@@ -24,11 +24,12 @@ const outPath = './output/'+args.i;
 
 if (args.m === 'single') {
     const input = require(dirPath);
-    const page = new Page(input, path.dirname(args.i));
+    const fileDirName = path.dirname(args.i);
+    const page = new Page(input, fileDirName);
     const name = path.parse(dirPath).name;
-    fs.writeFileSync("./output/"+name+".svg", page.render());
+    fs.writeFileSync("./output/"+fileDirName+"/"+name+".svg", page.render());
     if (args.e === 'png') 
-        saveAsPNG('./output/', name);
+        saveAsPNG('./output/'+fileDirName, name);
 } else if (args.m === 'batch') {
     const files = fs.readdirSync(dirPath).filter(f => path.extname(f) === '.json').map(f => path.join(dirPath, f));
     if (!fs.existsSync(outPath))
