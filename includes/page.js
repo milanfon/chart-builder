@@ -2,6 +2,7 @@ const colors = require("../constants/colors.json");
 const dimensions = require("../constants/dimensions.json");
 import {getCurrentDateMonth, imageToBase64} from "../includes/aux";
 import { renderBrightnessTable } from "./chart-types/brightness";
+import { getEmbeddedLogo } from "./chart-types/general-components";
 import { renderVerticalAxis } from "./chart-types/line";
 
 export class Page {
@@ -62,10 +63,6 @@ export class Page {
         return val;
     }
 
-    getEmbeddedLogo() {
-        return `data:image/png;base64,${imageToBase64("./assets/logo.png")}`;
-    }
-
     renderHeader() {
         const settingsFontSize = this.props.sizes?.["settings-font"] || 20;
         return `
@@ -89,7 +86,7 @@ export class Page {
 
             <text x="1975" y="90" fill="#${colors.general.outline}" text-anchor="middle" align-baseline="middle" font-family="Russo One" font-size="40" dominant-baseline="central">${getCurrentDateMonth()}</text>
 
-            <image xlink:href="${this.getEmbeddedLogo()}" x="30" y="47" width="210" height="90"/>
+            <image xlink:href="${getEmbeddedLogo()}" x="30" y="47" width="210" height="90"/>
         `;
     }
 
@@ -244,7 +241,7 @@ export class Page {
             <line x1="30" y1="${headLine}" x2="2130" y2="${headLine}" stroke="#${colors.general.outline}" stroke-width="2"/>
             <line x1="30" y1="${headLineHalf}" x2="${paramLine}" y2="${headLineHalf}" stroke="#${colors.general.outline}" stroke-width="2"/>
             <text x="${dimensions.specs.padding + dimensions.specs["param-line"]/2}" y="${dimensions.specs.padding + dimensions.specs["head-line"] / 4}" fill="#${colors.general.background}" text-anchor="middle" align-baseline="middle" font-family="Russo One" font-size="${40}" dominant-baseline="central">${this.props.name}</text>
-            <image xlink:href="${this.getEmbeddedLogo()}" x="${dimensions.specs.padding}" y="${dimensions.specs["head-line"] * 0.55 + dimensions.specs.padding}" width="${dimensions.specs["param-line"]}" height="${dimensions.specs["head-line"]/2 * 0.8}"/>
+            <image xlink:href="${getEmbeddedLogo()}" x="${dimensions.specs.padding}" y="${dimensions.specs["head-line"] * 0.55 + dimensions.specs.padding}" width="${dimensions.specs["param-line"]}" height="${dimensions.specs["head-line"]/2 * 0.8}"/>
             ${this.renderParameters(paramLine, headLine)}
             <line x1="${paramLine}" y1="30" x2="${paramLine}" y2="1050" stroke="#${colors.general.outline}" stroke-width="2"/>
         `;
