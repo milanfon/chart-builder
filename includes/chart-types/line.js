@@ -1,5 +1,6 @@
 import dimensions from "../../constants/dimensions.json";
 import colors from "../../constants/colors.json";
+import { renderHeader } from "./general-components";
 
 function determineTicks(size, bounds) {
     const diff = Math.abs(bounds[1] - bounds[0]);
@@ -36,5 +37,15 @@ export function renderVerticalAxis(data, order) {
     return `
         ${outline}
         ${ticks}
+    `;
+}
+
+export function renderLine(props) {
+    const left = props.values.filter(i => i.position === 'left');
+    const right = props.values.filter(i => i.position === 'right');
+    const leftAxes = left.map((v,i) => renderVerticalAxis(v, i));
+    return `
+        ${renderHeader(props)}
+        ${leftAxes}
     `;
 }

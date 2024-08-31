@@ -195,16 +195,6 @@ export class Page {
         return params;
     }
 
-    renderLine() {
-        const left = this.props.values.filter(i => i.position === 'left');
-        const right = this.props.values.filter(i => i.position === 'right');
-        const leftAxes = left.map((v,i) => renderVerticalAxis(v, i));
-        return `
-            ${renderHeader(this.props)}
-            ${leftAxes}
-        `;
-    }
-
     renderSpecs() {
         const headLine = dimensions.specs.padding + dimensions.specs["head-line"];
         const headLineHalf = dimensions.specs.padding + (dimensions.specs["head-line"] / 2);
@@ -225,7 +215,7 @@ export class Page {
         if (this.props.type === 'bars')
             body = this.renderChart();
         if (this.props.type === 'line')
-            body = this.renderLine();
+            body = renderHeader(this.props);
         if (this.props.type === 'specs')
             body = this.renderSpecs();
         if (this.props.type === 'brightness')
