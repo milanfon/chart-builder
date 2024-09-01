@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "argparse": "^2.0.1",
+    "iconv-lite": "^0.6.3",
     "xml-writer": "^1.7.0"
   }
 }

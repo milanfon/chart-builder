@@ -1,6 +1,7 @@
 import dimensions from "../../constants/dimensions.json";
 import colors from "../../constants/colors.json";
 import { renderHeader } from "./general-components";
+import { parseHWiFile } from "../parsers/csv";
 
 function determineTicks(size, bounds) {
     const diff = Math.abs(bounds[1] - bounds[0]);
@@ -40,10 +41,14 @@ export function renderVerticalAxis(data, order) {
     `;
 }
 
-export function renderLine(props) {
+export function renderLine(props, inputName) {
     const left = props.values.filter(i => i.position === 'left');
     const right = props.values.filter(i => i.position === 'right');
     const leftAxes = left.map((v,i) => renderVerticalAxis(v, i));
+    const keys = [...left.flatMap(j => j.series.map(i => i.key)), ...right.flatMap(j => j.series.map(i => i.key))];
+
+    parseHWiFile(props.sourceFile, inputName, {encoding: props.encoding, columns: keys});
+
     return `
         ${renderHeader(props)}
         ${leftAxes}

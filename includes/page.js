@@ -3,7 +3,7 @@ const dimensions = require("../constants/dimensions.json");
 import { imageToBase64} from "../includes/aux";
 import { renderBrightnessTable } from "./chart-types/brightness";
 import { getEmbeddedLogo, renderHeader } from "./chart-types/general-components";
-import { renderVerticalAxis } from "./chart-types/line";
+import { renderLine, renderVerticalAxis } from "./chart-types/line";
 
 export class Page {
     constructor(props, inputName) {
@@ -215,7 +215,7 @@ export class Page {
         if (this.props.type === 'bars')
             body = this.renderChart();
         if (this.props.type === 'line')
-            body = renderHeader(this.props);
+            body = renderLine(this.props, this.inputName);
         if (this.props.type === 'specs')
             body = this.renderSpecs();
         if (this.props.type === 'brightness')
