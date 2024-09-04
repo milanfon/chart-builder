@@ -23,9 +23,9 @@ function lineToArray(line) {
 
 export function parseHWiFile(path, inputName, {encoding, columns}) {
     const vals = parseCSV(path, inputName, {encoding, columns: ["Date", "Time", ...columns]});
-    Object.values(vals).forEach(k => {
-        k.splice(0, 1);
-        k.splice(-3, 3)
+    Object.values(vals).forEach(v => {
+        v.splice(0, 1);
+        v.splice(-3, 3);
     });
-    console.log(vals)
+    return vals;
 }
