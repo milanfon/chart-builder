@@ -13,27 +13,29 @@ function determineTicks(size, bounds) {
     };
 }
 
-export function renderVerticalAxis(data, order) {
+export function renderVerticalAxis(data, order, right = false) {
     const height = 860;
+    const width = data.width || dimensions.stats.axisWidth;
     const y = 150;
-    const outline = `<rect x="30" y="${y}" width="${dimensions.stats.axisWidth}" height="${height}" stroke="#${colors.general.outline}" fill="none" stroke-width="2"/>`;
+    const x = !right ? 30 + width * order : dimensions.canvas.width - 30 - (order + 1) * width;
+    const outline = `<rect x="${x}" y="${y}" width="${width}" height="${height}" stroke="#${colors.general.outline}" fill="none" stroke-width="2"/>`;
     let ticks = `
-        <text x="${30 + 2 + dimensions.stats.tickMajorWidth}" y="${y + height - 5}" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="text-top">${data.bounds[0]}</text>
-        <text x="${30 + 2 + dimensions.stats.tickMajorWidth}" y="${y + 5}" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="hanging">${data.bounds[1]}</text>
+        <text x="${x + 2 + dimensions.stats.tickMajorWidth}" y="${y + height - 5}" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="text-top">${data.bounds[0]}</text>
+        <text x="${x + 2 + dimensions.stats.tickMajorWidth}" y="${y + 5}" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="hanging">${data.bounds[1]}</text>
     `;
     const dt = determineTicks(height, data.bounds);
     let label = data.bounds[0] + dt.boundsLabel;
     for (let t = height - dt.major; t > 0; t -= dt.major) {
         const yPos = y + t;
         ticks += `
-            <line x1="30" y1="${yPos}" x2="${30 + dimensions.stats.tickMajorWidth}" y2="${yPos}" stroke="#${colors.general.outline}" stroke-width="4"/>
-            <text x="${30 + 2 + dimensions.stats.tickMajorWidth}" y="${yPos}" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">${label}</text>
+            <line x1="${x}" y1="${yPos}" x2="${x + dimensions.stats.tickMajorWidth}" y2="${yPos}" stroke="#${colors.general.outline}" stroke-width="4"/>
+            <text x="${x + 2 + dimensions.stats.tickMajorWidth}" y="${yPos}" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">${label}</text>
         `;
         label += dt.boundsLabel;
     }
     for (let t = height - dt.minor; t > 0; t -= dt.minor) {
         const yPos = y + t;
-        ticks += `<line x1="30" y1="${yPos}" x2="${30 + dimensions.stats.tickMinorWidth}" y2="${yPos}" stroke="#${colors.general.outline}" stroke-width="2"/>`;
+        ticks += `<line x1="${x}" y1="${yPos}" x2="${x + dimensions.stats.tickMinorWidth}" y2="${yPos}" stroke="#${colors.general.outline}" stroke-width="2"/>`;
     }
     return `
         ${outline}
@@ -41,16 +43,34 @@ export function renderVerticalAxis(data, order) {
     `;
 }
 
+export function calcFullAxisWidth(data, max = undefined) {
+    let i = 0;
+    let width = 0;
+    while (i < data.length) {
+        width += data[i].width || dimensions.stats.axisWidth;
+        if (max && i >= max)
+            break;
+        i++;
+    }
+    return width;
+}
+
 export function renderLine(props, inputName) {
     const left = props.values.filter(i => i.position === 'left');
     const right = props.values.filter(i => i.position === 'right');
     const leftAxes = left.map((v,i) => renderVerticalAxis(v, i));
+    const rightAxes = right.map((v,i) => renderVerticalAxis(v, i, true));
     const keys = [...left.flatMap(j => j.series.map(i => i.key)), ...right.flatMap(j => j.series.map(i => i.key))];
 
-    parseHWiFile(props.sourceFile, inputName, {encoding: props.encoding, columns: keys});
+    const vals = parseHWiFile(props.sourceFile, inputName, {encoding: props.encoding, columns: keys});
+
+    const leftAxisWidth = calcFullAxisWidth(left);
+    const rightAxisWidth = calcFullAxisWidth(right);
+    const insideCanvasWidth = dimensions.canvas.width - 2 * 30 - leftAxisWidth - rightAxisWidth;
 
     return `
         ${renderHeader(props)}
         ${leftAxes}
+        ${rightAxes}
     `;
 }
