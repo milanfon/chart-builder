@@ -111,7 +111,7 @@ export function renderLine(props, inputName) {
     const rightAxes = right.map((v,i) => renderVerticalAxis(v, i, true));
     const keys = [...left.flatMap(j => j.series.map(i => i.key)), ...right.flatMap(j => j.series.map(i => i.key))];
 
-    const vals = parseHWiFile(props.sourceFile, inputName, {encoding: props.encoding, columns: keys});
+    const vals = parseHWiFile(props.sourceFile, inputName, {encoding: props.encoding, columns: keys, limit: props.limit});
 
     const leftAxisWidth = calcFullAxisWidth(left);
     const rightAxisWidth = calcFullAxisWidth(right);
