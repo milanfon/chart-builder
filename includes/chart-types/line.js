@@ -56,7 +56,7 @@ export function calcFullAxisWidth(data, max = undefined) {
     return width;
 }
 
-function renderSeries(props, vals, series, canvas) {
+function renderSeries(vals, series, canvas) {
     const ret = [];
     let pos;
     series.forEach(b => {
@@ -76,6 +76,34 @@ function renderSeries(props, vals, series, canvas) {
     return ret;
 }
 
+function renderLineFooter(props, series) {
+    let letAcc = 240;
+    const legend = series.reduce((a, s, i) => {
+        const x = letAcc;
+        const charLen = 12;
+        letAcc += s.name.length * charLen + 65;
+        return a + `
+            <g transform="translate(${x}, 1010)">
+                <rect x="5" y="5" width="50" height="30" stroke="#${s.color}" fill="none" stroke-width="4"/>
+                <text x="${65}" y="20" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">${s.name}</text>
+                <text x="${30}" y="20" fill="#${colors.general.outline}" text-anchor="middle" align-baseline="middle" font-family="Russo One" font-size="15" dominant-baseline="central">${s.unit}</text>
+            </g>
+        `;
+    }, "");
+    return `
+            ${legend}
+            <line x1="30" y1="1010" x2="2130" y2="1010" stroke="#${colors.general.outline}" stroke-width="2"/>
+            <line x1="240" y1="1010" x2="240" y2="1050" stroke="#${colors.general.outline}" stroke-width="2"/>
+            <text x="135" y="1030" fill="#${colors.general.outline}" text-anchor="middle" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">Legenda</text>
+            <line x1="1830" y1="1010" x2="1830" y2="1050" stroke="#${colors.general.outline}" stroke-width="2"/>
+            <line x1="1980" y1="1010" x2="1980" y2="1050" stroke="#${colors.general.outline}" stroke-width="2"/>
+            <line x1="2130" y1="1010" x2="2130" y2="1050" stroke="#${colors.general.outline}" stroke-width="2"/>
+            <rect x="1980" y="1010" width="150" height="40" fill="#${colors.general.outline}"/>
+            <text x="1905" y="1030" fill="#${colors.general.outline}" text-anchor="middle" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">Jednotky x</text>
+            <text x="2055" y="1030" fill="#${colors.general.background}" text-anchor="middle" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">${props.units}</text>
+    `;
+}
+
 export function renderLine(props, inputName) {
     const left = props.values.filter(i => i.position === 'left');
     const right = props.values.filter(i => i.position === 'right');
@@ -92,12 +120,13 @@ export function renderLine(props, inputName) {
     const insideCanvasHeight = 860;
     const insideCanvasX = leftAxisWidth + 30;
     const insideCanvasY = 150;
-    const series = renderSeries(props, vals, [...left, ...right], {x: insideCanvasX, y: insideCanvasY, width: insideCanvasWidth, height: insideCanvasHeight});
+    const series = renderSeries(vals, [...left, ...right], {x: insideCanvasX, y: insideCanvasY, width: insideCanvasWidth, height: insideCanvasHeight});
 
     return `
         ${series.join("\n")}
         ${renderHeader(props)}
         ${leftAxes}
         ${rightAxes}
+        ${renderLineFooter(props, [...left, ...right].map(i => i.series).flat())}
     `;
 }
