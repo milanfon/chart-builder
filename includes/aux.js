@@ -17,3 +17,7 @@ export function percentageToString(percent) {
         return "0%";
     return (percent > 0 ? "+" : "-") + Math.abs(percent) + "%";
 }
+
+export function linMap(val, [origA, origB], [boundA, boundB]) {
+    return ((val - origA) * (boundB - boundA)) / (origB - origA) + boundA;
+}

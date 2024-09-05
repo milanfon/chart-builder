@@ -2,6 +2,7 @@ import dimensions from "../../constants/dimensions.json";
 import colors from "../../constants/colors.json";
 import { renderHeader } from "./general-components";
 import { parseHWiFile } from "../parsers/csv";
+import { linMap } from "../aux";
 
 function determineTicks(size, bounds) {
     const diff = Math.abs(bounds[1] - bounds[0]);
@@ -55,6 +56,26 @@ export function calcFullAxisWidth(data, max = undefined) {
     return width;
 }
 
+function renderSeries(props, vals, series, canvas) {
+    const ret = [];
+    let pos;
+    series.forEach(b => {
+        b.series.forEach(s => {
+            if (!pos)
+                pos = vals[s.key].map((_, i) => linMap(i, [0, vals[s.key].length], [canvas.x, canvas.x + canvas.width]));
+            const remaped = vals[s.key].map(i => (canvas.y + canvas.height) - linMap(i, b.bounds, [0, canvas.height]));
+            const pathString = remaped.reduce((a, v, i) => {
+                if (i > 0)
+                    return a + " L" + pos[i] + " " + v;
+                else
+                    return a + "M " + pos[i] + " " + v;
+            }, "");
+            ret.push(`<path d="${pathString}" stroke="#${s.color}" stroke-width="3" fill="none"/>`);
+        });
+    });
+    return ret;
+}
+
 export function renderLine(props, inputName) {
     const left = props.values.filter(i => i.position === 'left');
     const right = props.values.filter(i => i.position === 'right');
@@ -66,9 +87,15 @@ export function renderLine(props, inputName) {
 
     const leftAxisWidth = calcFullAxisWidth(left);
     const rightAxisWidth = calcFullAxisWidth(right);
+
     const insideCanvasWidth = dimensions.canvas.width - 2 * 30 - leftAxisWidth - rightAxisWidth;
+    const insideCanvasHeight = 860;
+    const insideCanvasX = leftAxisWidth + 30;
+    const insideCanvasY = 150;
+    const series = renderSeries(props, vals, [...left, ...right], {x: insideCanvasX, y: insideCanvasY, width: insideCanvasWidth, height: insideCanvasHeight});
 
     return `
+        ${series.join("\n")}
         ${renderHeader(props)}
         ${leftAxes}
         ${rightAxes}
