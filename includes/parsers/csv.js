@@ -25,16 +25,15 @@ export function parseHWiFile(path, inputName, {encoding, columns, limit}) {
     const vals = parseCSV(path, inputName, {encoding, columns: ["Date", "Time", ...columns]});
     Object.values(vals).forEach(v => {
         console.log("Data length: " + v.length);
-        let lim = [1, 3];
+        let lim = [1, v.length - 4];
         if (limit) {
             if (Array.isArray(limit))
                 lim = limit;
             else if (typeof limit === "number")
                 lim[1] = limit;
         }
-        console.log(lim)
-        v.splice(0, lim[0]);
         v.splice(lim[1] + 1);
+        v.splice(0, lim[0]);
     });
     return vals;
 }

@@ -62,7 +62,7 @@ function renderSeries(vals, series, canvas) {
     series.forEach(b => {
         b.series.forEach(s => {
             if (!pos)
-                pos = vals[s.key].map((_, i) => linMap(i, [0, vals[s.key].length], [canvas.x, canvas.x + canvas.width]));
+                pos = vals[s.key].map((_, i) => linMap(i, [0, vals[s.key].length - 1], [canvas.x, canvas.x + canvas.width]));
             const remaped = vals[s.key].map(i => (canvas.y + canvas.height) - linMap(i, b.bounds, [0, canvas.height]));
             const pathString = remaped.reduce((a, v, i) => {
                 if (i > 0)
