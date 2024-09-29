@@ -56,7 +56,7 @@ export class Page {
     }
 
     getAbsValue(val) {
-        if (this.props.units === 'min') {
+        if (this.props.units === 'min' || this.props.units === 'hrs') {
             const time = val.split(":");
             return parseInt(time[0]) * 60 + parseInt(time[1]);
         }
