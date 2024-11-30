@@ -66,7 +66,7 @@ export class Page {
     renderLegend() {
         const startX = 240;
         return this.props.bars.map((val, index) => `
-                <g transform="translate(${startX + index * 150}, 1010)">
+                <g transform="translate(${startX + index * (this.props.legendSpacing || 150)}, 1010)">
                     <rect x="5" y="5" width="30" height="30" fill="#${colors[this.props.type][this.props.legendBy || "general"][this.barKeys[index]]}"/>
                     <text x="${45}" y="20" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">${val}</text>
                 </g>
