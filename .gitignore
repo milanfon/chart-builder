@@ -5,3 +5,4 @@ node_modules/
 index.json
 input/.DS_Store
 output/.DS_Store
+.DS_Store
