@@ -3,6 +3,7 @@ import colors from "../../constants/colors.json";
 import { renderHeader } from "./general-components";
 import { parseHWiFile } from "../parsers/csv";
 import { linMap } from "../aux";
+import { parseREWtxt } from "../parsers/rew";
 
 function determineTicks(size, bounds) {
     const diff = Math.abs(bounds[1] - bounds[0]);
@@ -111,7 +112,13 @@ export function renderLine(props, inputName) {
     const rightAxes = right.map((v,i) => renderVerticalAxis(v, i, true));
     const keys = [...left.flatMap(j => j.series.map(i => i.key)), ...right.flatMap(j => j.series.map(i => i.key))];
 
-    const vals = parseHWiFile(props.sourceFile, inputName, {encoding: props.encoding, columns: keys, limit: props.limit});
+    let vals = {};
+    if (props.parser === 'hwi')
+        vals = parseHWiFile(props.sourceFile, inputName, {encoding: props.encoding, columns: keys, limit: props.limit});
+    else if (props.parser === 'rew')
+        vals = parseREWtxt(inputName, {encoding: props.encoding, values: props.values});
+    else
+        throw new Error("Invalid parser value!");
 
     const leftAxisWidth = calcFullAxisWidth(left);
     const rightAxisWidth = calcFullAxisWidth(right);
