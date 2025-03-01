@@ -111,10 +111,11 @@ export function renderLine(props, inputName) {
     const leftAxes = left.map((v,i) => renderVerticalAxis(v, i));
     const rightAxes = right.map((v,i) => renderVerticalAxis(v, i, true));
     const keys = [...left.flatMap(j => j.series.map(i => i.key)), ...right.flatMap(j => j.series.map(i => i.key))];
+    const indexes = [...left.flatMap(j => j.series.map(i => ({[i.key]: i.index}))), ...right.flatMap(j => j.series.map(i => ({[i.key]: i.index})))];
 
     let vals = {};
     if (props.parser === 'hwi')
-        vals = parseHWiFile(props.sourceFile, inputName, {encoding: props.encoding, columns: keys, limit: props.limit});
+        vals = parseHWiFile(props.sourceFile, inputName, {encoding: props.encoding, columns: keys, limit: props.limit, indexes: Object.assign({}, ...indexes)});
     else if (props.parser === 'rew')
         vals = parseREWtxt(inputName, {encoding: props.encoding, values: props.values});
     else

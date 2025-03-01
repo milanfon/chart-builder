@@ -1,14 +1,30 @@
 import {readFileSync} from "node:fs";
 import { decode } from "iconv-lite";
 
-export function parseCSV(path, inputName, {encoding, columns}) {
+export function parseCSV(path, inputName, {encoding, columns, indexes}) {
     const buffer = readFileSync("input/"+inputName+"/"+path);
     const data = decode(buffer, encoding || 'utf8');
     const lines = data.split(`\n`);
 
     const header = lineToArray(lines[0]);
+    console.log("Header columns: ", header.length, "Data columns: ", lineToArray(lines[1]).length);
 
-    const columnIndexes = columns.map(i => header.indexOf(i));
+    const columnIndexes = columns.map(i => {
+        if (indexes && indexes[i]) {
+            if ((indexes[i] + "").startsWith("d"))
+                return indexes[i].substring(1);
+            let hit = 0;
+            let res = -1;
+            do {
+                res = header.indexOf(i, res + 1);
+                hit++;
+            } while (hit != indexes[i] && res != -1);
+            return res;
+        } else {
+            return header.indexOf(i);
+        }
+    });
+    console.log("Column indexes:", columnIndexes);
 
     return lines.reduce((a, l) => {
             columnIndexes.forEach((v, i) => a[columns[i]].push(l.split(",")[v]));
@@ -21,8 +37,8 @@ function lineToArray(line) {
     return line.split(",").map(i => i.replace(/"/g, ''));
 }
 
-export function parseHWiFile(path, inputName, {encoding, columns, limit}) {
-    const vals = parseCSV(path, inputName, {encoding, columns: ["Date", "Time", ...columns]});
+export function parseHWiFile(path, inputName, {encoding, columns, limit, indexes}) {
+    const vals = parseCSV(path, inputName, {encoding, columns: ["Date", "Time", ...columns], indexes});
     Object.values(vals).forEach(v => {
         console.log("Data length: " + v.length);
         let lim = [1, v.length - 4];
