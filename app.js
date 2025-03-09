@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const {ArgumentParser} = require('argparse');
 import {$} from "bun";
-import { getIndex, writeIndex } from "./includes/files";
+import { checkOrCreateOutPath, getIndex, loadGeneral, loadInput, writeIndex } from "./includes/files";
 import { saveAsPNG } from "./includes/export";
 
 const argparser = new ArgumentParser({
@@ -21,9 +21,11 @@ let filesChanged = 0;
 
 const dirPath = './input/'+args.i;
 const outPath = './output/'+args.i;
+checkOrCreateOutPath(outPath);
+const generalVals = loadGeneral(dirPath);
 
 if (args.m === 'single') {
-    const input = require(dirPath);
+    const input = await loadInput(dirPath);
     const fileDirName = path.dirname(args.i);
     const page = new Page(input, fileDirName);
     const name = path.parse(dirPath).name;
@@ -32,8 +34,6 @@ if (args.m === 'single') {
         saveAsPNG('./output/'+fileDirName, name);
 } else if (args.m === 'batch') {
     const files = fs.readdirSync(dirPath).filter(f => path.extname(f) === '.json').map(f => path.join(dirPath, f));
-    if (!fs.existsSync(outPath))
-        fs.mkdirSync(outPath, {recursive: true});
     if (!index?.[args.i])
         index[args.i] = {};
     const processFile = async (f) => {
@@ -43,7 +43,7 @@ if (args.m === 'single') {
         else 
             index[args.i][f] = checksum;
         filesChanged++;
-        const page = new Page(require('./'+f), args.i);
+        const page = new Page(await loadInput('./'+f), args.i);
         const name = path.parse(f).name;
         fs.writeFileSync(outPath+"/"+name+".svg", page.render());
         if (args.e === 'png')
