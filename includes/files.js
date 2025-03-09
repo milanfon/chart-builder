@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import Mustache from "mustache";
 
 const indexPath = 'index.json';
 
@@ -48,8 +49,18 @@ export function checkOrCreateOutPath(argOutPath) {
         fs.mkdirSync(outPath, {recursive: true});
 }
 
-export async function loadInput(inputPath) {
+function renderTopLevelTemplates(obj, view) {
+    Object.keys(obj).forEach(key => {
+        if (typeof obj[key] === 'string') {
+            obj[key] = Mustache.render(obj[key], view);
+        }
+    });
+}
+
+export async function loadInput(inputPath, templateView) {
     const file = Bun.file(inputPath);
     const content = await file.json();
+    if (templateView)
+        renderTopLevelTemplates(content, templateView);
     return content;
 }

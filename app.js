@@ -25,7 +25,7 @@ checkOrCreateOutPath(outPath);
 const generalVals = loadGeneral(dirPath);
 
 if (args.m === 'single') {
-    const input = await loadInput(dirPath);
+    const input = await loadInput(dirPath, generalVals);
     const fileDirName = path.dirname(args.i);
     const page = new Page(input, fileDirName);
     const name = path.parse(dirPath).name;
@@ -43,7 +43,7 @@ if (args.m === 'single') {
         else 
             index[args.i][f] = checksum;
         filesChanged++;
-        const page = new Page(await loadInput('./'+f), args.i);
+        const page = new Page(await loadInput('./'+f, generalVals), args.i);
         const name = path.parse(f).name;
         fs.writeFileSync(outPath+"/"+name+".svg", page.render());
         if (args.e === 'png')
