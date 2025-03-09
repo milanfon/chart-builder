@@ -35,7 +35,6 @@ export function loadGeneral(inputPath) {
     if (!dir)
         return undefined;
     const generalFilePath = path.join(dir, '.global');
-    console.log(generalFilePath)
     if (fs.existsSync(generalFilePath)) {
         const view = fs.readFileSync(generalFilePath, 'utf8');
         return JSON.parse(view);
