@@ -21,3 +21,7 @@ export function percentageToString(percent) {
 export function linMap(val, [origA, origB], [boundA, boundB]) {
     return ((val - origA) * (boundB - boundA)) / (origB - origA) + boundA;
 }
+
+export function invert(val, invert) {
+    return invert ? -val : val;
+}

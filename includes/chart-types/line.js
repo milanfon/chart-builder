@@ -2,7 +2,7 @@ import dimensions from "../../constants/dimensions.json";
 import colors from "../../constants/colors.json";
 import { renderHeader } from "./general-components";
 import { parseHWiFile } from "../parsers/csv";
-import { linMap } from "../aux";
+import { linMap, invert } from "../aux";
 import { parseREWtxt } from "../parsers/rew";
 
 function determineTicks(size, bounds) {
@@ -64,7 +64,7 @@ function renderSeries(vals, series, canvas) {
         b.series.forEach(s => {
             if (!pos)
                 pos = vals[s.key].map((_, i) => linMap(i, [0, vals[s.key].length - 1], [canvas.x, canvas.x + canvas.width]));
-            const remaped = vals[s.key].map(i => (canvas.y + canvas.height) - linMap(i, b.bounds, [0, canvas.height]));
+            const remaped = vals[s.key].map(i => (canvas.y + canvas.height) - linMap(invert(i, s?.invert), b.bounds, [0, canvas.height]));
             const pathString = remaped.reduce((a, v, i) => {
                 if (i > 0)
                     return a + " L" + pos[i] + " " + v;
