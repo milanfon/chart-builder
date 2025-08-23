@@ -189,8 +189,10 @@ export class Page {
         }
         for (let c = 1; c < columnCount + 1; c++) {
             params += `<text x="${paramLine + (c - 0.5) * valUnit}" y="${headLine + (0.5) * unitHeight}" fill="#${colors.general.background}" text-anchor="middle" align-baseline="middle" font-family="Russo One" font-size="${dimensions.specs["font-size"]}" dominant-baseline="central">${this.props.values[c - 1].name}</text>
-                        <line x1="${paramLine + c * valUnit}" y1="${dimensions.specs.padding}" x2="${paramLine + c * valUnit}" y2="${dimensions.canvas.height - dimensions.specs.padding}" stroke="#${colors.general.outline}" stroke-width="2"/>
-                        <image xlink:href="../../input/${this.inputName}/${this.props.values[c-1].pic.path}" x="${paramLine + (c - 0.9) * valUnit}" y="${dimensions.specs.padding + dimensions.specs["head-line"] * 0.1}" width="${valUnit * 0.8}" height="${dimensions.specs["head-line"] * 0.8}"/>`;
+                        <line x1="${paramLine + c * valUnit}" y1="${dimensions.specs.padding}" x2="${paramLine + c * valUnit}" y2="${dimensions.canvas.height - dimensions.specs.padding}" stroke="#${colors.general.outline}" stroke-width="2"/>`;
+            if (this.props.values[c-1].pic) {
+                params += `<image xlink:href="../../input/${this.inputName}/${this.props.values[c-1].pic.path}" x="${paramLine + (c - 0.9) * valUnit}" y="${dimensions.specs.padding + dimensions.specs["head-line"] * 0.1}" width="${valUnit * 0.8}" height="${dimensions.specs["head-line"] * 0.8}"/>`;
+            }
         }
         return params;
     }
