@@ -12,7 +12,12 @@
         "padding": 30,
         "param-line": 400,
         "head-line": 230,
-        "font-size": 26
+        "font-size": {
+            "default": 26,
+            "small": 12,
+            "medium": 18,
+            "large": 26
+        }
     },
     "stats": {
         "axisWidth": 70,
