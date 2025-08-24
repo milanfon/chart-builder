@@ -1,6 +1,23 @@
 import dimensions from "../../constants/dimensions.json" assert {type: "json"}
 import colors from "../../constants/colors.json" assert {type: "json"}
 
+function parseCellProperties(cellValue){
+    let [cellText, cellTextSize] = ["", dimensions.specs["font-size"].default];
+    if (typeof cellValue === "object") {
+        cellText = cellValue.text;
+        if (typeof cellValue.size === "string")
+            cellTextSize = dimensions.specs["font-size"][cellValue.size];
+        else if (typeof cellValue.size === "number")
+            cellTextSize = cellValue.size;
+        else
+            console.log("Undefined type of cell size", typeof cellValue.size);
+    } else if(typeof cellValue === "string")
+        cellText = cellValue;
+    else
+        console.log("Undefined type of cell", typeof cellValue);
+    return [cellText, cellTextSize];
+}
+
 export function renderCells(paramLine, headLine, props, inputName) {
         const paramCount = props.parameters.length;
         const columnCount = props.values.length;
@@ -24,20 +41,7 @@ export function renderCells(paramLine, headLine, props, inputName) {
                 }  else if (c < 1) {
                     params += `<text x="${dimensions.specs.padding + dimensions.specs["param-line"] / 2}" y="${headLine + (i+0.5) * unitHeight}" fill="#${colors.general.outline}" text-anchor="middle" align-baseline="middle" font-family="Russo One" font-size="${dimensions.specs["font-size"].default}" dominant-baseline="central">${props.parameters[i - 1]}</text>`;
                 } else if (i > 0) {
-                    const cellValue = props.values[c - 1].val[i - 1];
-                    let [cellText, cellTextSize] = ["", dimensions.specs["font-size"].default];
-                    if (typeof cellValue === "object") {
-                        cellText = cellValue.text;
-                        if (typeof cellValue.size === "string")
-                            cellTextSize = dimensions.specs["font-size"][cellValue.size];
-                        else if (typeof cellValue.size === "number")
-                            cellTextSize = cellValue.size;
-                        else
-                            console.log("Undefined type of cell size");
-                    } else if(typeof cellValue === "string")
-                        cellText = cellValue;
-                    else
-                        console.log("Undefined type of cell");
+                    const [cellText, cellTextSize] = parseCellProperties(props.values[c - 1].val[i - 1]);
                     params += `<text x="${paramLine + (c - 0.5) * valUnit}" y="${headLine + (i+0.5) * unitHeight}" fill="#${colors.general.outline}" text-anchor="middle" align-baseline="middle" font-family="Russo One" font-size="${cellTextSize}" dominant-baseline="central">${cellText}</text>`;
                 }
             }
