@@ -61,3 +61,78 @@ One of the parsers is for plotting audio response. the `rew` parser is for the o
     ]
 }
 ```
+
+### Table
+
+Right now tables are called 'SPECS'
+
+Table cells can be both text format or object that specifies both the text and it's size.
+
+```json
+{
+    "name": "SPECIFIKACE",
+    "type": "specs",
+    "parameters": [
+        "SoC",
+        "Velikost displeje",
+        "Displej",
+        "Rozlišení displeje",
+        "Hlavní kamera",
+        "Ultrawide kamera",
+        "Telephoto kamera",
+        "Přední kamera",
+        "Velikost baterie",
+        "Rychlost nabíjení",
+        "Bezdrátové nabíjení",
+        "Cena k 12/24"
+    ],
+    "values": [
+        {
+            "name": "Pixel 9 Pro",
+            "pic": {
+                "path": "pixel-9-pro.png"
+            },
+            "val": [
+                "Tensor G4",
+                "6.3\"",
+                {
+                    "text": "OLED, HDR 2000 (3000) nit, 120 Hz",
+                    "size": 22
+                },
+                "1280x2856 px",
+                "50 MP, f/1.7, 25mm, OIS",
+                "48 MP, f/2.2, 126°",
+                "48 MP, f/2.8, 113mm",
+                "42 MP, f/2.2, 17mm",
+                "4700 mAh",
+                "27W, PD 3.0",
+                "21W (12W) + Reverse",
+                "22 990,-"
+            ]
+        },
+        {
+            "name": "Pixel 10 Pro",
+            "pic": {
+                "path": "pixel-10-pro.png"
+            },
+            "val": [
+                "Tensor G5",
+                "6.3\"",
+                {
+                    "text": "LTPO OLED, HDR 2200 (3300) nit, 120 Hz",
+                    "size": 19
+                },
+                "1280x2856 px",
+                "50 MP, f/1.68, OIS",
+                "48 MP, f/1.7, 123°, AF",
+                "48 MP, f/2.8, 5x, OIS",
+                "42 MP, f/2.2, 103°",
+                "4870 mAh",
+                "30W, USB-C PPS",
+                "15W (Qi2)",
+                "27 990,-"
+            ]
+        }
+    ]
+}
+```
