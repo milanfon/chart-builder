@@ -187,7 +187,12 @@ export class Page {
                     let [cellText, cellTextSize] = ["", dimensions.specs["font-size"].default];
                     if (typeof cellValue === "object") {
                         cellText = cellValue.text;
-                        cellTextSize = dimensions.specs["font-size"][cellValue.size];
+                        if (typeof cellValue.size === "string")
+                            cellTextSize = dimensions.specs["font-size"][cellValue.size];
+                        else if (typeof cellValue.size === "number")
+                            cellTextSize = cellValue.size;
+                        else
+                            console.log("Undefined type of cell size");
                     } else if(typeof cellValue === "string")
                         cellText = cellValue;
                     else
