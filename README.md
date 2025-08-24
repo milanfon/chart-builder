@@ -4,6 +4,8 @@ Created by the Milanfon Media team, lead by Milan Horínek. All drived work must
 
 __This whole README section is still under WIP and is beign completed gradually__
 
+_Please acknowledge that this project might be sometimes a mess because most fixed and features are done under time pressure, so the least time consuming path for a solution is usually taken._
+
 ## Prerequisities
 
 Required software to run this project:
