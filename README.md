@@ -16,6 +16,34 @@ Currently this software was tested and developed under MacOS, for which compatib
 
 ## Usage
 
+### General
+
+For the header, the software is by default looking for these 3 values and they are placed in the header in this particular order:
+
+```js
+{
+    "driver": "512.56",
+    "version": "4.04",
+    "settings": "High",
+    ...
+}
+```
+
+_This comes from the fact that the main purpose of the software is to render gaming benchmarks._ But if some of those are not defined, then it looks next to the `info` parameter, which is an array of lenght 3, containing these pairs:
+
+```js
+{
+    "name": "Frekvenční charakteristika",
+    "info": [
+    {"title": "Frekvence", "value": "20 .. 20 000 Hz"},
+    {"title": "Měřící zařízení", "value": "MiniDSP E.A.R.S."},
+    {"title": "Sluchátka", "value": "JBL Tour One M3"}
+    ],
+    "type": "line",
+    ...
+}
+```
+
 ### Bar chart
 
 ### Line chart
