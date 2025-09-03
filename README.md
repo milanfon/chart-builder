@@ -44,6 +44,8 @@ _This comes from the fact that the main purpose of the software is to render gam
 }
 ```
 
+__If value of one of this header parameter is not defined, then no title is shown.__
+
 ### Bar chart
 
 ### Line chart
