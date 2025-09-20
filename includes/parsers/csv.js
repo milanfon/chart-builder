@@ -1,13 +1,15 @@
 import {readFileSync} from "node:fs";
 import { decode } from "iconv-lite";
 
-export function parseCSV(path, inputName, {encoding, columns, indexes}) {
+export function parseCSV(path, inputName, {encoding, columns, indexes, headerLine = 0}) {
     const buffer = readFileSync("input/"+inputName+"/"+path);
     const data = decode(buffer, encoding || 'utf8');
-    const lines = data.split(`\n`);
+    let lines = data.split(`\n`);
 
-    const header = lineToArray(lines[0]);
-    console.log("Header columns: ", header.length, "Data columns: ", lineToArray(lines[1]).length);
+    const header = lineToArray(lines[headerLine]);
+    console.log("Header columns: ", header.length, "Data columns: ", lineToArray(lines[headerLine+1]).length);
+
+    lines = lines.slice(headerLine+1);
 
     const columnIndexes = columns.map(i => {
         if (indexes && indexes[i]) {
@@ -51,5 +53,10 @@ export function parseHWiFile(path, inputName, {encoding, columns, limit, indexes
         v.splice(lim[1] + 1);
         v.splice(0, lim[0]);
     });
+    return vals;
+}
+
+export function parseMangoHUDFile(path, inputName, {encoding, columns, limit, indexes}) {
+    const vals = parseCSV(path, inputName, {encoding, columns, indexes, headerLine: 2});
     return vals;
 }

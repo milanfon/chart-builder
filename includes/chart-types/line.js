@@ -1,7 +1,7 @@
 import dimensions from "../../constants/dimensions.json";
 import colors from "../../constants/colors.json";
 import { renderHeader } from "./general-components";
-import { parseHWiFile } from "../parsers/csv";
+import { parseHWiFile, parseMangoHUDFile } from "../parsers/csv";
 import { linMap, invert } from "../aux";
 import { parseREWtxt } from "../parsers/rew";
 
@@ -116,6 +116,8 @@ export function renderLine(props, inputName) {
     let vals = {};
     if (props.parser === 'hwi')
         vals = parseHWiFile(props.sourceFile, inputName, {encoding: props.encoding, columns: keys, limit: props.limit, indexes: Object.assign({}, ...indexes)});
+    else if (props.parser === 'mangohud')
+        vals = parseMangoHUDFile(props.sourceFile, inputName, {encoding: props.encoding, columns: keys, limit: props.limit, indexes: Object.assign({}, ...indexes)});
     else if (props.parser === 'rew')
         vals = parseREWtxt(inputName, {encoding: props.encoding, values: props.values});
     else
