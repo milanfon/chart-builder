@@ -42,7 +42,7 @@ export function renderBrightnessTable(props, inputName) {
             rectangles += `
                 <rect x="${dimensions.brightness.padding + v * recWidthUnit}" y="${dimensions.brightness.top + h * recHeightUnit}" width="${recWidthUnit}" height="${recHeightUnit}" stroke="#${colors.general.outline}" stroke-width="2" fill="#${decideRectColor(diff[h * parsed.cols + v])}"/>
                 <text x="${dimensions.brightness.padding + (v + 0.5) * recWidthUnit}" y="${dimensions.brightness.top + (h + 0.45) * recHeightUnit}" fill="#${colors.general.outline}" text-anchor="middle" align-baseline="middle" font-family="Russo One" font-size="${dimensions.brightness.brightnessText}" dominant-baseline="central">${parsed.values[h * parsed.cols + v]}</text>
-                <text x="${dimensions.brightness.padding + (v + 0.5) * recWidthUnit}" y="${dimensions.brightness.top + (h + 0.6) * recHeightUnit}" fill="#000000" text-anchor="middle" align-baseline="middle" font-family="Russo One" font-size="${dimensions.brightness.diffText}" dominant-baseline="central">${percentageToString(diff[h * parsed.cols + v])}</text>
+                <text x="${dimensions.brightness.padding + (v + 0.5) * recWidthUnit}" y="${dimensions.brightness.top + (h + 0.6) * recHeightUnit}" fill="#000000" text-anchor="middle" align-baseline="middle" font-family="Russo One" font-size="${dimensions.brightness.diffText}" dominant-baseline="hanging">${percentageToString(diff[h * parsed.cols + v])}</text>
             `;
         }
     }
