@@ -5,6 +5,7 @@ import { renderBrightnessTable } from "./chart-types/brightness";
 import { getEmbeddedLogo, renderHeader } from "./chart-types/general-components";
 import { renderLine, renderVerticalAxis } from "./chart-types/line";
 import { renderCells } from "./chart-types/table";
+import { renderText } from "./rendering-helpers/text";
 
 export class Page {
     constructor(props, inputName) {
@@ -122,8 +123,18 @@ export class Page {
             for (let i = 0; i < count; i++){
                 bars += `
                 <rect x="0" y="${i * unit * scale}" width="${this.scaleBar(val.val[i])}" height="${unit * scale}" fill="#${colors[this.props.type][variant][this.barKeys[i]]}"/>
-                <text x="${this.scaleBar(val.val[i]) - 15}" y="${(i+0.5) * unit * scale}" fill="#${colors.general["font-primary"]}" text-anchor="end" align-baseline="middle" font-family="Russo One" font-size="${dimensions["font-size"].unit * scale * 1 / count}" dominant-baseline="central">${val.val[i]}</text>
             `;
+                const fontSize = this.props?.barsFontSize?.[i] || dimensions["font-size"].unit * scale * 1 / count;
+                bars += renderText({
+                    x: this.scaleBar(val.val[i]) - 15,
+                    y: (i+0.5) * unit * scale,
+                    fill: colors.general["font-primary"],
+                    textAnchor: "end",
+                    alignBaseline: "middle",
+                    fontSize,
+                    dominantBaseline: "central",
+                    text: val.val[i]
+                });
             }
             return `
                 <g transform="translate(0 ${index * one + d})">
