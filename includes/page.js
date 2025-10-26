@@ -103,12 +103,13 @@ export class Page {
     getDescriptions(one, d, scale) {
         return this.props.values.map((val, index) => {
                 const iconHref = val?.icon ? `<image xlink:href="data:image/png;base64,${imageToBase64("./assets/icons/"+val.icon+".png")}" x="0" y="0" width="${40 * scale}" height="${40 * scale}"/>` : undefined;
+                const modelText = renderText({x: 95, y: 50*scale, fill: colors.general["font-secondary"], textAnchor: "start", alignBaseline: "middle", fontFamily: "Russo One", fontSize: 28*scale, dominantBaseline: "hanging", text: val.model || ""})
                 return `
                 <g transform="translate(0 ${index * one + d})">
                     ${iconHref || ""}
                     <text x="${iconHref ? 50 : 0}" y="${20 * scale}" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="${40 * scale}" dominant-baseline="central">${val.name}</text>
                     <text x="0" y="${50 * scale}" fill="#${colors.general["font-secondary"]}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="${28 * scale}" dominant-baseline="hanging">${val.date}</text>
-                    <text x="95" y="${50 * scale}" fill="#${colors.general["font-secondary"]}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="${28 * scale}" dominant-baseline="hanging">${val.model || ""}</text>
+                    ${modelText}
                 </g>
             `});
     }
