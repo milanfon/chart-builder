@@ -37,7 +37,7 @@ if (args.m === 'single') {
     if (!index?.[args.i])
         index[args.i] = {};
     const processFile = async (f) => {
-        const checksum = await $`shasum -a 512 ${f}`.text().then(i => i.split('  ')[0]);
+        const checksum = await $`shasum -a 512 -- ${f}`.text().then(i => i.split('  ')[0]);
         if (index?.[args.i]?.[f] === checksum && !args.f)
             return;
         else 
@@ -47,12 +47,14 @@ if (args.m === 'single') {
         const name = path.parse(f).name;
         fs.writeFileSync(outPath+"/"+name+".svg", page.render());
         if (args.e === 'png')
-            saveAsPNG(outPath, name);
+            await saveAsPNG(outPath, name);
     };
-    Promise.all(files.map(processFile)).then(() => {
-        if (filesChanged > 0)
-            writeIndex(index);
-        else
-            console.log("No files changed!");
-    });
+    await Promise.all(files.map(processFile))
+        .then(() => {
+            if (filesChanged > 0)
+                writeIndex(index);
+            else
+                console.log("No files changed!");
+        })
+        .catch((e) => console.error(e));
 }
