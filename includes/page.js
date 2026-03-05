@@ -13,6 +13,7 @@ export class Page {
         this.inputName = inputName;
         if (props.type === 'bars') {
             this.calcMaxScale();
+            this.calcMinScale();
             this.sortValues();
         }
         if (this.props?.values)
@@ -47,6 +48,15 @@ export class Page {
         this.max = this.max * 1.1;
     }
 
+    calcMinScale() {
+        this.min = 0;
+        this.props.values.forEach(i => {
+            const m = Math.min(...i.val.map(v => this.getAbsValue(v)));
+            if (m < this.min)
+                this.min = m;
+        });
+    }
+
     sortValues() {
         const sort = this.props?.sort;
         const index = this.props?.sortIndex || 0;
@@ -58,7 +68,7 @@ export class Page {
     }
 
     getAbsValue(val) {
-        if (this.props.units === 'min' || this.props.units === 'hrs') {
+        if (typeof val === "string" && (this.props.units === 'min' || this.props.units === 'hrs')) {
             const time = val.split(":");
             return parseInt(time[0]) * 60 + parseInt(time[1]);
         }
@@ -94,10 +104,29 @@ export class Page {
     scaleBar(val) {
         const converted = this.getAbsValue(val);
         const corr = this.props.barsX ? (dimensions.canvas.barsX - this.props.barsX) : 0;
-        const unit = (dimensions["bar-length"] + corr) / this.max;
+        const unit = (dimensions["bar-length"] + corr) / (this.max + Math.abs(this.min));
         const ret = converted * unit;
         const min = this.props.units === 'min' ? 150 : 60;
-        return ret > min ? ret : min;
+        if (ret >= 0)
+            return ret > 0 ? ret : min;
+        else  
+            return Math.abs(ret);
+    }
+
+    scaleBarX(val) {
+        const converted = this.getAbsValue(val);
+        if (this.min > 0)
+            return 0;
+        else {
+            const corr = this.props.barsX ? (dimensions.canvas.barsX - this.props.barsX) : 0;
+            const unit = (dimensions["bar-length"] + corr) / (this.max + Math.abs(this.min));
+            const zero = unit * Math.abs(this.min);
+            if (converted < 0)
+                return zero + (converted * unit);
+            else {
+                return zero;
+            }
+        }
     }
 
     getDescriptions(one, d, scale) {
@@ -123,14 +152,14 @@ export class Page {
             let bars = "";
             for (let i = 0; i < count; i++){
                 bars += `
-                <rect x="0" y="${i * unit * scale}" width="${this.scaleBar(val.val[i])}" height="${unit * scale}" fill="#${colors[this.props.type][variant][this.barKeys[i]]}"/>
+                <rect x="${this.scaleBarX(val.val[i])}" y="${i * unit * scale}" width="${this.scaleBar(val.val[i])}" height="${unit * scale}" fill="#${colors[this.props.type][variant][this.barKeys[i]]}"/>
             `;
                 const fontSize = this.props?.barsFontSize?.[i] || dimensions["font-size"].unit * scale * 1 / count;
                 bars += renderText({
-                    x: this.scaleBar(val.val[i]) - 15,
+                    x: (val.val[i] < 0) ? this.scaleBarX(val.val[i]) + 15 : this.scaleBarX(val.val[i]) + this.scaleBar(val.val[i]) - 15,
                     y: (i+0.5) * unit * scale,
                     fill: colors.general["font-primary"],
-                    textAnchor: "end",
+                    textAnchor: val.val[i] < 0 ? "start" : "end",
                     alignBaseline: "middle",
                     fontSize,
                     dominantBaseline: "central",
@@ -154,6 +183,7 @@ export class Page {
         const mapped = this.getDescriptions(one, d, scale);
         const bars = this.getBars(one, d, scale);
         const barsX = this.props.barsX || dimensions.canvas.barsX;
+        const zeroBar = this.min >= 0 ? "" : `<line x1="${this.scaleBarX(0) + barsX}" x2="${this.scaleBarX(0) + barsX}" y1="150" y2="1010" stroke="#${colors.general.outline}" stroke-width="2" stroke="#${colors.general["zero-bar"]}"/>`;
         return `
             <g transform="translate(60, 180)">
                 ${mapped}
@@ -162,14 +192,15 @@ export class Page {
                 ${bars}
             </g>
             <line x1="${barsX}" y1="150" x2="${barsX}" y2="1010" stroke="#${colors.general.outline}" stroke-width="2"/>
+            ${zeroBar} 
         `;
     }
 
     renderChart() {
         return `
+            ${this.renderSeries()}
             ${renderHeader(this.props)}
             ${this.renderFooter()}
-            ${this.renderSeries()}
         `;
     }
 
