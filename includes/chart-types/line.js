@@ -2,21 +2,22 @@ import dimensions from "../../constants/dimensions.json";
 import colors from "../../constants/colors.json";
 import { renderHeader } from "./general-components";
 import { parseCSV, parseHWiFile, parseMangoHUDFile } from "../parsers/csv";
-import { linMap, invert } from "../aux";
+import { linMap, invert, determineFilePath } from "../aux";
 import { parseREWtxt } from "../parsers/rew";
+import { renderText } from "../rendering-helpers/text";
 
-function determineTicks(size, bounds) {
+function determineTicks(size, bounds, base = 10) {
     const diff = Math.abs(bounds[1] - bounds[0]);
     const scale = size / diff;
     return {
-        major: diff / 10 * scale,
-        minor: diff / 20 * scale,
-        boundsLabel: diff / 10 
+        major: diff / base * scale,
+        minor: diff / (2 * base) * scale,
+        boundsLabel: diff / base
     };
 }
 
 export function renderVerticalAxis(data, order, right = false) {
-    const height = 860;
+    const height = 820;
     const width = data.width || dimensions.stats.axisWidth;
     const y = 150;
     const x = !right ? 30 + width * order : dimensions.canvas.width - 30 - (order + 1) * width;
@@ -38,6 +39,37 @@ export function renderVerticalAxis(data, order, right = false) {
     for (let t = height - dt.minor; t > 0; t -= dt.minor) {
         const yPos = y + t;
         ticks += `<line x1="${x}" y1="${yPos}" x2="${x + dimensions.stats.tickMinorWidth}" y2="${yPos}" stroke="#${colors.general.outline}" stroke-width="2"/>`;
+    }
+    return `
+        ${outline}
+        ${ticks}
+    `;
+}
+
+export function renderHorizontalAxis(leftAxisWidth, rightAxisWidth, bounds, size) {
+    const y = 150 + 820;
+    const x = 30 + leftAxisWidth;
+    const height = 40;
+    const axisWidth = dimensions.canvas.width - 30 * 2 - leftAxisWidth - rightAxisWidth;
+    const textPadding = 5;
+    const outline = `
+        <rect x="${30}" y="${y}" width="${leftAxisWidth}" height="${height}" stroke="#${colors.general.outline}" fill="#${colors.general.outline}" stroke-width="2"/>
+        <rect x="${dimensions.canvas.width - 30 - rightAxisWidth}" y="${y}" width="${rightAxisWidth}" height="${height}" stroke="#${colors.general.outline}" fill="#${colors.general.outline}" stroke-width="2"/>
+        <rect x="${x}" y="${y}" width="${axisWidth}" height="${height}" stroke="#${colors.general.outline}" fill="#${colors.general.background}" stroke-width="2"/>
+    `;
+    let ticks = `
+        ${renderText({x: x + textPadding, y: y + height - textPadding, text: bounds[0], textAnchor: "start", dominantBaseline: "text-top", fontSize: 20})}
+        ${renderText({x: dimensions.canvas.width - 30 - rightAxisWidth - textPadding, y: y + height - textPadding, text: bounds[1], textAnchor: "end", dominantBaseline: "text-top", fontSize: 20})}
+    `;
+    const dt = determineTicks(axisWidth, bounds, size);
+    let label = bounds[0] + dt.boundsLabel;
+    for (let t = 30 + leftAxisWidth + dt.major; t <= 30 + leftAxisWidth + axisWidth - dt.major; t += dt.major) {
+        const xPos = t;
+        ticks += `
+            <line x1="${xPos}" y1="${y}" x2="${xPos}" y2="${y+20}" stroke="#${colors.general.outline}" stroke-width="2"/>
+            ${renderText({x: xPos, y: y + height - textPadding, text: label, textAnchor: "middle", dominantBaseline: "text-top", fontSize: 20})}
+        `;
+        label += dt.boundsLabel;
     }
     return `
         ${outline}
@@ -112,6 +144,7 @@ export function renderLine(props, inputName) {
     const rightAxes = right.map((v,i) => renderVerticalAxis(v, i, true));
     const keys = [...left.flatMap(j => j.series.map(i => i.key)), ...right.flatMap(j => j.series.map(i => i.key))];
     const indexes = [...left.flatMap(j => j.series.map(i => ({[i.key]: i.index}))), ...right.flatMap(j => j.series.map(i => ({[i.key]: i.index})))];
+    const xBounds = [0,1];
 
     let vals = {};
     switch(props.parser) {
@@ -125,7 +158,7 @@ export function renderLine(props, inputName) {
             vals = parseREWtxt(inputName, {encoding: props.encoding, values: props.values});
             break;
         case 'csv':
-            vals = parseCSV(props.sourceFile, inputName, {encoding: props.encoding, columns: keys, limit: props.limit, indexes: Object.assign({}, ...indexes)});
+            vals = parseCSV(props.sourceFile, inputName, {encoding: props.encoding, columns: keys, limit: props.limit, indexes: Object.assign({}, ...indexes), xBounds});
             break;
         default:
             throw new Error("Invalid parser value!");
@@ -133,9 +166,10 @@ export function renderLine(props, inputName) {
 
     const leftAxisWidth = calcFullAxisWidth(left);
     const rightAxisWidth = calcFullAxisWidth(right);
+    const size = Object.values(vals)[0].length - 1;
 
     const insideCanvasWidth = dimensions.canvas.width - 2 * 30 - leftAxisWidth - rightAxisWidth;
-    const insideCanvasHeight = 860;
+    const insideCanvasHeight = 860 - 40;
     const insideCanvasX = leftAxisWidth + 30;
     const insideCanvasY = 150;
     const series = renderSeries(vals, [...left, ...right], {x: insideCanvasX, y: insideCanvasY, width: insideCanvasWidth, height: insideCanvasHeight});
@@ -145,6 +179,7 @@ export function renderLine(props, inputName) {
         ${renderHeader(props)}
         ${leftAxes}
         ${rightAxes}
+        ${renderHorizontalAxis(leftAxisWidth, rightAxisWidth, xBounds, size)}
         ${renderLineFooter(props, [...left, ...right].map(i => i.series).flat())}
     `;
 }

@@ -2,7 +2,7 @@ import {readFileSync} from "node:fs";
 import { decode } from "iconv-lite";
 import { determineFilePath } from "../aux";
 
-export function parseCSV(path, inputName, {encoding, columns, indexes, headerLine = 0}) {
+export function parseCSV(path, inputName, {encoding, columns, indexes, headerLine = 0, xBounds}) {
     const buffer = readFileSync(determineFilePath(path, inputName));
     const data = decode(buffer, encoding || 'utf8');
     let lines = data.split(`\n`);
@@ -30,6 +30,9 @@ export function parseCSV(path, inputName, {encoding, columns, indexes, headerLin
         }
     });
     console.log("Column indexes:", columnIndexes);
+
+    xBounds[0] = Number(lineToArray(lines[0])[0]);
+    xBounds[1] = Number(lineToArray(lines[lines.length - 1])[0]);
 
     return lines.reduce((a, l) => {
             columnIndexes.forEach((v, i) => a[columns[i]].push(l.split(",")[v]));
