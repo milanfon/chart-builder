@@ -1,12 +1,8 @@
 import fs from "node:fs";
+import { determineFilePath } from "../aux";
 
 export function parseUniformityTest(filePath, inputName) {
-    let fullFilePath = "";
-    if (filePath[0] === "/")
-        fullFilePath = filePath;
-    else
-        fullFilePath = "input/"+inputName+"/"+filePath;
-    const text = fs.readFileSync(fullFilePath, 'utf8');
+    const text = fs.readFileSync(determineFilePath(filePath, inputName), 'utf8');
 
     const resMatch = text.match(/.*results = \{.*$/gm);
     const resultsLine = resMatch[0];

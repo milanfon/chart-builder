@@ -1,8 +1,9 @@
 import {readFileSync} from "node:fs";
 import { decode } from "iconv-lite";
+import { determineFilePath } from "../aux";
 
 export function parseCSV(path, inputName, {encoding, columns, indexes, headerLine = 0}) {
-    const buffer = readFileSync("input/"+inputName+"/"+path);
+    const buffer = readFileSync(determineFilePath(path, inputName));
     const data = decode(buffer, encoding || 'utf8');
     let lines = data.split(`\n`);
 

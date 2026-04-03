@@ -25,3 +25,12 @@ export function linMap(val, [origA, origB], [boundA, boundB]) {
 export function invert(val, invert) {
     return invert ? -val : val;
 }
+
+export function determineFilePath(filePath, inputName) {
+    let fullFilePath = "";
+    if (filePath[0] === "/")
+        fullFilePath = filePath;
+    else
+        fullFilePath = "input/"+inputName+"/"+filePath;
+    return fullFilePath;
+}
