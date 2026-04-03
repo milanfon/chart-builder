@@ -1,5 +1,6 @@
 import colors from "../../constants/colors.json";
 import { imageToBase64, getCurrentDateMonth } from "../aux";
+import { renderText } from "../rendering-helpers/text";
 
 export function getEmbeddedLogo() {
     return `data:image/png;base64,${imageToBase64("./assets/logo.png")}`;
@@ -19,13 +20,13 @@ export function renderHeader(props) {
         <rect x="240" y="30" width="1080" height="120" fill="#${colors.general.outline}"/>
         <text x="270" y="90" fill="#${colors.general.background}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="40" dominant-baseline="central">${props.name}</text>
 
-        <text x="1340" y="50" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">${props?.settings ? "Nastavení" : (props?.info?.[0]?.title || "")}</text>
-        <text x="1340" y="90" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">${props?.driver ? "Driver" : (props?.info?.[1]?.title || "")}</text>
-        <text x="1340" y="130" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">${props?.version ? "Verze" : (props?.info?.[2]?.title || "")}</text>
+        ${renderText({x: 1340, y: 50, textAnchor: "start", alignBaseline: "middle", fontFamily: "Russo One", fontSize: 20, dominantBaseline: "central", text: props?.version ? "Verze" : (props?.info?.[0]?.title || "")})}
+        ${renderText({x: 1340, y: 90, textAnchor: "start", alignBaseline: "middle", fontFamily: "Russo One", fontSize: 20, dominantBaseline: "central", text: props?.version ? "Verze" : (props?.info?.[1]?.title || "")})}
+        ${renderText({x: 1340, y: 130, textAnchor: "start", alignBaseline: "middle", fontFamily: "Russo One", fontSize: 20, dominantBaseline: "central", text: props?.version ? "Verze" : (props?.info?.[2]?.title || "")})}
         
-        <text x="1540" y="50" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="${settingsFontSize}" dominant-baseline="central">${props?.settings || props?.info?.[0]?.value || ""}</text>
-        <text x="1540" y="90" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">${props?.driver || props?.info?.[1]?.value || ""}</text>
-        <text x="1540" y="130" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">${props?.version || props?.info?.[2]?.value || ""}</text>
+        ${renderText({x: 1540, y: 50, textAnchor: "start", alignBaseline: "middle", fontFamily: "Russo One", fontSize: 20, dominantBaseline: "central", text: props?.version || props?.info?.[0]?.value || ""})}
+        ${renderText({x: 1540, y: 90, textAnchor: "start", alignBaseline: "middle", fontFamily: "Russo One", fontSize: 20, dominantBaseline: "central", text: props?.version || props?.info?.[1]?.value || ""})}
+        ${renderText({x: 1540, y: 130, textAnchor: "start", alignBaseline: "middle", fontFamily: "Russo One", fontSize: 20, dominantBaseline: "central", text: props?.version || props?.info?.[2]?.value || ""})}
 
         <text x="1975" y="90" fill="#${colors.general.outline}" text-anchor="middle" align-baseline="middle" font-family="Russo One" font-size="40" dominant-baseline="central">${getCurrentDateMonth()}</text>
 
