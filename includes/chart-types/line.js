@@ -1,7 +1,7 @@
 import dimensions from "../../constants/dimensions.json";
 import colors from "../../constants/colors.json";
 import { renderHeader } from "./general-components";
-import { parseHWiFile, parseMangoHUDFile } from "../parsers/csv";
+import { parseCSV, parseHWiFile, parseMangoHUDFile } from "../parsers/csv";
 import { linMap, invert } from "../aux";
 import { parseREWtxt } from "../parsers/rew";
 
@@ -114,14 +114,22 @@ export function renderLine(props, inputName) {
     const indexes = [...left.flatMap(j => j.series.map(i => ({[i.key]: i.index}))), ...right.flatMap(j => j.series.map(i => ({[i.key]: i.index})))];
 
     let vals = {};
-    if (props.parser === 'hwi')
-        vals = parseHWiFile(props.sourceFile, inputName, {encoding: props.encoding, columns: keys, limit: props.limit, indexes: Object.assign({}, ...indexes)});
-    else if (props.parser === 'mangohud')
-        vals = parseMangoHUDFile(props.sourceFile, inputName, {encoding: props.encoding, columns: keys, limit: props.limit, indexes: Object.assign({}, ...indexes)});
-    else if (props.parser === 'rew')
-        vals = parseREWtxt(inputName, {encoding: props.encoding, values: props.values});
-    else
-        throw new Error("Invalid parser value!");
+    switch(props.parser) {
+        case 'hwi':
+            vals = parseHWiFile(props.sourceFile, inputName, {encoding: props.encoding, columns: keys, limit: props.limit, indexes: Object.assign({}, ...indexes)});
+            break;
+        case 'mangohud':
+            vals = parseMangoHUDFile(props.sourceFile, inputName, {encoding: props.encoding, columns: keys, limit: props.limit, indexes: Object.assign({}, ...indexes)});
+            break;
+        case 'rew':
+            vals = parseREWtxt(inputName, {encoding: props.encoding, values: props.values});
+            break;
+        case 'csv':
+            vals = parseCSV(props.sourceFile, inputName, {encoding: props.encoding, columns: keys, limit: props.limit, indexes: Object.assign({}, ...indexes)});
+            break;
+        default:
+            throw new Error("Invalid parser value!");
+    }
 
     const leftAxisWidth = calcFullAxisWidth(left);
     const rightAxisWidth = calcFullAxisWidth(right);

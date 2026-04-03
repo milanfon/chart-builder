@@ -10,7 +10,9 @@ export function parseCSV(path, inputName, {encoding, columns, indexes, headerLin
     const header = lineToArray(lines[headerLine]);
     console.log("Header columns: ", header.length, "Data columns: ", lineToArray(lines[headerLine+1]).length);
 
-    lines = lines.slice(headerLine+1);
+    lines = lines
+      .slice(headerLine+1)
+      .filter(line => line.trim() !== "");
 
     const columnIndexes = columns.map(i => {
         if (indexes && indexes[i]) {
@@ -37,7 +39,10 @@ export function parseCSV(path, inputName, {encoding, columns, indexes, headerLin
 }
 
 function lineToArray(line) {
-    return line.split(",").map(i => i.replace(/"/g, ''));
+    return line
+      .replace(/[\r\n]+$/g, '')
+      .split(",")
+      .map(i => i.replace(/"/g, ''));
 }
 
 export function parseHWiFile(path, inputName, {encoding, columns, limit, indexes}) {
