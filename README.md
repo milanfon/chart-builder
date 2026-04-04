@@ -46,11 +46,40 @@ _This comes from the fact that the main purpose of the software is to render gam
 
 __If value of one of this header parameter is not defined, then no title is shown.__
 
+#### Text
+
+Text can be either a __string__
+
+```json
+"Hey, I'm a text value"
+```
+
+or object with defined text and size
+
+```json
+{
+    "text": "Hey, I'm a text object!",
+    "size": 18
+}
+```
+
+[] More parameters are intended to be added to the text object
+
+#### File paths
+
+Spoorted are both relative and absolute paths. Root of the __relative__ paths is the current _input_ directory that is beign processed.
+
 ### Bar chart
+
+[] Not yet implemented
 
 ### Line chart
 
-Line charts support multiple parsers. 
+Line charts support multiple parsers:
+- _hwi_ - HWiNFO
+- _rew_ - For plotting audio
+- _mango_ - Results from MangoHUD
+- _csv_ - General CSV file
 
 #### HW Stats
 
@@ -164,6 +193,31 @@ Table cells can be both text format or object that specifies both the text and i
                 "15W (Qi2)",
                 "27 990,-"
             ]
+        }
+    ]
+}
+```
+
+### Brightness
+
+Plotting of __display uniformity__ from _DisplayCAL_ is also supported.
+
+```json
+{
+    "name": "Uniformita podsvícení - HDR",
+    "type": "brightness",
+    "sourceFile": "/Users/milan/Projekty/Videos/TCL Monitor/testy/Samsung/HDR/Uniformity Check 3.8.9.3 — Odyssey G50SF @ 0, 0, 2560x1440 — 2026-04-02 13-09.html",
+    "info": [
+        {
+            "title": "Monitor",
+            "value": {
+                "text": "Samsung Odyssey OLED G5 G50SF",
+                "size": 14
+            }
+        },
+        {
+            "title": "Měřící zažízení",
+            "value": "ColorCheckter Plus"
         }
     ]
 }
