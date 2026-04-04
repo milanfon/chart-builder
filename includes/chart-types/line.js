@@ -63,8 +63,8 @@ export function renderHorizontalAxis(leftAxisWidth, rightAxisWidth, bounds, size
     `;
     const dt = determineTicks(axisWidth, bounds, size);
     let label = bounds[0] + dt.boundsLabel;
-    for (let t = 30 + leftAxisWidth + dt.major; t <= 30 + leftAxisWidth + axisWidth - dt.major; t += dt.major) {
-        const xPos = t;
+    for (let t = dt.major; t.toFixed(1) < axisWidth; t += dt.major) {
+        const xPos = 30 + leftAxisWidth + t;
         ticks += `
             <line x1="${xPos}" y1="${y}" x2="${xPos}" y2="${y+20}" stroke="#${colors.general.outline}" stroke-width="2"/>
             ${renderText({x: xPos, y: y + height - textPadding, text: label, textAnchor: "middle", dominantBaseline: "text-top", fontSize: 20})}
