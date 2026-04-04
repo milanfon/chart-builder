@@ -1,8 +1,8 @@
 import dimensions from "../../constants/dimensions.json";
 import colors from "../../constants/colors.json";
 import { renderHeader } from "./general-components";
-import { parseCSV, parseHWiFile, parseMangoHUDFile } from "../parsers/csv";
-import { linMap, invert, determineFilePath } from "../aux";
+import { normalizeCSVValues, parseCSVSeries, parseHWiFile, parseMangoHUDFile } from "../parsers/csv";
+import { linMap, invert } from "../aux";
 import { parseREWtxt } from "../parsers/rew";
 import { renderText } from "../rendering-helpers/text";
 
@@ -138,12 +138,13 @@ function renderLineFooter(props, series) {
 }
 
 export function renderLine(props, inputName) {
-    const left = props.values.filter(i => i.position === 'left');
-    const right = props.values.filter(i => i.position === 'right');
+    const values = props.parser === 'csv' ? normalizeCSVValues(props.values) : props.values;
+    const left = values.filter(i => i.position === 'left');
+    const right = values.filter(i => i.position === 'right');
     const leftAxes = left.map((v,i) => renderVerticalAxis(v, i));
     const rightAxes = right.map((v,i) => renderVerticalAxis(v, i, true));
-    const keys = [...left.flatMap(j => j.series.map(i => i.key)), ...right.flatMap(j => j.series.map(i => i.key))];
-    const indexes = [...left.flatMap(j => j.series.map(i => ({[i.key]: i.index}))), ...right.flatMap(j => j.series.map(i => ({[i.key]: i.index})))];
+    const keys = [...left.flatMap(j => j.series.map(i => i.sourceKey || i.key)), ...right.flatMap(j => j.series.map(i => i.sourceKey || i.key))];
+    const indexes = [...left.flatMap(j => j.series.map(i => ({[i.sourceKey || i.key]: i.index}))), ...right.flatMap(j => j.series.map(i => ({[i.sourceKey || i.key]: i.index})))];
     const xBounds = [0,1];
 
     let vals = {};
@@ -158,7 +159,7 @@ export function renderLine(props, inputName) {
             vals = parseREWtxt(inputName, {encoding: props.encoding, values: props.values});
             break;
         case 'csv':
-            vals = parseCSV(props.sourceFile, inputName, {encoding: props.encoding, columns: keys, limit: props.limit, indexes: Object.assign({}, ...indexes), xBounds});
+            vals = parseCSVSeries(props.sourceFile, inputName, {encoding: props.encoding, values, xBounds});
             break;
         default:
             throw new Error("Invalid parser value!");
