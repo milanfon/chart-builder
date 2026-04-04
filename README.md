@@ -63,7 +63,7 @@ or object with defined text and size
 }
 ```
 
-[] More parameters are intended to be added to the text object
+[ ] More parameters are intended to be added to the text object
 
 #### File paths
 
@@ -71,7 +71,7 @@ Spoorted are both relative and absolute paths. Root of the __relative__ paths is
 
 ### Bar chart
 
-[] Not yet implemented
+[ ] Not yet implemented
 
 ### Line chart
 
