@@ -123,6 +123,47 @@ Each series must define a non-empty `val` parameter. Supported formats are:
 }
 ```
 
+#### CSV
+
+The `csv` parser uses `sourceFile` as the default CSV input for all series.
+
+You can combine multiple CSV files in one line chart by setting optional `file` on selected series. When `file` is defined, that series is loaded from that file instead of `sourceFile`.
+
+This is useful when multiple files contain the same column name (for example `FPS`) and you want to plot them together.
+
+```json
+{
+    "name": "Frame rate comparison",
+    "type": "line",
+    "parser": "csv",
+    "sourceFile": "gpu-a.csv",
+    "units": "s",
+    "values": [
+        {
+            "bounds": [0, 200],
+            "position": "left",
+            "series": [
+                {
+                    "key": "FPS",
+                    "name": "GPU A",
+                    "unit": "fps",
+                    "color": "28a745"
+                },
+                {
+                    "key": "FPS",
+                    "name": "GPU B",
+                    "unit": "fps",
+                    "color": "dc3545",
+                    "file": "gpu-b.csv"
+                }
+            ]
+        }
+    ]
+}
+```
+
+`file` follows the same relative/absolute path rules as `sourceFile`.
+
 #### HW Stats
 
 The main usage of the line plots is for HWiNFO statistics. Here the `hwi` parser is used.
