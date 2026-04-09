@@ -80,6 +80,48 @@ Line charts support multiple parsers:
 - _rew_ - For plotting audio
 - _mango_ - Results from MangoHUD
 - _csv_ - General CSV file
+- _direct_ - Inline data defined directly in JSON
+
+If `parser` is omitted for line chart, `direct` parser is used by default.
+
+#### Direct
+
+The `direct` parser allows you to define series values directly in the JSON file, without any `sourceFile`.
+
+Each series must define a non-empty `val` parameter. Supported formats are:
+
+- `val: [1, 2, 3]` (implicit x-axis based on index)
+- `val: [[0, 1], [2, 3], [4, 2]]` (explicit `[x, y]` pairs)
+
+```json
+{
+    "name": "Direct line",
+    "type": "line",
+    "units": "s",
+    "values": [
+        {
+            "bounds": [0, 100],
+            "position": "left",
+            "series": [
+                {
+                    "key": "Series A",
+                    "name": "Series A",
+                    "unit": "ms",
+                    "color": "28a745",
+                    "val": [10, 20, 15, 25]
+                },
+                {
+                    "key": "Series B",
+                    "name": "Series B",
+                    "unit": "ms",
+                    "color": "dc3545",
+                    "val": [[0, 12], [2, 18], [4, 14]]
+                }
+            ]
+        }
+    ]
+}
+```
 
 #### HW Stats
 
