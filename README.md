@@ -84,14 +84,51 @@ Line charts support multiple parsers:
 
 If `parser` is omitted for line chart, `direct` parser is used by default.
 
+#### Common options
+
+Top-level line chart options:
+
+| Option | Description |
+| --- | --- |
+| `type` | Must be `line`. |
+| `parser` | One of `direct`, `csv`, `rew`, `hwi`, `mangohud` (optional, default is `direct`). |
+| `sourceFile` | Default input file (required for file-based parsers, not used by `direct`). |
+| `encoding` | Optional file encoding override (default: `utf8`). |
+| `units` | Text shown in line chart footer as x-axis units. |
+| `values` | Array of axis definitions. |
+
+Axis definition (`values[]`) options:
+
+| Option | Description |
+| --- | --- |
+| `position` | `left` or `right`. |
+| `bounds` | `[min, max]` y-axis bounds for all series on this axis. |
+| `width` | Optional custom width for this axis. |
+| `series` | Array of line series on this axis. |
+| `show` | Optional, if `false` the whole axis block is skipped. |
+
+Series options (used across parsers):
+
+| Option | Description |
+| --- | --- |
+| `key` | Data key/column name used by parser. |
+| `name` | Legend name. |
+| `unit` | Legend unit label. |
+| `color` | Line color in hex (without `#`). |
+| `invert` | Optional, if `true` y values are inverted. |
+| `index` | Optional column occurrence selector for duplicate column names. |
+| `file` | Optional per-series file override (supported by `csv`, required by `rew`). |
+
 #### Direct
 
-The `direct` parser allows you to define series values directly in the JSON file, without any `sourceFile`.
+The `direct` parser defines data directly in JSON, without `sourceFile`.
 
 Each series must define a non-empty `val` parameter. Supported formats are:
 
 - `val: [1, 2, 3]` (implicit x-axis based on index)
 - `val: [[0, 1], [2, 3], [4, 2]]` (explicit `[x, y]` pairs)
+
+All values must be numeric.
 
 ```json
 {
@@ -164,22 +201,17 @@ This is useful when multiple files contain the same column name (for example `FP
 
 `file` follows the same relative/absolute path rules as `sourceFile`.
 
-#### HW Stats
+#### REW
 
-The main usage of the line plots is for HWiNFO statistics. Here the `hwi` parser is used.
+The `rew` parser is for REW TXT exports. It does not parse `.mdat` directly.
 
-#### Audio
-
-One of the parsers is for plotting audio response. the `rew` parser is for the output of REW audio software. Here the program does not support directly the `.mdat` files for REW, but can utilize the `.txt` exports from REW. Usually the measurement is done for both audio channels (_left_ and _right_ side). These export files are CSV-like. Here the it is assumed that the space separator is beign used by default. As with other CSV files, this ones are also beign read by their column values specifies as the _key_ for the _series_. The problem here was that the keys are now not unique, because they are found in both of the files. To accomodate this, the _file_ identificator was added for the series item and needs to be filled in. As before, it is assumed to be in the same directory as the source JSON file. With this parser used, the key value is concantenated with the file name.
+For `rew`, each series should define `file` (for example left and right channel exports).
 
 ```json
 {
     "name": "Response",
-    "driver": "",
-    "version": "",
     "type": "line",
     "units": "Hz",
-    "xLabel": "Frequency",
     "parser": "rew",
     "values": [
         {
@@ -199,6 +231,68 @@ One of the parsers is for plotting audio response. the `rew` parser is for the o
                     "unit": "dB",
                     "color": "dc3545",
                     "file": "Right.txt"
+                }
+            ]
+        }
+    ]
+}
+```
+
+#### HWiNFO
+
+The `hwi` parser reads HWiNFO CSV exports from `sourceFile`.
+
+Optional `limit` is supported:
+
+- number: end index
+- array: `[startIndex, endIndex]`
+
+```json
+{
+    "name": "CPU stats",
+    "type": "line",
+    "parser": "hwi",
+    "sourceFile": "hwinfo.csv",
+    "limit": [1, 200],
+    "values": [
+        {
+            "bounds": [0, 100],
+            "position": "left",
+            "series": [
+                {
+                    "key": "CPU Package [°C]",
+                    "name": "CPU Package",
+                    "unit": "°C",
+                    "color": "dc3545"
+                }
+            ]
+        }
+    ]
+}
+```
+
+#### MangoHUD
+
+The `mangohud` parser reads MangoHUD CSV exports from `sourceFile`.
+
+Behavior is CSV-based with fixed `headerLine: 2`.
+
+```json
+{
+    "name": "Frame time",
+    "type": "line",
+    "parser": "mangohud",
+    "sourceFile": "mangohud.csv",
+    "values": [
+        {
+            "bounds": [0, 30],
+            "position": "left",
+            "series": [
+                {
+                    "key": "frametime",
+                    "name": "Frame time",
+                    "unit": "ms",
+                    "color": "28a745"
                 }
             ]
         }
