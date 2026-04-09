@@ -6,22 +6,22 @@ export function parseDirect(values, {xBounds}) {
 
     values.forEach(v => {
         v.series.forEach(s => {
-            if (!Array.isArray(s.data))
-                throw new Error(`Missing direct data for series '${s.key}'`);
-            if (s.data.length === 0)
-                throw new Error(`Direct data cannot be empty for series '${s.key}'`);
+            if (!Array.isArray(s.val))
+                throw new Error(`Missing direct val for series '${s.key}'`);
+            if (s.val.length === 0)
+                throw new Error(`Direct val cannot be empty for series '${s.key}'`);
 
-            const isPairs = s.data.length > 0 && Array.isArray(s.data[0]);
+            const isPairs = s.val.length > 0 && Array.isArray(s.val[0]);
             if (isPairs) {
                 const xs = [];
                 const ys = [];
-                s.data.forEach(point => {
+                s.val.forEach(point => {
                     if (!Array.isArray(point) || point.length < 2)
-                        throw new Error(`Invalid [x, y] point in direct data for series '${s.key}'`);
+                        throw new Error(`Invalid [x, y] point in direct val for series '${s.key}'`);
                     const x = Number(point[0]);
                     const y = Number(point[1]);
                     if (Number.isNaN(x) || Number.isNaN(y))
-                        throw new Error(`Non-numeric [x, y] point in direct data for series '${s.key}'`);
+                        throw new Error(`Non-numeric [x, y] point in direct val for series '${s.key}'`);
                     xs.push(x);
                     ys.push(y);
                     if (x < minX)
@@ -32,10 +32,10 @@ export function parseDirect(values, {xBounds}) {
                 xValues[s.key] = xs;
                 vals[s.key] = ys;
             } else {
-                const ys = s.data.map((value, index) => {
+                const ys = s.val.map((value, index) => {
                     const y = Number(value);
                     if (Number.isNaN(y))
-                        throw new Error(`Non-numeric y value in direct data for series '${s.key}'`);
+                        throw new Error(`Non-numeric y value in direct val for series '${s.key}'`);
                     if (index < minX)
                         minX = index;
                     if (index > maxX)
