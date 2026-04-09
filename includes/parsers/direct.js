@@ -7,7 +7,9 @@ export function parseDirect(values, {xBounds}) {
     values.forEach(v => {
         v.series.forEach(s => {
             if (!Array.isArray(s.data))
-                throw new Error(`Missing or invalid direct data for series '${s.key}'`);
+                throw new Error(`Missing direct data for series '${s.key}'`);
+            if (s.data.length === 0)
+                throw new Error(`Direct data cannot be empty for series '${s.key}'`);
 
             const isPairs = s.data.length > 0 && Array.isArray(s.data[0]);
             if (isPairs) {

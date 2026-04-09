@@ -138,7 +138,8 @@ function renderLineFooter(props, series) {
 }
 
 export function renderLine(props, inputName) {
-    const values = props.parser === 'csv' ? normalizeCSVValues(props.values) : props.values;
+    const parser = props.parser || 'direct';
+    const values = parser === 'csv' ? normalizeCSVValues(props.values) : props.values;
     const left = values.filter(i => i.position === 'left');
     const right = values.filter(i => i.position === 'right');
     const leftAxes = left.map((v,i) => renderVerticalAxis(v, i));
@@ -149,7 +150,7 @@ export function renderLine(props, inputName) {
     let xValues = {};
 
     let vals = {};
-    switch(props.parser) {
+    switch(parser) {
         case 'hwi':
             vals = parseHWiFile(props.sourceFile, inputName, {encoding: props.encoding, columns: keys, limit: props.limit, indexes: Object.assign({}, ...indexes)});
             break;
