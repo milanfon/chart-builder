@@ -2,6 +2,7 @@ import dimensions from "../../constants/dimensions.json";
 import colors from "../../constants/colors.json";
 import { renderHeader } from "./general-components";
 import { normalizeCSVValues, parseCSVSeries, parseHWiFile, parseMangoHUDFile } from "../parsers/csv";
+import { parseDirect } from "../parsers/direct";
 import { linMap, invert } from "../aux";
 import { parseREWtxt } from "../parsers/rew";
 import { renderText } from "../rendering-helpers/text";
@@ -89,13 +90,12 @@ export function calcFullAxisWidth(data, max = undefined) {
     return width;
 }
 
-function renderSeries(vals, series, canvas) {
+function renderSeries(vals, series, canvas, xBounds, xValues = {}) {
     const ret = [];
-    let pos;
     series.forEach(b => {
         b.series.forEach(s => {
-            if (!pos)
-                pos = vals[s.key].map((_, i) => linMap(i, [0, vals[s.key].length - 1], [canvas.x, canvas.x + canvas.width]));
+            const xs = xValues[s.key] || vals[s.key].map((_, i) => i);
+            const pos = xs.map(x => linMap(x, xBounds, [canvas.x, canvas.x + canvas.width]));
             const remaped = vals[s.key].map(i => (canvas.y + canvas.height) - linMap(invert(i, s?.invert), b.bounds, [0, canvas.height]));
             const pathString = remaped.reduce((a, v, i) => {
                 if (i > 0)
@@ -146,6 +146,7 @@ export function renderLine(props, inputName) {
     const keys = [...left.flatMap(j => j.series.map(i => i.sourceKey || i.key)), ...right.flatMap(j => j.series.map(i => i.sourceKey || i.key))];
     const indexes = [...left.flatMap(j => j.series.map(i => ({[i.sourceKey || i.key]: i.index}))), ...right.flatMap(j => j.series.map(i => ({[i.sourceKey || i.key]: i.index})))];
     const xBounds = [0,1];
+    let xValues = {};
 
     let vals = {};
     switch(props.parser) {
@@ -161,6 +162,12 @@ export function renderLine(props, inputName) {
         case 'csv':
             vals = parseCSVSeries(props.sourceFile, inputName, {encoding: props.encoding, values, xBounds});
             break;
+        case 'direct': {
+            const parsed = parseDirect(values, {xBounds});
+            vals = parsed.vals;
+            xValues = parsed.xValues;
+            break;
+        }
         default:
             throw new Error("Invalid parser value!");
     }
@@ -173,7 +180,7 @@ export function renderLine(props, inputName) {
     const insideCanvasHeight = 860 - 40;
     const insideCanvasX = leftAxisWidth + 30;
     const insideCanvasY = 150;
-    const series = renderSeries(vals, [...left, ...right], {x: insideCanvasX, y: insideCanvasY, width: insideCanvasWidth, height: insideCanvasHeight});
+    const series = renderSeries(vals, [...left, ...right], {x: insideCanvasX, y: insideCanvasY, width: insideCanvasWidth, height: insideCanvasHeight}, xBounds, xValues);
 
     return `
         ${series.join("\n")}
