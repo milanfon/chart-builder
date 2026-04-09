@@ -71,7 +71,64 @@ Spoorted are both relative and absolute paths. Root of the __relative__ paths is
 
 ### Bar chart
 
-[ ] Not yet implemented
+Bar charts compare multiple items across one or more measured values.
+
+#### Common options
+
+| Option | Description |
+| --- | --- |
+| `type` | Must be `bars`. |
+| `name` | Chart title. |
+| `units` | Unit label shown in the footer. |
+| `bars` | Array of legend labels for each bar in `val`. |
+| `better` | Footer hint, supported values are `higher` and `lower`. |
+| `values` | Array of compared items. |
+| `sort` | Optional sorting direction, supported values are `asc` and `desc`. |
+| `sortIndex` | Optional index inside `val` used for sorting (default: `0`). |
+| `legendBy` | Optional color palette group, defaults to `general`. |
+| `legendSpacing` | Optional spacing between legend items. |
+| `barsX` | Optional horizontal start position of the bar area. |
+| `barsFontSize` | Optional array of font sizes for bar labels. |
+
+#### Value item options
+
+| Option | Description |
+| --- | --- |
+| `name` | Item name shown on the left. |
+| `val` | Array of values rendered as bars. Length should match `bars`. |
+| `variant` | Optional row color variant, defaults to `general`. |
+| `model` | Optional secondary text shown below the item name. |
+| `date` | Optional date text shown next to the name block. |
+| `icon` | Optional icon name from `assets/icons` without `.png`. |
+| `show` | Optional, if `false` the item is skipped. |
+
+If `units` is `min` or `hrs`, string values like `MM:SS` are converted for sorting and scaling.
+
+```json
+{
+    "name": "Gaming performance",
+    "type": "bars",
+    "units": "fps",
+    "better": "higher",
+    "bars": ["Average", "1% Low"],
+    "sort": "desc",
+    "sortIndex": 0,
+    "values": [
+        {
+            "name": "VGA A",
+            "model": "16 GB",
+            "val": [120, 92],
+            "variant": "general"
+        },
+        {
+            "name": "VGA B",
+            "date": "04/26",
+            "val": [108, 84],
+            "icon": "nvidia"
+        }
+    ]
+}
+```
 
 ### Line chart
 
@@ -182,13 +239,13 @@ This is useful when multiple files contain the same column name (for example `FP
             "series": [
                 {
                     "key": "FPS",
-                    "name": "GPU A",
+                    "name": "VGA A",
                     "unit": "fps",
                     "color": "28a745"
                 },
                 {
                     "key": "FPS",
-                    "name": "GPU B",
+                    "name": "VGA B",
                     "unit": "fps",
                     "color": "dc3545",
                     "file": "gpu-b.csv"
