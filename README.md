@@ -78,7 +78,7 @@ Spoorted are both relative and absolute paths. Root of the __relative__ paths is
 Line charts support multiple parsers:
 - _hwi_ - HWiNFO
 - _rew_ - For plotting audio
-- _mango_ - Results from MangoHUD
+- _mangohud_ - Results from MangoHUD (uses CSV parser with fixed `headerLine: 2`)
 - _csv_ - General CSV file
 - _direct_ - Inline data defined directly in JSON
 
