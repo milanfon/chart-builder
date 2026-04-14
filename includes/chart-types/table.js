@@ -1,6 +1,7 @@
 import dimensions from "../../constants/dimensions.json" assert {type: "json"}
 import colors from "../../constants/colors.json" assert {type: "json"}
 import { verticalLine } from "../rendering-helpers/lines";
+import { renderText } from "../rendering-helpers/text";
 
 function parseCellProperties(cellValue){
     let [cellText, cellTextSize] = ["", dimensions.specs["font-size"].default];
@@ -58,7 +59,16 @@ export function renderCells(paramLine, headLine, props, inputName) {
                 if (i < 1 && c < 1) {
                     params += `<text x="${dimensions.specs["param-line"] / 2 + dimensions.specs.padding}" y="${headLine + (i+0.5) * unitHeight}" fill="#${colors.general.background}" text-anchor="middle" align-baseline="middle" font-family="Russo One" font-size="${dimensions.specs["font-size"].default}" dominant-baseline="central">Parametr</text>`
                 }  else if (c < 1) {
-                    params += `<text x="${dimensions.specs.padding + dimensions.specs["param-line"] / 2}" y="${headLine + (i+0.5) * unitHeight}" fill="#${colors.general.outline}" text-anchor="middle" align-baseline="middle" font-family="Russo One" font-size="${dimensions.specs["font-size"].default}" dominant-baseline="central">${props.parameters[i - 1]}</text>`;
+                    params += renderText({
+                        x: dimensions.specs.padding + dimensions.specs["param-line"] / 2,
+                        y: headLine + (i+0.5) * unitHeight,
+                        fill: colors.general.outline,
+                        textAnchor: "middle",
+                        alignBaseline: "middle",
+                        fontSize: dimensions.specs["font-size"].default,
+                        dominantBaseline: "central",
+                        text: props.parameters[i - 1]
+                    });
                 } else if (i > 0) {
                     const cellWidth = lookupSameCells(props.values, i-1, c-1);
                     if (cellWidth > 0) {
@@ -73,7 +83,16 @@ export function renderCells(paramLine, headLine, props, inputName) {
             }
         }
         for (let c = 1; c < columnCount + 1; c++) {
-            params += `<text x="${paramLine + (c - 0.5) * valUnit}" y="${headLine + (0.5) * unitHeight}" fill="#${colors.general.background}" text-anchor="middle" align-baseline="middle" font-family="Russo One" font-size="${dimensions.specs["font-size"].default}" dominant-baseline="central">${props.values[c - 1].name}</text>`;
+            params += renderText({
+                x: paramLine + (c - 0.5) * valUnit,
+                y: headLine + (0.5) * unitHeight,
+                fill: colors.general.background,
+                textAnchor: "middle",
+                alignBaseline: "middle",
+                fontSize: dimensions.specs["font-size"].default,
+                dominantBaseline: "central",
+                text: props.values[c - 1].name
+            });
             params += verticalLine(paramLine + c * valUnit, dimensions.specs.padding, headLine + unitHeight);
             if (props.values[c-1].pic) {
                 params += `<image xlink:href="../../input/${inputName}/${props.values[c-1].pic.path}" x="${paramLine + (c - 0.9) * valUnit}" y="${dimensions.specs.padding + dimensions.specs["head-line"] * 0.1}" width="${valUnit * 0.8}" height="${dimensions.specs["head-line"] * 0.8}"/>`;
