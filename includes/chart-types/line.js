@@ -152,7 +152,7 @@ export function renderLine(props, inputName) {
     let vals = {};
     switch(parser) {
         case 'hwi':
-            vals = parseHWiFile(props.sourceFile, inputName, {encoding: props.encoding, columns: keys, limit: props.limit, indexes: Object.assign({}, ...indexes)});
+            vals = parseHWiFile(props.sourceFile, inputName, {encoding: props.encoding, columns: keys, limit: props.limit, indexes: Object.assign({}, ...indexes), xBounds});
             break;
         case 'mangohud':
             vals = parseMangoHUDFile(props.sourceFile, inputName, {encoding: props.encoding, columns: keys, limit: props.limit, indexes: Object.assign({}, ...indexes)});

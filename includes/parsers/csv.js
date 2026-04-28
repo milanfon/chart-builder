@@ -105,7 +105,7 @@ function lineToArray(line) {
       .map(i => i.replace(/"/g, ''));
 }
 
-export function parseHWiFile(path, inputName, {encoding, columns, limit, indexes}) {
+export function parseHWiFile(path, inputName, {encoding, columns, limit, indexes, xBounds}) {
     const vals = parseCSV(path, inputName, {encoding, columns: ["Date", "Time", ...columns], indexes});
     Object.values(vals).forEach(v => {
         console.log("Data length: " + v.length);
@@ -119,6 +119,11 @@ export function parseHWiFile(path, inputName, {encoding, columns, limit, indexes
         v.splice(lim[1] + 1);
         v.splice(0, lim[0]);
     });
+    if (xBounds) {
+        const length = Object.values(vals)[0]?.length || 0;
+        xBounds[0] = 0;
+        xBounds[1] = Math.max(0, length - 1);
+    }
     return vals;
 }
 
