@@ -6,9 +6,20 @@ export function parseCSV(path, inputName, {encoding, columns, indexes, headerLin
     return parseCSVFile(path, inputName, {encoding, columns, indexes, headerLine, xBounds});
 }
 
+function detectCSVEncoding(buffer, encoding, headerLine = 0) {
+    if (encoding)
+        return encoding;
+
+    const utf8Header = decode(buffer, 'utf8').split(`\n`)[headerLine] || "";
+    if (!utf8Header.includes("\ufffd"))
+        return 'utf8';
+
+    return 'win1252';
+}
+
 function parseCSVFile(path, inputName, {encoding, columns, indexes, headerLine = 0, xBounds}) {
     const buffer = readFileSync(determineFilePath(path, inputName));
-    const data = decode(buffer, encoding || 'utf8');
+    const data = decode(buffer, detectCSVEncoding(buffer, encoding, headerLine));
     let lines = data.split(`\n`);
 
     const header = lineToArray(lines[headerLine]);
