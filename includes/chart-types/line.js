@@ -121,13 +121,31 @@ export function calcFullAxisWidth(data, max = undefined) {
     return width;
 }
 
+function applySeriesScaling(value, scaling) {
+    if (!scaling)
+        return value;
+
+    if (scaling.type !== "percentual")
+        throw new Error(`Invalid scaling type '${scaling.type}'`);
+
+    const min = Number(scaling.min);
+    const max = Number(scaling.max);
+    if (!Number.isFinite(min) || !Number.isFinite(max) || min === max)
+        throw new Error("Invalid percentual scaling bounds");
+
+    return linMap(value, [min, max], [0, 100]);
+}
+
 function renderSeries(vals, series, canvas, xBounds, xValues = {}) {
     const ret = [];
     series.forEach(b => {
         b.series.forEach(s => {
             const xs = xValues[s.key] || vals[s.key].map((_, i) => i);
             const pos = xs.map(x => linMap(x, xBounds, [canvas.x, canvas.x + canvas.width]));
-            const remaped = vals[s.key].map(i => (canvas.y + canvas.height) - linMap(invert(i, s?.invert), b.bounds, [0, canvas.height]));
+            const remaped = vals[s.key].map(i => {
+                const value = applySeriesScaling(Number(i), s.scaling);
+                return (canvas.y + canvas.height) - linMap(invert(value, s?.invert), b.bounds, [0, canvas.height]);
+            });
             const pathString = remaped.reduce((a, v, i) => {
                 if (i > 0)
                     return a + " L" + pos[i] + " " + v;
