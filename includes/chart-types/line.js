@@ -17,6 +17,35 @@ function determineTicks(size, bounds, base = 10) {
     };
 }
 
+function determineHorizontalTicks(axisWidth, bounds) {
+    const diff = Math.abs(bounds[1] - bounds[0]);
+    const targetCount = Math.max(2, Math.floor(axisWidth / 140));
+    const rawStep = diff / targetCount;
+    const magnitude = Math.pow(10, Math.floor(Math.log10(rawStep || 1)));
+    const normalized = rawStep / magnitude;
+
+    let step = magnitude;
+    if (normalized > 5)
+        step = 10 * magnitude;
+    else if (normalized > 2)
+        step = 5 * magnitude;
+    else if (normalized > 1)
+        step = 2 * magnitude;
+
+    return {
+        majorStep: step,
+        minorStep: step / 2
+    };
+}
+
+function formatTickLabel(value, step) {
+    if (Number.isInteger(value))
+        return value;
+
+    const decimals = Math.max(0, Math.ceil(-Math.log10(step)));
+    return value.toFixed(decimals);
+}
+
 export function renderVerticalAxis(data, order, right = false) {
     const height = 820;
     const width = data.width || dimensions.stats.axisWidth;
@@ -47,7 +76,7 @@ export function renderVerticalAxis(data, order, right = false) {
     `;
 }
 
-export function renderHorizontalAxis(leftAxisWidth, rightAxisWidth, bounds, size) {
+export function renderHorizontalAxis(leftAxisWidth, rightAxisWidth, bounds) {
     const y = 150 + 820;
     const x = 30 + leftAxisWidth;
     const height = 40;
@@ -62,15 +91,17 @@ export function renderHorizontalAxis(leftAxisWidth, rightAxisWidth, bounds, size
         ${renderText({x: x + textPadding, y: y + height - textPadding, text: bounds[0], textAnchor: "start", dominantBaseline: "text-top", fontSize: 20})}
         ${renderText({x: dimensions.canvas.width - 30 - rightAxisWidth - textPadding, y: y + height - textPadding, text: bounds[1], textAnchor: "end", dominantBaseline: "text-top", fontSize: 20})}
     `;
-    const dt = determineTicks(axisWidth, bounds, size);
-    let label = bounds[0] + dt.boundsLabel;
-    for (let t = dt.major; t.toFixed(1) < axisWidth; t += dt.major) {
-        const xPos = 30 + leftAxisWidth + t;
+    const dt = determineHorizontalTicks(axisWidth, bounds);
+    const firstMajor = Math.ceil(bounds[0] / dt.majorStep) * dt.majorStep;
+    for (let label = firstMajor; label < bounds[1]; label += dt.majorStep) {
+        if (label <= bounds[0])
+            continue;
+
+        const xPos = linMap(label, bounds, [x, x + axisWidth]);
         ticks += `
             <line x1="${xPos}" y1="${y}" x2="${xPos}" y2="${y+20}" stroke="#${colors.general.outline}" stroke-width="2"/>
-            ${renderText({x: xPos, y: y + height - textPadding, text: label, textAnchor: "middle", dominantBaseline: "text-top", fontSize: 20})}
+            ${renderText({x: xPos, y: y + height - textPadding, text: formatTickLabel(label, dt.majorStep), textAnchor: "middle", dominantBaseline: "text-top", fontSize: 20})}
         `;
-        label += dt.boundsLabel;
     }
     return `
         ${outline}
@@ -175,8 +206,6 @@ export function renderLine(props, inputName) {
 
     const leftAxisWidth = calcFullAxisWidth(left);
     const rightAxisWidth = calcFullAxisWidth(right);
-    const size = Object.values(vals)[0].length - 1;
-
     const insideCanvasWidth = dimensions.canvas.width - 2 * 30 - leftAxisWidth - rightAxisWidth;
     const insideCanvasHeight = 860 - 40;
     const insideCanvasX = leftAxisWidth + 30;
@@ -188,7 +217,7 @@ export function renderLine(props, inputName) {
         ${renderHeader(props)}
         ${leftAxes}
         ${rightAxes}
-        ${renderHorizontalAxis(leftAxisWidth, rightAxisWidth, xBounds, size)}
+        ${renderHorizontalAxis(leftAxisWidth, rightAxisWidth, xBounds)}
         ${renderLineFooter(props, [...left, ...right].map(i => i.series).flat())}
     `;
 }
