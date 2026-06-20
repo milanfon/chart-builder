@@ -30,7 +30,7 @@ function parseCSVFile(path, inputName, {encoding, columns, indexes, headerLine =
       .filter(line => line.trim() !== "");
 
     const columnIndexes = columns.map(i => {
-        if (indexes && indexes[i]) {
+        if (indexes && indexes[i] !== undefined) {
             if ((indexes[i] + "").startsWith("d"))
                 return indexes[i].substring(1);
             let hit = 0;
@@ -52,7 +52,8 @@ function parseCSVFile(path, inputName, {encoding, columns, indexes, headerLine =
     }
 
     return lines.reduce((a, l) => {
-            columnIndexes.forEach((v, i) => a[columns[i]].push(l.split(",")[v]));
+            const row = lineToArray(l);
+            columnIndexes.forEach((v, i) => a[columns[i]].push(row[v]));
             return a;
         }, 
         columns.reduce((a, c) => ({...a, [c]: []}), {}));
@@ -110,10 +111,32 @@ export function normalizeCSVValues(values) {
 }
 
 function lineToArray(line) {
-    return line
-      .replace(/[\r\n]+$/g, '')
-      .split(",")
-      .map(i => i.replace(/"/g, ''));
+    const row = [];
+    let value = "";
+    let inQuotes = false;
+    const trimmedLine = line.replace(/[\r\n]+$/g, '');
+
+    for (let i = 0; i < trimmedLine.length; i++) {
+        const char = trimmedLine[i];
+        const next = trimmedLine[i + 1];
+
+        if (char === '"') {
+            if (inQuotes && next === '"') {
+                value += '"';
+                i++;
+            } else {
+                inQuotes = !inQuotes;
+            }
+        } else if (char === "," && !inQuotes) {
+            row.push(value);
+            value = "";
+        } else {
+            value += char;
+        }
+    }
+
+    row.push(value);
+    return row;
 }
 
 export function parseHWiFile(path, inputName, {encoding, columns, limit, indexes, xBounds}) {
