@@ -9,6 +9,7 @@ export function getEmbeddedLogo() {
 
 export function renderHeader(props) {
     const settingsFontSize = props.sizes?.["settings-font"] || 20;
+    const driverVersionFontsize = props.sizes?.["driver-version-font"] || 20;
     return `
         <line x1="240" y1="30" x2="240" y2="150" stroke="#${colors.general.outline}" stroke-width="2"/>
         <line x1="30" y1="150" x2="2130" y2="150" stroke="#${colors.general.outline}" stroke-width="2"/>
@@ -24,8 +25,8 @@ export function renderHeader(props) {
         ${renderText({x: 1340, y: 90, textAnchor: "start", alignBaseline: "middle", fontFamily: "Russo One", fontSize: 20, dominantBaseline: "central", text: props?.driver ? "Driver" : (props?.info?.[1]?.title || "")})}
         ${renderText({x: 1340, y: 130, textAnchor: "start", alignBaseline: "middle", fontFamily: "Russo One", fontSize: 20, dominantBaseline: "central", text: props?.version ? "Verze" : (props?.info?.[2]?.title || "")})}
         
-        ${renderText({x: 1540, y: 50, textAnchor: "start", alignBaseline: "middle", fontFamily: "Russo One", fontSize: 20, dominantBaseline: "central", text: props?.settings || props?.info?.[0]?.value || ""})}
-        ${renderText({x: 1540, y: 90, textAnchor: "start", alignBaseline: "middle", fontFamily: "Russo One", fontSize: 20, dominantBaseline: "central", text: props?.driver || props?.info?.[1]?.value || ""})}
+        ${renderText({x: 1540, y: 50, textAnchor: "start", alignBaseline: "middle", fontFamily: "Russo One", fontSize: settingsFontSize, dominantBaseline: "central", text: props?.settings || props?.info?.[0]?.value || ""})}
+        ${renderText({x: 1540, y: 90, textAnchor: "start", alignBaseline: "middle", fontFamily: "Russo One", fontSize: driverVersionFontsize, dominantBaseline: "central", text: props?.driver || props?.info?.[1]?.value || ""})}
         ${renderText({x: 1540, y: 130, textAnchor: "start", alignBaseline: "middle", fontFamily: "Russo One", fontSize: 20, dominantBaseline: "central", text: props?.version || props?.info?.[2]?.value || ""})}
 
         <text x="1975" y="90" fill="#${colors.general.outline}" text-anchor="middle" align-baseline="middle" font-family="Russo One" font-size="40" dominant-baseline="central">${getCurrentDateMonth()}</text>

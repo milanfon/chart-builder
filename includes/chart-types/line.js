@@ -5,7 +5,7 @@ import { normalizeCSVValues, parseCSVSeries, parseHWiFile, parseMangoHUDFile } f
 import { parseDirect } from "../parsers/direct";
 import { linMap, invert } from "../aux";
 import { parseREWtxt } from "../parsers/rew";
-import { renderText } from "../rendering-helpers/text";
+import { estimateTextWidth, renderText } from "../rendering-helpers/text";
 
 function determineTicks(size, bounds, base = 10) {
     const diff = Math.abs(bounds[1] - bounds[0]);
@@ -162,8 +162,7 @@ function renderLineFooter(props, series) {
     let letAcc = 240;
     const legend = series.reduce((a, s, i) => {
         const x = letAcc;
-        const charLen = 12;
-        letAcc += s.name.length * charLen + 65;
+        letAcc += (s.legendWidth || estimateTextWidth(s.name, 20)) + 65;
         return a + `
             <g transform="translate(${x}, 1010)">
                 <rect x="5" y="5" width="50" height="30" stroke="#${s.color}" fill="none" stroke-width="4"/>

@@ -175,6 +175,19 @@ Series options (used across parsers):
 | `invert` | Optional, if `true` y values are inverted. |
 | `index` | Optional column occurrence selector for duplicate column names. |
 | `file` | Optional per-series file override (supported by `csv`, required by `rew`). |
+| `legendWidth` | Optional custom width used for spacing this series in the line chart legend. |
+
+Line chart legend spacing is estimated automatically from the series `name`. If the automatic spacing is not suitable, set `legendWidth` on the affected series:
+
+```json
+{
+    "key": "FPS",
+    "name": "RTX 4070 Ti SUPER",
+    "unit": "fps",
+    "color": "28a745",
+    "legendWidth": 240
+}
+```
 
 #### Direct
 

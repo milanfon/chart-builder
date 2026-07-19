@@ -27,3 +27,15 @@ export function renderText({
     }
     return `<text x="${x}" y="${y}" fill="#${fill}" text-anchor="${textAnchor}" align-baseline="${alignBaseline}" font-family="${fontFamily}" font-size="${actualSize}" dominant-baseline="${dominantBaseline}">${actualText}</text>`
 }
+
+export function estimateTextWidth(text, fontSize = dimensions.specs["font-size"].default) {
+    return [...String(text)].reduce((width, char) => {
+        if ("ilI1.,' ".includes(char))
+            return width + fontSize * 0.35;
+        if ("MW@#%&".includes(char))
+            return width + fontSize * 0.9;
+        if (/[A-Z0-9]/.test(char))
+            return width + fontSize * 0.7;
+        return width + fontSize * 0.55;
+    }, 0);
+}
