@@ -7,7 +7,7 @@ import { linMap, invert } from "../aux";
 import { parseREWtxt } from "../parsers/rew";
 import { estimateTextWidth, renderText } from "../rendering-helpers/text";
 
-function determineNiceStep(diff, targetCount) {
+function determineVerticalNiceStep(diff, targetCount) {
     const rawStep = diff / targetCount;
     const magnitude = Math.pow(10, Math.floor(Math.log10(rawStep || 1)));
     const normalized = rawStep / magnitude;
@@ -24,7 +24,17 @@ function determineNiceStep(diff, targetCount) {
 function determineHorizontalTicks(axisWidth, bounds) {
     const diff = Math.abs(bounds[1] - bounds[0]);
     const targetCount = Math.max(2, Math.floor(axisWidth / 140));
-    const step = determineNiceStep(diff, targetCount);
+    const rawStep = diff / targetCount;
+    const magnitude = Math.pow(10, Math.floor(Math.log10(rawStep || 1)));
+    const normalized = rawStep / magnitude;
+
+    let step = magnitude;
+    if (normalized > 5)
+        step = 10 * magnitude;
+    else if (normalized > 2)
+        step = 5 * magnitude;
+    else if (normalized > 1)
+        step = 2 * magnitude;
 
     return {
         majorStep: step,
@@ -47,7 +57,7 @@ export function renderVerticalAxis(data, order, right = false) {
     const x = !right ? 30 + width * order : dimensions.canvas.width - 30 - (order + 1) * width;
     const outline = `<rect x="${x}" y="${y}" width="${width}" height="${height}" stroke="#${colors.general.outline}" fill="none" stroke-width="2"/>`;
     const [min, max] = data.bounds;
-    const majorStep = determineNiceStep(Math.abs(max - min), 10);
+    const majorStep = determineVerticalNiceStep(Math.abs(max - min), 10);
     const minorStep = majorStep / 2;
     let ticks = `
         <text x="${x + 2 + dimensions.stats.tickMajorWidth}" y="${y + height - 5}" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="text-top">${min}</text>
