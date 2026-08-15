@@ -7,30 +7,24 @@ import { linMap, invert } from "../aux";
 import { parseREWtxt } from "../parsers/rew";
 import { estimateTextWidth, renderText } from "../rendering-helpers/text";
 
-function determineTicks(size, bounds, base = 10) {
-    const diff = Math.abs(bounds[1] - bounds[0]);
-    const scale = size / diff;
-    return {
-        major: diff / base * scale,
-        minor: diff / (2 * base) * scale,
-        boundsLabel: diff / base
-    };
+function determineNiceStep(diff, targetCount) {
+    const rawStep = diff / targetCount;
+    const magnitude = Math.pow(10, Math.floor(Math.log10(rawStep || 1)));
+    const normalized = rawStep / magnitude;
+
+    if (normalized >= Math.sqrt(50))
+        return 10 * magnitude;
+    if (normalized >= Math.sqrt(10))
+        return 5 * magnitude;
+    if (normalized >= Math.sqrt(2))
+        return 2 * magnitude;
+    return magnitude;
 }
 
 function determineHorizontalTicks(axisWidth, bounds) {
     const diff = Math.abs(bounds[1] - bounds[0]);
     const targetCount = Math.max(2, Math.floor(axisWidth / 140));
-    const rawStep = diff / targetCount;
-    const magnitude = Math.pow(10, Math.floor(Math.log10(rawStep || 1)));
-    const normalized = rawStep / magnitude;
-
-    let step = magnitude;
-    if (normalized > 5)
-        step = 10 * magnitude;
-    else if (normalized > 2)
-        step = 5 * magnitude;
-    else if (normalized > 1)
-        step = 2 * magnitude;
+    const step = determineNiceStep(diff, targetCount);
 
     return {
         majorStep: step,
@@ -52,22 +46,37 @@ export function renderVerticalAxis(data, order, right = false) {
     const y = 150;
     const x = !right ? 30 + width * order : dimensions.canvas.width - 30 - (order + 1) * width;
     const outline = `<rect x="${x}" y="${y}" width="${width}" height="${height}" stroke="#${colors.general.outline}" fill="none" stroke-width="2"/>`;
+    const [min, max] = data.bounds;
+    const majorStep = determineNiceStep(Math.abs(max - min), 10);
+    const minorStep = majorStep / 2;
     let ticks = `
-        <text x="${x + 2 + dimensions.stats.tickMajorWidth}" y="${y + height - 5}" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="text-top">${data.bounds[0]}</text>
-        <text x="${x + 2 + dimensions.stats.tickMajorWidth}" y="${y + 5}" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="hanging">${data.bounds[1]}</text>
+        <text x="${x + 2 + dimensions.stats.tickMajorWidth}" y="${y + height - 5}" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="text-top">${min}</text>
+        <text x="${x + 2 + dimensions.stats.tickMajorWidth}" y="${y + 5}" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="hanging">${max}</text>
     `;
-    const dt = determineTicks(height, data.bounds);
-    let label = data.bounds[0] + dt.boundsLabel;
-    for (let t = height - dt.major; t > 0; t -= dt.major) {
-        const yPos = y + t;
+    const firstMajorIndex = Math.ceil(min / majorStep);
+    const lastMajorIndex = Math.floor(max / majorStep);
+    for (let i = firstMajorIndex; i <= lastMajorIndex; i++) {
+        const label = i * majorStep;
+        if (label <= min || label >= max)
+            continue;
+
+        const yPos = linMap(label, data.bounds, [y + height, y]);
         ticks += `
             <line x1="${x}" y1="${yPos}" x2="${x + dimensions.stats.tickMajorWidth}" y2="${yPos}" stroke="#${colors.general.outline}" stroke-width="4"/>
-            <text x="${x + 2 + dimensions.stats.tickMajorWidth}" y="${yPos}" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">${label}</text>
+            <text x="${x + 2 + dimensions.stats.tickMajorWidth}" y="${yPos}" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">${formatTickLabel(label, majorStep)}</text>
         `;
-        label += dt.boundsLabel;
     }
-    for (let t = height - dt.minor; t > 0; t -= dt.minor) {
-        const yPos = y + t;
+    const firstMinorIndex = Math.ceil(min / minorStep);
+    const lastMinorIndex = Math.floor(max / minorStep);
+    for (let i = firstMinorIndex; i <= lastMinorIndex; i++) {
+        if (i % 2 === 0)
+            continue;
+
+        const value = i * minorStep;
+        if (value <= min || value >= max)
+            continue;
+
+        const yPos = linMap(value, data.bounds, [y + height, y]);
         ticks += `<line x1="${x}" y1="${yPos}" x2="${x + dimensions.stats.tickMinorWidth}" y2="${yPos}" stroke="#${colors.general.outline}" stroke-width="2"/>`;
     }
     return `
