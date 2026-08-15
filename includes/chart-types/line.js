@@ -236,9 +236,16 @@ export function renderLine(props, inputName) {
     const insideCanvasHeight = 860 - 40;
     const insideCanvasX = leftAxisWidth + 30;
     const insideCanvasY = 150;
+    const zeroPositions = [...new Set([...left, ...right]
+        .filter(axis => axis.bounds[0] < 0 && axis.bounds[1] > 0)
+        .map(axis => linMap(0, axis.bounds, [insideCanvasY + insideCanvasHeight, insideCanvasY])))];
+    const zeroLines = zeroPositions.map(y =>
+        `<line x1="${insideCanvasX}" y1="${y}" x2="${insideCanvasX + insideCanvasWidth}" y2="${y}" stroke="#${colors.general["zero-bar"]}" stroke-width="3" stroke-dasharray="12 8"/>`
+    );
     const series = renderSeries(vals, [...left, ...right], {x: insideCanvasX, y: insideCanvasY, width: insideCanvasWidth, height: insideCanvasHeight}, xBounds, xValues);
 
     return `
+        ${zeroLines.join("\n")}
         ${series.join("\n")}
         ${renderHeader(props)}
         ${leftAxes}
