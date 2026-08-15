@@ -50,6 +50,11 @@ function formatTickLabel(value, step) {
     return value.toFixed(decimals);
 }
 
+function formatVerticalTickLabel(value) {
+    const rounded = Number(value.toPrecision(12));
+    return Object.is(rounded, -0) ? 0 : rounded;
+}
+
 export function renderVerticalAxis(data, order, right = false) {
     const height = 820;
     const width = data.width || dimensions.stats.axisWidth;
@@ -57,32 +62,35 @@ export function renderVerticalAxis(data, order, right = false) {
     const x = !right ? 30 + width * order : dimensions.canvas.width - 30 - (order + 1) * width;
     const outline = `<rect x="${x}" y="${y}" width="${width}" height="${height}" stroke="#${colors.general.outline}" fill="none" stroke-width="2"/>`;
     const [min, max] = data.bounds;
-    const majorStep = determineVerticalNiceStep(Math.abs(max - min), 10);
+    const diff = Math.abs(max - min);
+    const crossesZero = min < 0 && max > 0;
+    const majorStep = crossesZero ? determineVerticalNiceStep(diff, 10) : diff / 10;
     const minorStep = majorStep / 2;
+    const tickOrigin = crossesZero ? 0 : min;
     let ticks = `
         <text x="${x + 2 + dimensions.stats.tickMajorWidth}" y="${y + height - 5}" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="text-top">${min}</text>
         <text x="${x + 2 + dimensions.stats.tickMajorWidth}" y="${y + 5}" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="hanging">${max}</text>
     `;
-    const firstMajorIndex = Math.ceil(min / majorStep);
-    const lastMajorIndex = Math.floor(max / majorStep);
+    const firstMajorIndex = Math.ceil((min - tickOrigin) / majorStep);
+    const lastMajorIndex = Math.floor((max - tickOrigin) / majorStep);
     for (let i = firstMajorIndex; i <= lastMajorIndex; i++) {
-        const label = i * majorStep;
+        const label = tickOrigin + i * majorStep;
         if (label <= min || label >= max)
             continue;
 
         const yPos = linMap(label, data.bounds, [y + height, y]);
         ticks += `
             <line x1="${x}" y1="${yPos}" x2="${x + dimensions.stats.tickMajorWidth}" y2="${yPos}" stroke="#${colors.general.outline}" stroke-width="4"/>
-            <text x="${x + 2 + dimensions.stats.tickMajorWidth}" y="${yPos}" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">${formatTickLabel(label, majorStep)}</text>
+            <text x="${x + 2 + dimensions.stats.tickMajorWidth}" y="${yPos}" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">${formatVerticalTickLabel(label)}</text>
         `;
     }
-    const firstMinorIndex = Math.ceil(min / minorStep);
-    const lastMinorIndex = Math.floor(max / minorStep);
+    const firstMinorIndex = Math.ceil((min - tickOrigin) / minorStep);
+    const lastMinorIndex = Math.floor((max - tickOrigin) / minorStep);
     for (let i = firstMinorIndex; i <= lastMinorIndex; i++) {
         if (i % 2 === 0)
             continue;
 
-        const value = i * minorStep;
+        const value = tickOrigin + i * minorStep;
         if (value <= min || value >= max)
             continue;
 
