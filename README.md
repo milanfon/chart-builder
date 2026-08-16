@@ -152,6 +152,7 @@ Top-level line chart options:
 | `sourceFile` | Default input file (required for file-based parsers, not used by `direct`). |
 | `encoding` | Optional file encoding override (default: `utf8`). |
 | `units` | Text shown in line chart footer as x-axis units. |
+| `grid` | Optional, if `true` renders major horizontal and vertical gridlines behind the series. Horizontal lines follow the first left axis, or the first right axis when no left axis exists. |
 | `values` | Array of axis definitions. |
 
 Axis definition (`values[]`) options:
@@ -205,6 +206,7 @@ All values must be numeric.
     "name": "Direct line",
     "type": "line",
     "units": "s",
+    "grid": true,
     "values": [
         {
             "bounds": [0, 100],

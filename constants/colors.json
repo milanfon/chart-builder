@@ -4,7 +4,8 @@
         "outline": "FFFFFF",
         "font-primary": "FFFFFF",
         "font-secondary": "B6B6B6",
-        "zero-bar": "9B9B9B"
+        "zero-bar": "9B9B9B",
+        "grid-line": "777777"
     },
     "specs": {
         "lighter": "D9D9D9",
