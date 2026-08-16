@@ -306,10 +306,17 @@ export function renderLine(props, inputName) {
     const series = renderSeries(vals, [...left, ...right], canvas, xBounds, xValues);
 
     return `
+        <defs>
+            <clipPath id="line-chart-plot-clip" clipPathUnits="userSpaceOnUse">
+                <rect x="${insideCanvasX}" y="${insideCanvasY}" width="${insideCanvasWidth}" height="${insideCanvasHeight}"/>
+            </clipPath>
+        </defs>
+        <g clip-path="url(#line-chart-plot-clip)">
+            ${gridLines.join("\n")}
+            ${zeroLines.join("\n")}
+            ${series.join("\n")}
+        </g>
         ${renderHeader(props)}
-        ${gridLines.join("\n")}
-        ${zeroLines.join("\n")}
-        ${series.join("\n")}
         ${leftAxes}
         ${rightAxes}
         ${renderHorizontalAxis(leftAxisWidth, rightAxisWidth, xBounds)}

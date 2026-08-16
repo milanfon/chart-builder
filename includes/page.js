@@ -237,8 +237,8 @@ export class Page {
     xmlns="http://www.w3.org/2000/svg"
     xmlns:svg="http://www.w3.org/2000/svg">
     <rect width="100%" height="100%" fill="#${colors.general.background}"/>
-    <rect x="30" y="30" width="2100" height="1020" fill="none" stroke="#${colors.general.outline}" stroke-width="2"/>
     ${body}
+    <rect x="30" y="30" width="2100" height="1020" fill="none" stroke="#${colors.general.outline}" stroke-width="2"/>
 </svg>`;
     }
 }
