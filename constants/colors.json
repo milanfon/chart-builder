@@ -15,6 +15,11 @@
             "primary": "0288E8",
             "secondary": "0062BC"
         },
+        "brands": {
+            "primary": "76B900",
+            "secondary": "ED1C24",
+            "triary": "0071C5"
+        },
         "primary": {
             "primary": "E61C00",
             "secondary": "8F2300"
