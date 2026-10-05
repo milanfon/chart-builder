@@ -11,6 +11,22 @@ export class Page {
     constructor(props, inputName) {
         this.props = props;
         this.inputName = inputName;
+        if (this.props.renderSteps === true) {
+            if (props.type !== 'bars')
+                throw new Error("renderSteps is only supported for bar charts");
+            props.values.forEach(record => {
+                if (record.step !== undefined && (!Number.isSafeInteger(record.step) || record.step < 1))
+                    throw new Error(`Invalid step for '${record.name}': expected a positive integer`);
+            });
+            this.props.values = this.props.values.filter(i => i?.show === undefined || i.show);
+            const steps = [...new Set(this.props.values
+                .filter(record => record.step !== undefined)
+                .map(record => record.step))].sort((a, b) => a - b);
+            if (steps.some((step, index) => step !== index + 1)) {
+                console.warn(`Warning: chart '${props.name || inputName}' has a non-consecutive step sequence (${steps.join(', ')}). Steps must start at 1 with no gaps. Rendering a normal chart without steps.`);
+                this.props.renderSteps = false;
+            }
+        }
         if (props.type === 'bars') {
             this.calcMaxScale();
             this.calcMinScale();
@@ -18,6 +34,17 @@ export class Page {
         }
         if (this.props?.values)
             this.props.values = this.props.values.filter(i => i?.show === undefined || i.show);
+    }
+
+    getRenderSteps() {
+        if (this.props.renderSteps !== true)
+            return [undefined];
+        const count = this.props.values.reduce((max, record) => Math.max(max, record.step || 1), 1);
+        return Array.from({length: count}, (_, index) => index + 1);
+    }
+
+    isVisibleAtStep(record, currentStep) {
+        return this.props.renderSteps !== true || currentStep === undefined || record.step === undefined || record.step <= currentStep;
     }
 
     betterMap = {
@@ -129,8 +156,10 @@ export class Page {
         }
     }
 
-    getDescriptions(one, d, scale) {
+    getDescriptions(one, d, scale, currentStep) {
         return this.props.values.map((val, index) => {
+                if (!this.isVisibleAtStep(val, currentStep))
+                    return "";
                 const iconHref = val?.icon ? `<image xlink:href="data:image/png;base64,${imageToBase64("./assets/icons/"+val.icon+".png")}" x="0" y="0" width="${40 * scale}" height="${40 * scale}"/>` : undefined;
                 const modelText = renderText({x: 95, y: 50*scale, fill: colors.general["font-secondary"], textAnchor: "start", alignBaseline: "middle", fontFamily: "Russo One", fontSize: 28*scale, dominantBaseline: "hanging", text: val.model || ""})
                 const dateText = val.date ? `
@@ -146,11 +175,13 @@ export class Page {
             `});
     }
 
-    getBars(one, d, scale) {
+    getBars(one, d, scale, currentStep) {
         const h = 80;
         const count = this.props.bars.length;
         const unit = h/count;
         return this.props.values.map((val, index) => {
+            if (!this.isVisibleAtStep(val, currentStep))
+                return "";
             const variant = val?.variant || "general";
             let bars = "";
             for (let i = 0; i < count; i++){
@@ -176,32 +207,32 @@ export class Page {
             `});
     }
 
-    renderSeries() {
+    renderSeries(currentStep) {
         const h = 100;
         const n = this.props.values.length;
         const height = 840;
         const one = (height / n);
         const d = (one - h) / 2;
         const scale = n > 8 ? (one/h) : 1;
-        const mapped = this.getDescriptions(one, d, scale);
-        const bars = this.getBars(one, d, scale);
+        const mapped = this.getDescriptions(one, d, scale, currentStep);
+        const bars = this.getBars(one, d, scale, currentStep);
         const barsX = this.props.barsX || dimensions.canvas.barsX;
         const zeroBar = this.min >= 0 ? "" : `<line x1="${this.scaleBarX(0) + barsX}" x2="${this.scaleBarX(0) + barsX}" y1="150" y2="1010" stroke="#${colors.general.outline}" stroke-width="2" stroke="#${colors.general["zero-bar"]}"/>`;
         return `
             <g transform="translate(60, 180)">
-                ${mapped}
+                ${mapped.join("\n")}
             </g>
             <g transform="translate(${barsX}, 180)">
-                ${bars}
+                ${bars.join("\n")}
             </g>
             <line x1="${barsX}" y1="150" x2="${barsX}" y2="1010" stroke="#${colors.general.outline}" stroke-width="2"/>
             ${zeroBar} 
         `;
     }
 
-    renderChart() {
+    renderChart(currentStep) {
         return `
-            ${this.renderSeries()}
+            ${this.renderSeries(currentStep)}
             ${renderHeader(this.props)}
             ${this.renderFooter()}
         `;
@@ -222,10 +253,10 @@ export class Page {
         `;
     }
 
-    render() {
+    render(currentStep) {
         let body = "";
         if (this.props.type === 'bars')
-            body = this.renderChart();
+            body = this.renderChart(currentStep);
         if (this.props.type === 'line')
             body = renderLine(this.props, this.inputName);
         if (this.props.type === 'specs')

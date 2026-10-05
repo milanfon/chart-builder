@@ -2,9 +2,8 @@ import { Page } from "./includes/page";
 const fs = require('fs');
 const path = require('path');
 const {ArgumentParser} = require('argparse');
-import {$} from "bun";
-import { checkOrCreateOutPath, getIndex, loadGeneral, loadInput, writeIndex } from "./includes/files";
-import { saveAsPNG } from "./includes/export";
+import { checkOrCreateOutPath, getChecksum, getIndex, loadGeneral, loadInput, writeIndex } from "./includes/files";
+import { getOutputFrames, renderOutputs } from "./includes/export";
 
 const argparser = new ArgumentParser({
     description: "MML Chart render service"
@@ -29,32 +28,41 @@ if (args.m === 'single') {
     const fileDirName = path.dirname(args.i);
     const page = new Page(input, fileDirName);
     const name = path.parse(dirPath).name;
-    fs.writeFileSync("./output/"+fileDirName+"/"+name+".svg", page.render());
-    if (args.e === 'png') 
-        saveAsPNG('./output/'+fileDirName, name);
+    const source = path.join('input', args.i);
+    const checksum = await getChecksum(source);
+    if (!index[fileDirName])
+        index[fileDirName] = {};
+    const outputs = await renderOutputs(page, getOutputFrames(page, name), path.join('output', fileDirName), args.e, index[fileDirName][source]?.outputs);
+    index[fileDirName][source] = {checksum, outputs};
+    await writeIndex(index);
 } else if (args.m === 'batch') {
     const files = fs.readdirSync(dirPath).filter(f => path.extname(f) === '.json').map(f => path.join(dirPath, f));
     if (!index?.[args.i])
         index[args.i] = {};
     const processFile = async (f) => {
-        const checksum = await $`shasum -a 512 -- ${f}`.text().then(i => i.split('  ')[0]);
-        if (index?.[args.i]?.[f] === checksum && !args.f)
-            return;
-        else 
-            index[args.i][f] = checksum;
-        filesChanged++;
+        const checksum = await getChecksum(f);
+        const previous = index[args.i][f];
         const page = new Page(await loadInput('./'+f, generalVals), args.i);
         const name = path.parse(f).name;
-        fs.writeFileSync(outPath+"/"+name+".svg", page.render());
-        if (args.e === 'png')
-            await saveAsPNG(outPath, name);
+        const frames = getOutputFrames(page, name);
+        const expectedOutputs = frames.map(frame => frame.name + '.' + args.e);
+        if (!args.f && previous?.checksum === checksum
+            && JSON.stringify(previous.outputs) === JSON.stringify(expectedOutputs)
+            && expectedOutputs.every(output => fs.existsSync(path.join(outPath, output))))
+            return;
+        const outputs = await renderOutputs(page, frames, outPath, args.e, previous?.outputs);
+        index[args.i][f] = {checksum, outputs};
+        filesChanged++;
     };
-    await Promise.all(files.map(processFile))
-        .then(() => {
-            if (filesChanged > 0)
-                writeIndex(index);
-            else
-                console.log("No files changed!");
-        })
-        .catch((e) => console.error(e));
+    const results = await Promise.allSettled(files.map(processFile));
+    if (filesChanged > 0)
+        await writeIndex(index);
+    else if (results.every(result => result.status === 'fulfilled'))
+        console.log("No files changed!");
+    for (const result of results) {
+        if (result.status === 'rejected') {
+            console.error(result.reason);
+            process.exitCode = 1;
+        }
+    }
 }

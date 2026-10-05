@@ -1,8 +1,13 @@
 import fs from "fs";
 import path from "path";
 import Mustache from "mustache";
+import {$} from "bun";
 
 const indexPath = 'index.json';
+
+export async function getChecksum(file) {
+    return $`shasum -a 512 -- ${file}`.text().then(i => i.split('  ')[0]);
+}
 
 export function getIndex() {
     try {
@@ -15,10 +20,7 @@ export function getIndex() {
 }
 
 export function writeIndex(data) {
-    fs.writeFile(indexPath, JSON.stringify(data, null, 2), 'utf8', e => {
-        if (e)
-            console.log('Index write error!', e);
-    });
+    return fs.promises.writeFile(indexPath, JSON.stringify(data, null, 2), 'utf8');
 }
 
 export function getDirectory(filePath) {
