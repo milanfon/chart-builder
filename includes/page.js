@@ -5,7 +5,7 @@ import { renderBrightnessTable } from "./chart-types/brightness";
 import { getEmbeddedLogo, renderHeader } from "./chart-types/general-components";
 import { renderLine, renderVerticalAxis } from "./chart-types/line";
 import { renderCells } from "./chart-types/table";
-import { renderText } from "./rendering-helpers/text";
+import { estimateTextWidth, renderText } from "./rendering-helpers/text";
 
 export class Page {
     constructor(props, inputName) {
@@ -104,7 +104,7 @@ export class Page {
     scaleBar(val) {
         const converted = this.getAbsValue(val);
         const corr = this.props.barsX ? (dimensions.canvas.barsX - this.props.barsX) : 0;
-        const unit = (dimensions["bar-length"] + corr) / (this.max + Math.abs(this.min));
+        const unit = (dimensions["bar-length"] + corr) / ((this.max + Math.abs(this.min)) || 1);
         const ret = converted * unit;
         const min = this.props.units === 'min' ? 150 : 60;
         if (ret >= 0)
@@ -119,7 +119,7 @@ export class Page {
             return 0;
         else {
             const corr = this.props.barsX ? (dimensions.canvas.barsX - this.props.barsX) : 0;
-            const unit = (dimensions["bar-length"] + corr) / (this.max + Math.abs(this.min));
+            const unit = (dimensions["bar-length"] + corr) / ((this.max + Math.abs(this.min)) || 1);
             const zero = unit * Math.abs(this.min);
             if (converted < 0)
                 return zero + (converted * unit);
@@ -154,19 +154,23 @@ export class Page {
             const variant = val?.variant || "general";
             let bars = "";
             for (let i = 0; i < count; i++){
-                bars += `
-                <rect x="${this.scaleBarX(val.val[i])}" y="${i * unit * scale}" width="${this.scaleBar(val.val[i])}" height="${unit * scale}" fill="#${colors[this.props.type][variant][this.barKeys[i]]}"/>
-            `;
+                const dnf = val.dnf === true || val.dnf?.[i] === true;
+                const dnr = val.dnr === true || val.dnr?.[i] === true;
+                const label = dnf ? "DNF" : dnr ? "DNR" : val.val[i];
                 const fontSize = this.props?.barsFontSize?.[i] || dimensions["font-size"].unit * scale * 1 / count;
+                const width = dnf || dnr ? Math.max(this.scaleBar(val.val[i]), estimateTextWidth(label, fontSize) + 30) : this.scaleBar(val.val[i]);
+                bars += `
+                <rect x="${this.scaleBarX(val.val[i])}" y="${i * unit * scale}" width="${width}" height="${unit * scale}" fill="#${colors[this.props.type][variant][this.barKeys[i]]}"/>
+            `;
                 bars += renderText({
-                    x: (val.val[i] < 0) ? this.scaleBarX(val.val[i]) + 15 : this.scaleBarX(val.val[i]) + this.scaleBar(val.val[i]) - 15,
+                    x: (val.val[i] < 0) ? this.scaleBarX(val.val[i]) + 15 : this.scaleBarX(val.val[i]) + width - 15,
                     y: (i+0.5) * unit * scale,
                     fill: colors.general["font-primary"],
                     textAnchor: val.val[i] < 0 ? "start" : "end",
                     alignBaseline: "middle",
                     fontSize,
                     dominantBaseline: "central",
-                    text: val.val[i]
+                    text: label
                 });
             }
             return `

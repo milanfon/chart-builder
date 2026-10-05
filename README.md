@@ -96,6 +96,8 @@ Bar charts compare multiple items across one or more measured values.
 | --- | --- |
 | `name` | Item name shown on the left. |
 | `val` | Array of values rendered as bars. Length should match `bars`. |
+| `dnf` | Optional, `true` labels every bar in the item as `DNF`, or an array of booleans flags individual bars in `val`. |
+| `dnr` | Optional, `true` labels every bar in the item as `DNR`, or an array of booleans flags individual bars in `val`. |
 | `variant` | Optional row color variant, defaults to `general`. |
 | `model` | Optional secondary text shown below the item name. |
 | `date` | Optional date text shown next to the name block. |
@@ -103,6 +105,38 @@ Bar charts compare multiple items across one or more measured values.
 | `show` | Optional, if `false` the item is skipped. |
 
 If `units` is `min` or `hrs`, string values like `MM:SS` are converted for sorting and scaling.
+
+For tests that did not finish, keep the placeholder values as `0` and set `dnf`. The flag only changes the displayed label to `DNF`; values remain numeric for sorting and scaling. Unflagged zeros still display `0`. DNF placeholder bars are wide enough to fit the label.
+
+Use `dnf: true` when the entire test did not finish, or an array matching `val` to flag individual measurements:
+
+```json
+{
+    "name": "GPU A",
+    "val": [0, 0],
+    "dnf": true
+}
+```
+
+```json
+{
+    "name": "GPU B",
+    "val": [120, 0],
+    "dnf": [false, true]
+}
+```
+
+For tests that did not run, use `dnr` in the same way. Keep `0` as the placeholder value; flagged bars display `DNR` and have enough room for the label. If both `dnf` and `dnr` flag the same bar, `DNF` takes precedence.
+
+```json
+{
+    "name": "GPU C",
+    "val": [0, 0],
+    "dnr": true
+}
+```
+
+To flag just one measurement, use `"dnr": [false, true]` alongside `"val": [120, 0]`.
 
 ```json
 {
