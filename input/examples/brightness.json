@@ -1,0 +1,15 @@
+{
+    "name": "Uniformita podsvícení",
+    "type": "brightness",
+    "sourceFile": "data/asus-brightness.html",
+    "info": [
+        {
+            "title": "Monitor",
+            "value": "Asus PG34WCDN"
+        },
+        {
+            "title": "Měřící zažízení",
+            "value": "ColorCheckter Plus"
+        }
+    ]
+}

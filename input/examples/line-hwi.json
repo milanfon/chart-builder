@@ -1,0 +1,57 @@
+{
+    "name": "CoD: Black Ops 6 - RX 9070 GRE",
+    "settings": "",
+    "driver": "596.36 / 26.5.2",
+    "version": "",
+    "type": "line",
+    "units": "s",
+    "xLabel": "Čas",
+    "sourceFile": "data/9070 GRE CODBO6 HW.CSV",
+    "parser": "hwi",
+    "values": [
+        {
+            "bounds": [0, 100],
+            "position": "left",
+            "series": [
+                {
+                    "key": "Celkové vytížení CPU [%]",
+                    "name": "Zatížení CPU",
+                    "unit": "%",
+                    "color": "bababa"
+                },
+                {
+                    "key": "Vyhrazená paměť GPU D3D [MB]",
+                    "name": "Využití VRAM",
+                    "unit": "MB",
+                    "color": "00ccff",
+                    "scaling": {
+                        "type": "percentual",
+                        "min": 0,
+                        "max": 12288
+                    }
+                },
+                {
+                    "key": "Teplota GPU [°C]",
+                    "index": "d269",
+                    "name": "Teplota GPU",
+                    "unit": "°C",
+                    "color": "ff8000"
+                }
+            ]
+        },
+        {
+            "bounds": [0, 4000],
+            "position": "right",
+            "width": 90,
+            "series": [
+                {
+                    "key": "Takt GPU [MHz]",
+                    "name": "Průměrný takt GPU",
+                    "index": "d274",
+                    "unit": "MHz",
+                    "color": "ff0000"
+                }
+            ]
+        }
+    ]
+}

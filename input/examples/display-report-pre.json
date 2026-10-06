@@ -1,0 +1,10 @@
+{
+    "name": "AG276QSG2 – Default preset / Pre-cal",
+    "type": "display-report",
+    "sourceFile": "data/Default Preset - Pre-cal.html",
+    "info": [
+        {"title": "Monitor", "value": "AG276QSG2"},
+        {"title": "Režim", "value": "Default / Pre-cal"},
+        {"title": "Cíl", "value": "sRGB"}
+    ]
+}

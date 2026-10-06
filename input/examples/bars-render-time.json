@@ -1,0 +1,177 @@
+{
+  "name": "Blender - Cosmos Laundromat",
+  "settings": "CPU",
+  "driver": "",
+  "version": "4.5",
+  "type": "bars",
+  "units": "min",
+  "better": "lower",
+  "bars": [
+    "Čas renderu"
+  ],
+  "sort": "asc",
+  "barsX": 650,
+  "values": [
+    {
+      "name": "Intel 14900K",
+      "date": "10/23",
+      "model": "",
+      "icon": "intel",
+      "val": [
+        "5:01"
+      ]
+    },
+    {
+      "name": "Ryzen 7900X",
+      "date": "10/23",
+      "model": "",
+      "icon": "amd",
+      "val": [
+        "5:39"
+      ]
+    },
+    {
+      "name": "Ryzen 8700G",
+      "date": "02/24",
+      "model": "",
+      "icon": "amd",
+      "val": [
+        "9:35"
+      ]
+    },
+    {
+      "name": "Ryzen 7500F",
+      "date": "02/24",
+      "model": "",
+      "icon": "amd",
+      "val": [
+        "11:34"
+      ]
+    },
+    {
+      "name": "Intel 12600K",
+      "date": "07/22",
+      "model": "",
+      "icon": "intel",
+      "val": [
+        "12:34"
+      ]
+    },
+    {
+      "name": "Intel 13500",
+      "date": "03/23",
+      "model": "",
+      "icon": "intel",
+      "val": [
+        "11:37"
+      ]
+    },
+    {
+      "name": "Intel 14700KF",
+      "date": "07/24",
+      "model": "BASELINE",
+      "icon": "intel",
+      "val": [
+        "5:53"
+      ]
+    },
+    {
+      "name": "Ryzen 9700X",
+      "date": "08/24",
+      "model": "",
+      "icon": "amd",
+      "val": [
+        "8:46"
+      ]
+    },
+    {
+      "name": "Ryzen 9950X",
+      "date": "08/24",
+      "icon": "amd",
+      "val": [
+        "4:22"
+      ]
+    },
+    {
+      "name": "Intel 285K",
+      "date": "10/24",
+      "icon": "intel",
+      "val": [
+        "4:57"
+      ],
+      "variant": "secondary"
+    },
+    {
+      "name": "Ryzen 9800X3D",
+      "date": "11/24",
+      "model": "",
+      "icon": "amd",
+      "val": [
+        "7:47"
+      ]
+    },
+    {
+      "name": "Intel 235",
+      "date": "01/25",
+      "model": "",
+      "icon": "intel",
+      "val": [
+        "11:37"
+      ]
+    },
+    {
+      "name": "Ryzen 4100",
+      "date": "11/25",
+      "model": "",
+      "icon": "amd",
+      "val": [
+        "29:50"
+      ]
+    },
+    {
+      "name": "Ryzen 9950X3D",
+      "date": "11/25",
+      "model": "",
+      "icon": "amd",
+      "val": [
+        "3:59"
+      ]
+    },
+    {
+      "name": "Intel 245K",
+      "date": "01/26",
+      "icon": "intel",
+      "val": [
+        "8:39"
+      ],
+      "variant": "secondary"
+    },
+    {
+      "name": "Intel 265K",
+      "date": "01/26",
+      "icon": "intel",
+      "val": [
+        "6:01"
+      ],
+      "variant": "secondary"
+    },
+    {
+      "name": "Intel 250K Plus",
+      "date": "06/26",
+      "icon": "intel",
+      "val": [
+        "6:20"
+      ],
+      "variant": "primary"
+    },
+    {
+      "name": "Intel 270K Plus",
+      "date": "06/26",
+      "icon": "intel",
+      "val": [
+        "4:34"
+      ],
+      "variant": "primary"
+    }
+  ]
+}

@@ -6,6 +6,8 @@ import { parseDirect } from "../parsers/direct";
 import { linMap, invert } from "../aux";
 import { parseREWtxt } from "../parsers/rew";
 import { estimateTextWidth, renderText } from "../rendering-helpers/text";
+import { createPlot, renderAxisTicks } from "../rendering-helpers/plot";
+import { renderRect } from "../rendering-helpers/lines";
 
 function determineVerticalNiceStep(diff, targetCount) {
     const rawStep = diff / targetCount;
@@ -104,24 +106,16 @@ export function renderVerticalAxis(data, order, right = false) {
     const width = data.width || dimensions.stats.axisWidth;
     const y = 150;
     const x = !right ? 30 + width * order : dimensions.canvas.width - 30 - (order + 1) * width;
-    const outline = `<rect x="${x}" y="${y}" width="${width}" height="${height}" stroke="#${colors.general.outline}" fill="none" stroke-width="2"/>`;
+    const outline = renderRect({x, y, width, height});
     const [min, max] = data.bounds;
     let ticks = `
         <text x="${x + 2 + dimensions.stats.tickMajorWidth}" y="${y + height - 5}" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="text-top">${min}</text>
         <text x="${x + 2 + dimensions.stats.tickMajorWidth}" y="${y + 5}" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="hanging">${max}</text>
     `;
     const axisTicks = getVerticalTicks(data.bounds);
-    for (const label of axisTicks.major) {
-        const yPos = linMap(label, data.bounds, [y + height, y]);
-        ticks += `
-            <line x1="${x}" y1="${yPos}" x2="${x + dimensions.stats.tickMajorWidth}" y2="${yPos}" stroke="#${colors.general.outline}" stroke-width="4"/>
-            <text x="${x + 2 + dimensions.stats.tickMajorWidth}" y="${yPos}" fill="#${colors.general.outline}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">${formatVerticalTickLabel(label)}</text>
-        `;
-    }
-    for (const value of axisTicks.minor) {
-        const yPos = linMap(value, data.bounds, [y + height, y]);
-        ticks += `<line x1="${x}" y1="${yPos}" x2="${x + dimensions.stats.tickMinorWidth}" y2="${yPos}" stroke="#${colors.general.outline}" stroke-width="2"/>`;
-    }
+    ticks += renderAxisTicks({orientation: 'vertical', position: x, scale: value => linMap(value, data.bounds, [y + height, y]),
+        major: axisTicks.major, minor: axisTicks.minor, majorLength: dimensions.stats.tickMajorWidth, minorLength: dimensions.stats.tickMinorWidth, majorWidth: 4,
+        label: (value, yPos) => renderText({x: x + 2 + dimensions.stats.tickMajorWidth, y: yPos, text: formatVerticalTickLabel(value), textAnchor: 'start', fontSize: 20, dominantBaseline: 'central'})});
     return `
         ${outline}
         ${ticks}
@@ -135,22 +129,17 @@ export function renderHorizontalAxis(leftAxisWidth, rightAxisWidth, bounds) {
     const axisWidth = dimensions.canvas.width - 30 * 2 - leftAxisWidth - rightAxisWidth;
     const textPadding = 5;
     const outline = `
-        <rect x="${30}" y="${y}" width="${leftAxisWidth}" height="${height}" stroke="#${colors.general.outline}" fill="#${colors.general.outline}" stroke-width="2"/>
-        <rect x="${dimensions.canvas.width - 30 - rightAxisWidth}" y="${y}" width="${rightAxisWidth}" height="${height}" stroke="#${colors.general.outline}" fill="#${colors.general.outline}" stroke-width="2"/>
-        <rect x="${x}" y="${y}" width="${axisWidth}" height="${height}" stroke="#${colors.general.outline}" fill="#${colors.general.background}" stroke-width="2"/>
+        ${renderRect({x: 30, y, width: leftAxisWidth, height, fill: `#${colors.general.outline}`})}
+        ${renderRect({x: dimensions.canvas.width - 30 - rightAxisWidth, y, width: rightAxisWidth, height, fill: `#${colors.general.outline}`})}
+        ${renderRect({x, y, width: axisWidth, height, fill: `#${colors.general.background}`})}
     `;
     let ticks = `
         ${renderText({x: x + textPadding, y: y + height - textPadding, text: bounds[0], textAnchor: "start", dominantBaseline: "text-top", fontSize: 20})}
         ${renderText({x: dimensions.canvas.width - 30 - rightAxisWidth - textPadding, y: y + height - textPadding, text: bounds[1], textAnchor: "end", dominantBaseline: "text-top", fontSize: 20})}
     `;
     const axisTicks = getHorizontalTicks(axisWidth, bounds);
-    for (const label of axisTicks.major) {
-        const xPos = linMap(label, bounds, [x, x + axisWidth]);
-        ticks += `
-            <line x1="${xPos}" y1="${y}" x2="${xPos}" y2="${y+20}" stroke="#${colors.general.outline}" stroke-width="2"/>
-            ${renderText({x: xPos, y: y + height - textPadding, text: formatTickLabel(label, axisTicks.majorStep), textAnchor: "middle", dominantBaseline: "text-top", fontSize: 20})}
-        `;
-    }
+    ticks += renderAxisTicks({orientation: 'horizontal', position: y, scale: value => linMap(value, bounds, [x, x + axisWidth]), major: axisTicks.major, majorLength: 20,
+        label: (value, xPos) => renderText({x: xPos, y: y + height - textPadding, text: formatTickLabel(value, axisTicks.majorStep), textAnchor: 'middle', dominantBaseline: 'text-top', fontSize: 20})});
     return `
         ${outline}
         ${ticks}
@@ -187,12 +176,13 @@ function applySeriesScaling(value, scaling) {
 function renderSeries(vals, series, canvas, xBounds, xValues = {}) {
     const ret = [];
     series.forEach(b => {
+        const plot = createPlot({...canvas, xBounds, yBounds: b.bounds});
         b.series.forEach(s => {
             const xs = xValues[s.key] || vals[s.key].map((_, i) => i);
-            const pos = xs.map(x => linMap(x, xBounds, [canvas.x, canvas.x + canvas.width]));
+            const pos = xs.map(plot.scaleX);
             const remaped = vals[s.key].map(i => {
                 const value = applySeriesScaling(Number(i), s.scaling);
-                return (canvas.y + canvas.height) - linMap(invert(value, s?.invert), b.bounds, [0, canvas.height]);
+                return plot.scaleY(invert(value, s?.invert));
             });
             const pathString = remaped.reduce((a, v, i) => {
                 if (i > 0)
@@ -207,23 +197,10 @@ function renderSeries(vals, series, canvas, xBounds, xValues = {}) {
 }
 
 function renderGrid(primaryAxis, canvas, xBounds, zeroPositions) {
-    const lines = [];
-    if (primaryAxis) {
-        for (const value of getVerticalTicks(primaryAxis.bounds).major) {
-            const y = linMap(value, primaryAxis.bounds, [canvas.y + canvas.height, canvas.y]);
-            if (zeroPositions.some(zeroY => Math.abs(zeroY - y) < 1e-6))
-                continue;
-
-            lines.push(`<line data-grid="horizontal" x1="${canvas.x}" y1="${y}" x2="${canvas.x + canvas.width}" y2="${y}" stroke="#${colors.general["grid-line"]}" stroke-width="1"/>`);
-        }
-    }
-
-    for (const value of getHorizontalTicks(canvas.width, xBounds).major) {
-        const x = linMap(value, xBounds, [canvas.x, canvas.x + canvas.width]);
-        lines.push(`<line data-grid="vertical" x1="${x}" y1="${canvas.y}" x2="${x}" y2="${canvas.y + canvas.height}" stroke="#${colors.general["grid-line"]}" stroke-width="1"/>`);
-    }
-
-    return lines;
+    const plot = createPlot({...canvas, xBounds, yBounds: primaryAxis?.bounds || [0, 1]});
+    const yTicks = primaryAxis ? getVerticalTicks(primaryAxis.bounds).major.filter(value =>
+        !zeroPositions.some(zeroY => Math.abs(zeroY - plot.scaleY(value)) < 1e-6)) : [];
+    return plot.grid({xTicks: getHorizontalTicks(canvas.width, xBounds).major, yTicks, strokeWidth: 1});
 }
 
 function renderLineFooter(props, series) {
@@ -302,20 +279,12 @@ export function renderLine(props, inputName) {
         `<line x1="${insideCanvasX}" y1="${y}" x2="${insideCanvasX + insideCanvasWidth}" y2="${y}" stroke="#${colors.general["zero-bar"]}" stroke-width="3" stroke-dasharray="12 8"/>`
     );
     const canvas = {x: insideCanvasX, y: insideCanvasY, width: insideCanvasWidth, height: insideCanvasHeight};
-    const gridLines = props.grid === true ? renderGrid(left[0] || right[0], canvas, xBounds, zeroPositions) : [];
+    const plot = createPlot({...canvas, xBounds, yBounds: [0, 1], id: 'line-chart-plot-clip'});
+    const gridLines = props.grid === true ? renderGrid(left[0] || right[0], canvas, xBounds, zeroPositions) : '';
     const series = renderSeries(vals, [...left, ...right], canvas, xBounds, xValues);
 
     return `
-        <defs>
-            <clipPath id="line-chart-plot-clip" clipPathUnits="userSpaceOnUse">
-                <rect x="${insideCanvasX}" y="${insideCanvasY}" width="${insideCanvasWidth}" height="${insideCanvasHeight}"/>
-            </clipPath>
-        </defs>
-        <g clip-path="url(#line-chart-plot-clip)">
-            ${gridLines.join("\n")}
-            ${zeroLines.join("\n")}
-            ${series.join("\n")}
-        </g>
+        ${plot.clip(gridLines + zeroLines.join('\n') + series.join('\n'))}
         ${renderHeader(props)}
         ${leftAxes}
         ${rightAxes}
