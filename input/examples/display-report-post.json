@@ -1,0 +1,10 @@
+{
+    "name": "AG276QSG2 – Default preset / Post-cal",
+    "type": "display-report",
+    "sourceFile": "data/Default Preset - Post-cal.html",
+    "info": [
+        {"title": "Monitor", "value": "AG276QSG2"},
+        {"title": "Režim", "value": "Default / Post-cal"},
+        {"title": "Cíl", "value": "sRGB"}
+    ]
+}

@@ -1,0 +1,185 @@
+{
+  "name": "Cyberpunk 2077 - 1080p",
+  "settings": "High, FSR Balanced",
+  "driver": "",
+  "version": "2.31",
+  "type": "bars",
+  "units": "FPS",
+  "better": "higher",
+  "bars": [
+    "Průměr",
+    "1% Percentil"
+  ],
+  "sort": "desc",
+  "values": [
+    {
+      "name": "Ryzen 7900X",
+      "date": "11/24",
+      "model": "",
+      "icon": "amd",
+      "val": [
+        136.7,
+        83.9
+      ]
+    },
+    {
+      "name": "i9 14900K",
+      "date": "10/23",
+      "model": "",
+      "icon": "intel",
+      "val": [
+        136.1,
+        94.4
+      ]
+    },
+    {
+      "name": "i5 12600K",
+      "date": "10/23",
+      "model": "",
+      "icon": "intel",
+      "val": [
+        104.8,
+        71.7
+      ]
+    },
+    {
+      "name": "Ryzen 8700G",
+      "date": "02/24",
+      "model": "",
+      "icon": "amd",
+      "val": [
+        141.2,
+        89.4
+      ]
+    },
+    {
+      "name": "Ryzen 7500F",
+      "date": "02/24",
+      "model": "",
+      "icon": "amd",
+      "val": [
+        118.7,
+        81
+      ]
+    },
+    {
+      "name": "Intel 14700KF",
+      "date": "07/24",
+      "model": "BASELINE",
+      "icon": "intel",
+      "val": [
+        143.2,
+        90
+      ]
+    },
+    {
+      "name": "Ryzen 9700X",
+      "date": "11/24",
+      "model": "",
+      "icon": "amd",
+      "val": [
+        142.8,
+        93.4
+      ]
+    },
+    {
+      "name": "Ryzen 9950X",
+      "date": "10/24",
+      "icon": "amd",
+      "val": [
+        147.7,
+        96.2
+      ]
+    },
+    {
+      "name": "Intel 285K",
+      "date": "06/26",
+      "icon": "intel",
+      "val": [
+        154.1,
+        112.2
+      ],
+      "variant": "secondary"
+    },
+    {
+      "name": "Ryzen 9800X3D",
+      "date": "11/24",
+      "model": "",
+      "icon": "amd",
+      "val": [
+        201.5,
+        124.2
+      ]
+    },
+    {
+      "name": "Intel 235",
+      "date": "01/25",
+      "model": "",
+      "icon": "intel",
+      "val": [
+        120.1,
+        81.5
+      ]
+    },
+    {
+      "name": "Ryzen 4100",
+      "date": "11/25",
+      "model": "",
+      "icon": "amd",
+      "val": [
+        57.7,
+        39.1
+      ]
+    },
+    {
+      "name": "Ryzen 9950X3D",
+      "date": "11/25",
+      "model": "",
+      "icon": "amd",
+      "val": [
+        157.3,
+        101.4
+      ]
+    },
+    {
+      "name": "Intel 245K",
+      "date": "01/26",
+      "icon": "intel",
+      "val": [
+        143.2,
+        98.4
+      ],
+      "variant": "secondary"
+    },
+    {
+      "name": "Intel 265K",
+      "date": "01/26",
+      "icon": "intel",
+      "val": [
+        155.4,
+        110.3
+      ],
+      "variant": "secondary"
+    },
+    {
+      "name": "Intel 250K Plus",
+      "date": "06/26",
+      "icon": "intel",
+      "val": [
+        141.8,
+        98.9
+      ],
+      "variant": "primary"
+    },
+    {
+      "name": "Intel 270K Plus",
+      "date": "06/26",
+      "icon": "intel",
+      "val": [
+        166.7,
+        111.8
+      ],
+      "variant": "primary"
+    }
+  ]
+}

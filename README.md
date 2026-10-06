@@ -16,6 +16,19 @@ Currently this software was tested and developed under MacOS, for which compatib
 
 ## Usage
 
+### Regression examples
+
+[`input/examples/`](input/examples/README.md) contains self-contained real-project
+examples for all chart types, with local reports, CSV/text data, and product images.
+Render the complete set with:
+
+```sh
+bun app.js -m batch -i examples -e svg -f
+```
+
+Use `-e png` for Inkscape-rendered previews. See the folder's README for provenance,
+coverage, and visual regression review instructions.
+
 ### General
 
 For the header, the software is by default looking for these 3 values and they are placed in the header in this particular order:
@@ -480,6 +493,50 @@ Table cells can be both text format or object that specifies both the text and i
     ]
 }
 ```
+
+### DisplayCAL measurement report
+
+Use `type: "display-report"` to create one slide from one DisplayCAL **Measurement Report** HTML file. The report's embedded reference and measured RGB/Lab/XYZ data are parsed directly; no browser or report JavaScript is needed.
+
+The normal header is followed by four sections:
+
+| Left column | Middle column (full height) | Right column (full height) |
+| --- | --- | --- |
+| Patch accuracy (ΔE2000), above grayscale response, brightness and contrast | Enlarged chromaticity chart (CIE 1976 u′v′) | Vertical reference/measured color pairs |
+
+The color strip uses one shared REF/MEAS legend. Patch numbers and per-preview ΔE labels are omitted; errors appear in the patch accuracy chart.
+
+```json
+{
+    "name": "AG276QSG2 – Default preset / Pre-cal",
+    "type": "display-report",
+    "sourceFile": "Default Preset - Pre-cal.html",
+    "info": [
+        {"title": "Monitor", "value": "AG276QSG2"},
+        {"title": "Režim", "value": "Default / Pre-cal"},
+        {"title": "Cíl", "value": "sRGB"}
+    ]
+}
+```
+
+`sourceFile` uses the usual relative/absolute path rules. If `info` is omitted, the header shows the display name, patch count and measurement date from the report.
+
+Optional settings:
+- `deltaEMax`: positive fixed upper bound for the error chart, at least the largest measured error. Useful for matching scales across separate slides; otherwise the scale is automatic.
+- `previewPatches`: array of 1–12 sample IDs to show as color pairs. By default, the slide selects full-intensity primary/secondary colors and muted colors when available, with other color patches as fallback.
+
+Example input: `input/display-test/displaycal-report.json`.
+
+```sh
+bun app.js -m single -i display-test/displaycal-report.json -e svg
+bun app.js -m single -i display-test/displaycal-report.json -e png
+```
+
+Outputs are written to `output/display-test/displaycal-report.svg` or `.png`. To render another report, change `sourceFile` and the title, or create another JSON file.
+
+ΔE2000 is calculated from embedded, white-relative Lab values with unit weighting factors. These errors do not include the full whitepoint deviation from D65; the chromaticity chart uses raw measured XYZ to show that deviation. Its reference triangle uses embedded reference primary Lab adapted from D50 to D65. Triangles represent sampled primaries, not gamut coverage/volume. Grayscale compares measured relative XYZ Y against the embedded reference Lab luminance curve, so it follows the report's reference rather than assuming a gamma curve. Contrast uses recorded absolute white Y / black Y.
+
+Color previews convert D50 Lab through Bradford adaptation to D65 and then sRGB. Out-of-gamut previews are clipped; errors are calculated before clipping. The dashed ΔE00 = 2 line is a visual guide. Uniformity reports use the separate `brightness` type below.
 
 ### Brightness
 

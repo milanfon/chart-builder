@@ -1,4 +1,5 @@
 input/*
+!input/examples/
 output/*
 output.svg
 node_modules/

@@ -1,0 +1,24 @@
+{
+    "name": "Gigabyte MO27Q2A ICE – jas SDR / APL",
+    "type": "line",
+    "parser": "csv",
+    "grid": true,
+    "units": "vzorek",
+    "info": [
+        {"title": "Monitor", "value": "Gigabyte MO27Q2A ICE"},
+        {"title": "Měřící zažízení", "value": "ColorCheckter Plus"},
+        {"title": "Režim", "value": "SDR · pokrytí 10–100 %"}
+    ],
+    "values": [
+        {
+            "bounds": [0, 1200],
+            "position": "left",
+            "width": 100,
+            "series": [
+                {"key": "average_brightness", "name": "APL HIGH", "unit": "nit", "color": "ff2600", "file": "data/coverage-high.csv"},
+                {"key": "average_brightness", "name": "APL MEDIUM", "unit": "nit", "color": "15ae00", "file": "data/coverage-medium.csv"},
+                {"key": "average_brightness", "name": "APL LOW", "unit": "nit", "color": "00e1ff", "file": "data/coverage-low.csv"}
+            ]
+        }
+    ]
+}

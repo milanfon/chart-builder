@@ -1,5 +1,14 @@
 import {readFileSync} from "node:fs";
 
+// Escape characters with special meaning in XML text and attributes.
+export function escapeXML(value) {
+    return String(value).replace(/[&<>"']/g, char => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;'}[char]));
+}
+
+export function formatMeasurement(value, digits = 2) {
+    return value === null ? 'N/A' : value.toFixed(digits);
+}
+
 export function imageToBase64(filePath) {
     const buffer = readFileSync(filePath);
     return buffer.toString('base64');

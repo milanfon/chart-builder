@@ -1,0 +1,54 @@
+{
+    "name": "SPECIFIKACE",
+    "type": "specs",
+    "parameters": [
+        "Úhlopříčka",
+        "Poměr stran",
+        "Rozlišení",
+        "Obnovovací frekvence",
+        "Typ panelu",
+        "Maximální jas",
+        "Podpora HDR",
+        "KVM Switch",
+        "Rychlost nabíjení",
+        "Cena 03/26"
+    ],
+    "values": [
+        {
+            "name": "Asus PG34WCDN",
+            "pic": {
+                "path": "data/pg34wcdn.png"
+            },
+            "val": [
+                "34\"",
+                "21:9",
+                "3440x1440",
+                "360 Hz",
+                "QD-OLED",
+                "1300 nit",
+                "HDR10",
+                "Ano",
+                "90W",
+                "-"
+            ]
+        },
+        {
+            "name": "Asus XG34WCDMS",
+            "pic": {
+                "path": "data/xg34wcms.png"
+            },
+            "val": [
+                "34\"",
+                "21:9",
+                "3440x1440",
+                "240 Hz",
+                "QD-OLED",
+                "1000 nit",
+                "Dolby Vision",
+                "Ne",
+                "-",
+                "-"
+            ]
+        }
+    ]
+}

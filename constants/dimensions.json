@@ -25,6 +25,38 @@
         "tickMajorWidth": 30,
         "axisPadding": 5
     },
+    "display-report": {
+        "contentOffsetY": 20,
+        "methodology": {"x": 45, "y": 164, "lineLeft": 30, "lineRight": 2130, "lineY": 170},
+        "axis": {"unitHeight": 40, "labelPadding": 12, "topLabelOffset": 21, "bottomLabelOffset": -7, "labelOffset": 6, "horizontalLabelOffset": 31, "edgeLabelPadding": 5, "unitLabelOffset": 29, "majorTickLength": 15},
+        "header": {"rowHeight": 40, "labelOffsetY": 27, "titleOffsetY": 10},
+        "accuracy": {
+            "left": 30, "top": 150, "width": 1050, "height": 440,
+            "plot": {"x": 75, "y": 80, "width": 975, "height": 320},
+            "header": {"titleWidth": 525, "valueX": 800, "labelX": 545, "readingX": 825},
+            "bar": {"inset": 0.15, "width": 0.7, "strokeWidth": 0.7}
+        },
+        "previews": {
+            "left": 1820, "top": 150, "width": 310, "height": 880,
+            "rowsTop": 100, "rowsBottom": 880, "headerHeight": 60,
+            "titleY": 38, "legendY": 87, "emptyLabelY": 160
+        },
+        "chromaticity": {
+            "left": 1080, "top": 150, "width": 740, "height": 880,
+            "plot": {"x": 75, "y": 80},
+            "header": {"titleWidth": 370, "valueX": 500, "labelX": 390, "readingX": 520},
+            "unit": {"verticalLabelOffset": 16, "horizontalLabelOffset": 34},
+            "marker": {"radius": 6, "crossHalfSize": 7},
+            "legend": {"leftLineStart": 20, "leftLineEnd": 75, "leftLabelX": 90, "rightLineStart": 350, "rightLineEnd": 405, "rightLabelX": 420, "lineY": 807, "lineLabelY": 814, "crossX": 47, "dotX": 377, "markerY": 852, "markerLabelY": 859},
+            "missingLabel": {"x": 100, "y": 205}
+        },
+        "grayscale": {
+            "left": 30, "top": 590, "width": 1050, "height": 440,
+            "plot": {"x": 75, "y": 120, "width": 975, "height": 280},
+            "header": {"titleWidth": 525, "valueX": 700, "labelX": 545, "readingX": 725},
+            "missingLabel": {"x": 25, "y": 210}
+        }
+    },
     "brightness": {
         "padding": 80,
         "top": 180,

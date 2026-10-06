@@ -1,0 +1,31 @@
+{
+    "name": "Odezva",
+    "driver": "",
+    "version": "",
+    "type": "line",
+    "units": "Hz",
+    "xLabel": "Frekvence",
+    "parser": "rew",
+    "values": [
+        {
+            "bounds": [-100, 0],
+            "position": "left",
+            "series": [
+                {
+                    "key": "dBFS(dBFS)",
+                    "name": "SPL - Left",
+                    "unit": "dB",
+                    "color": "28a745",
+                    "file": "data/Left.txt"
+                },
+                {
+                    "key": "dBFS(dBFS)",
+                    "name": "SPL - Right",
+                    "unit": "dB",
+                    "color": "dc3545",
+                    "file": "data/Right.txt"
+                }
+            ]
+        }
+    ]
+}

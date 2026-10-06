@@ -2,6 +2,7 @@ const colors = require("../constants/colors.json");
 const dimensions = require("../constants/dimensions.json");
 import { imageToBase64} from "../includes/aux";
 import { renderBrightnessTable } from "./chart-types/brightness";
+import { renderDisplayCALReport } from "./chart-types/displaycal";
 import { getEmbeddedLogo, renderHeader } from "./chart-types/general-components";
 import { renderLine, renderVerticalAxis } from "./chart-types/line";
 import { renderCells } from "./chart-types/table";
@@ -267,9 +268,12 @@ export class Page {
             body = this.renderSpecs();
         if (this.props.type === 'brightness')
             body = renderBrightnessTable(this.props, this.inputName);
+        if (this.props.type === 'display-report')
+            body = renderDisplayCALReport(this.props, this.inputName);
         return `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg width="${dimensions.canvas.width}" height="${dimensions.canvas.height}" version="1.1"
     xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:svg="http://www.w3.org/2000/svg">
     <rect width="100%" height="100%" fill="#${colors.general.background}"/>
     ${body}

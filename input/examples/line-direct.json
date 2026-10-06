@@ -1,0 +1,40 @@
+{
+    "name": "Cinebench R24 při různé ambientní teplotě",
+    "type": "line",
+    "parser": "direct",
+    "grid": true,
+    "units": "%",
+    "xLabel": "Teplota",
+    "info": [
+        {
+            "title": "CPU",
+            "value": "Ryzen 9950X"
+        },
+        {
+            "title": "VGA",
+            "value": "RTX 5090 Inno3D iChill X3"
+        }
+    ],
+    "values": [
+        {
+            "bounds": [-100, 10],
+            "position": "left",
+            "width": 80,
+            "series": [
+                {
+                    "key": "air",
+                    "name": "Vzduchový chladič",
+                    "unit": "%",
+                    "color": "ff0000",
+                    "val": [
+                        [15, 1.2],
+                        [20, 0.0],
+                        [30, -5.7],
+                        [40, -7.6],
+                        [50, -100.0]
+                    ]
+                }
+            ]
+        }
+    ]
+}
