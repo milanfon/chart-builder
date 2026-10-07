@@ -57,6 +57,23 @@
             "missingLabel": {"x": 25, "y": 210}
         }
     },
+    "osrtt": {
+        "contentTop": 150,
+        "summaryTop": 612,
+        "heatmap": {
+            "leftInset": 40,
+            "top": 222,
+            "height": 350,
+            "titleY": 185,
+            "targetLabelY": 592,
+            "sourceLabelOffsetX": 20,
+            "cellFontWidthRatio": 0.32
+        },
+        "table": {"labelWidth": 452, "referenceWidth": 640, "textPadding": 12},
+        "info": {"transitionCellWidths": [190, 50, 110, 50, 110, 70, 120]},
+        "legend": {"titleWidthRatio": 0.4, "missingPatchWidth": 140},
+        "fontSize": {"default": 22, "heatmapTitle": 29, "axisLabel": 19, "heatmapCell": 27, "info": 20, "legendTitle": 24, "legendValue": 23}
+    },
     "brightness": {
         "padding": 80,
         "top": 180,

@@ -43,6 +43,15 @@
     "display-report": {
         "measured": "58D4DF"
     },
+    "osrtt": {
+        "row-darker": "484848",
+        "good": "32b95a",
+        "moderate": "d6ba5c",
+        "poor": "d74545",
+        "missing": "353b43",
+        "diagonal": "d0d0d0",
+        "refresh": "4787b3"
+    },
     "brightness": {
         "background": ["67E319", "FF8D22", "FF0000"]
     }
