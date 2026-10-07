@@ -39,6 +39,7 @@ changes to the renderer or referenced data files.
 | `brightness.json` | `brightness` | `oled-2026/a-brightness.json` | Real DisplayCAL brightness-uniformity HTML |
 | `display-report-pre.json` | `display-report` | `display-test/displaycal-report.json` | Pre-calibration patch accuracy, grayscale, chromaticity, reference/measured swatches |
 | `display-report-post.json` | `display-report` | `display-test/displaycal-report-post-cal.json` | Same monitor after calibration, lower error range |
+| `osrtt.json` | `osrtt` | `display-test/003-RT-AG276QSG2-360-DP-100/003-RT-AG276QSG2-360-DP-100.csv` | RGB10 response-time, overshoot and rating heatmaps, missing transitions, statistics and color keys |
 
 The CSV coverage example preserves the original Gigabyte MO27Q2A ICE readings;
 its three data arrays were transcribed into local CSV files to exercise the CSV
@@ -47,7 +48,7 @@ parser. The x axis uses sample indices 0–9, corresponding to coverage 10–100
 original data files or inline readings.
 Project header templates were resolved using each source project's `.global`.
 
-There are **11 input charts and 18 rendered slides** (the stepped bar chart emits
+There are **12 input charts and 19 rendered slides** (the stepped bar chart emits
 eight slides). Only the top-level JSON files are chart inputs; `data/` holds all
 copied reports, logs, measurements, and product images.
 

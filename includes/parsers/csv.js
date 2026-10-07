@@ -110,7 +110,7 @@ export function normalizeCSVValues(values) {
     }));
 }
 
-function lineToArray(line) {
+export function lineToArray(line) {
     const row = [];
     let value = "";
     let inQuotes = false;

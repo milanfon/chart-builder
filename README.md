@@ -538,6 +538,31 @@ Outputs are written to `output/display-test/displaycal-report.svg` or `.png`. To
 
 Color previews convert D50 Lab through Bradford adaptation to D65 and then sRGB. Out-of-gamut previews are clipped; errors are calculated before clipping. The dashed ΔE00 = 2 line is a visual guide. Uniformity reports use the separate `brightness` type below.
 
+### OSRTT response-time report
+
+Use `type: "osrtt"` to render an OSRTT **summary CSV export** (measurements followed by JSON metadata). RGB5 and RGB10 tolerance exports are supported; the initial/perceived timing columns are identified by their labels. Select the run-named summary CSV, rather than the `RAW-OSRTT` or `FULL-OSRTT` waveform files.
+
+```json
+{
+    "name": "Odezva – AOC AG276QSG2",
+    "type": "osrtt",
+    "sourceFile": "003-RT-AG276QSG2-360-DP-100/003-RT-AG276QSG2-360-DP-100.csv"
+}
+```
+
+The slide uses the standard logo/title header with resolution, refresh rate, and overdrive taken from the export. Set `info` to override those three header rows. `name` is optional and defaults to the monitor name prefixed by “Odezva”. `sourceFile` follows the usual relative/absolute path rules; optional `note` replaces the footer text.
+
+Three heatmaps show perceived response time (ms), overshoot (RGB), and visual response rating. Rows are starting RGB levels; columns are ending RGB levels. Below them are response-time statistics, overshoot/rating summaries, and three color keys. Color thresholds match the sample report: response time 1/5/10 ms, overshoot 5/15/20 RGB, and rating 50/70/90.
+
+Missing, non-finite, negative, and all-zero export results are shown as `N/A` and excluded separately for each metric. Overshoot is excluded when perceived time or rating is missing. Genuine zero overshoot is retained. Rise/fall averages use increasing/decreasing RGB levels. Refresh-window compliance uses perceived time ≤ 1000 / refresh rate; the 0–255–0 cycle requires both transitions to be valid. These exclusions can produce different averages from OSRTT screenshots that count failed measurements as zero.
+
+```sh
+bun app.js -m single -i display-test/osrtt-report.json -e svg
+bun app.js -m single -i display-test/osrtt-report.json -e png
+```
+
+A self-contained regression example is available in `input/examples/osrtt.json`.
+
 ### Brightness
 
 Plotting of __display uniformity__ from _DisplayCAL_ is also supported.

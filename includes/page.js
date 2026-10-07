@@ -3,6 +3,7 @@ const dimensions = require("../constants/dimensions.json");
 import { imageToBase64} from "../includes/aux";
 import { renderBrightnessTable } from "./chart-types/brightness";
 import { renderDisplayCALReport } from "./chart-types/displaycal";
+import { renderOSRTT } from "./chart-types/osrtt";
 import { getEmbeddedLogo, renderHeader } from "./chart-types/general-components";
 import { renderLine, renderVerticalAxis } from "./chart-types/line";
 import { renderCells } from "./chart-types/table";
@@ -270,6 +271,8 @@ export class Page {
             body = renderBrightnessTable(this.props, this.inputName);
         if (this.props.type === 'display-report')
             body = renderDisplayCALReport(this.props, this.inputName);
+        if (this.props.type === 'osrtt')
+            body = renderOSRTT(this.props, this.inputName);
         return `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg width="${dimensions.canvas.width}" height="${dimensions.canvas.height}" version="1.1"
     xmlns="http://www.w3.org/2000/svg"
