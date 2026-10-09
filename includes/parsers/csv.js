@@ -59,7 +59,7 @@ function parseCSVFile(path, inputName, {encoding, columns, indexes, headerLine =
         columns.reduce((a, c) => ({...a, [c]: []}), {}));
 }
 
-export function parseCSVSeries(defaultPath, inputName, {encoding, values, headerLine = 0, xBounds}) {
+export function parseCSVSeries(defaultPath, inputName, {encoding, values, headerLine = 0, xBounds, xKey}) {
     const fileMapping = values
       .flatMap(v => v.series)
       .reduce((a, s) => {
@@ -75,25 +75,52 @@ export function parseCSVSeries(defaultPath, inputName, {encoding, values, header
       }, {});
 
     let xBoundsSet = false;
-    return Object.entries(fileMapping)
-      .map(([file, fileSeries]) => {
-          const columns = fileSeries.map(s => s.sourceKey);
-          const indexes = fileSeries.reduce((a, s) => {
-              if (s.index !== undefined)
-                  a[s.sourceKey] = s.index;
-              return a;
-          }, {});
-          const parsed = parseCSVFile(file, inputName, {
-              encoding,
-              columns,
-              indexes,
-              headerLine,
-              xBounds: xBoundsSet ? undefined : xBounds
-          });
-          xBoundsSet = true;
-          return fileSeries.reduce((a, s) => ({...a, [s.outputKey]: parsed[s.sourceKey]}), {});
-      })
-      .reduce((a, o) => ({...a, ...o}), {});
+    const vals = {};
+    const xValues = {};
+    let minX = Infinity;
+    let maxX = -Infinity;
+
+    for (const [file, fileSeries] of Object.entries(fileMapping)) {
+        const columns = new Set(fileSeries.map(s => s.sourceKey));
+        if (xKey)
+            columns.add(xKey);
+
+        const indexes = fileSeries.reduce((a, s) => {
+            if (s.index !== undefined)
+                a[s.sourceKey] = s.index;
+            return a;
+        }, {});
+        const parsed = parseCSVFile(file, inputName, {
+            encoding,
+            columns: [...columns],
+            indexes,
+            headerLine,
+            xBounds: !xKey && !xBoundsSet ? xBounds : undefined
+        });
+        xBoundsSet = true;
+
+        const xs = xKey ? parsed[xKey].map((value, index) => {
+            const x = Number(value);
+            if (value === undefined || value.trim() === "" || !Number.isFinite(x))
+                throw new Error(`Invalid X value in column '${xKey}' of '${file}' at data row ${index + 1}`);
+            minX = Math.min(minX, x);
+            maxX = Math.max(maxX, x);
+            return x;
+        }) : undefined;
+
+        for (const {sourceKey, outputKey} of fileSeries) {
+            vals[outputKey] = parsed[sourceKey];
+            if (xs)
+                xValues[outputKey] = xs;
+        }
+    }
+
+    if (xKey && xBounds && Number.isFinite(minX) && Number.isFinite(maxX)) {
+        xBounds[0] = minX;
+        xBounds[1] = maxX;
+    }
+
+    return {vals, xValues};
 }
 
 export function normalizeCSVValues(values) {

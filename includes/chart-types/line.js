@@ -254,14 +254,11 @@ export function renderLine(props, inputName) {
             vals = parseREWtxt(inputName, {encoding: props.encoding, values: props.values});
             break;
         case 'csv':
-            vals = parseCSVSeries(props.sourceFile, inputName, {encoding: props.encoding, values, xBounds});
+            ({vals, xValues} = parseCSVSeries(props.sourceFile, inputName, {encoding: props.encoding, values, xBounds, xKey: props.xKey}));
             break;
-        case 'direct': {
-            const parsed = parseDirect(values, {xBounds});
-            vals = parsed.vals;
-            xValues = parsed.xValues;
+        case 'direct':
+            ({vals, xValues} = parseDirect(values, {xBounds}));
             break;
-        }
         default:
             throw new Error("Invalid parser value!");
     }

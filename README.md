@@ -197,6 +197,7 @@ Top-level line chart options:
 | `type` | Must be `line`. |
 | `parser` | One of `direct`, `csv`, `rew`, `hwi`, `mangohud` (optional, default is `direct`). |
 | `sourceFile` | Default input file (required for file-based parsers, not used by `direct`). |
+| `xKey` | Optional CSV column name used for x coordinates (`csv` parser only). X-axis bounds are calculated from this column across all input files. |
 | `encoding` | Optional file encoding override (default: `utf8`). |
 | `units` | Text shown in line chart footer as x-axis units. |
 | `grid` | Optional, if `true` renders major horizontal and vertical gridlines behind the series. Horizontal lines follow the first left axis, or the first right axis when no left axis exists. |
@@ -283,6 +284,10 @@ All values must be numeric.
 
 The `csv` parser uses `sourceFile` as the default CSV input for all series.
 
+Set the top-level `xKey` option to the name of the CSV column containing x coordinates, for example `"xKey": "Time"`. Values must be non-empty, finite numbers. Each series uses the x coordinates from its own file, and the x-axis bounds cover the minimum and maximum values across all input files. The selected column must exist in every file used by the chart.
+
+If `xKey` is omitted, points use zero-based sample indexes as x coordinates, and x-axis bounds are read from the first column of the first input file.
+
 You can combine multiple CSV files in one line chart by setting optional `file` on selected series. When `file` is defined, that series is loaded from that file instead of `sourceFile`.
 
 This is useful when multiple files contain the same column name (for example `FPS`) and you want to plot them together.
@@ -293,6 +298,7 @@ This is useful when multiple files contain the same column name (for example `FP
     "type": "line",
     "parser": "csv",
     "sourceFile": "gpu-a.csv",
+    "xKey": "Time",
     "units": "s",
     "values": [
         {
@@ -319,6 +325,30 @@ This is useful when multiple files contain the same column name (for example `FP
 ```
 
 `file` follows the same relative/absolute path rules as `sourceFile`.
+
+For example, `xKey` is useful when measurements are recorded at uneven time intervals. The chart configuration above can use these files:
+
+`gpu-a.csv`:
+
+```csv
+Time,FPS
+0,120
+0.5,118
+2,95
+5,110
+```
+
+`gpu-b.csv`:
+
+```csv
+Time,FPS
+0,130
+1,125
+3,105
+6,115
+```
+
+With `"xKey": "Time"`, each point is placed at its actual timestamp, and the shared x-axis spans 0–6 seconds. For example, the third points are plotted at 2 seconds for VGA A and 3 seconds for VGA B. Without `xKey`, both third points would be plotted at sample index 2, hiding the difference in measurement timing.
 
 #### REW
 
