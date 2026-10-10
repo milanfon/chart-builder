@@ -12,22 +12,21 @@ Required software to run this project:
 - Bun JS runtime
 - Inkscape
 
-Currently this software was tested and developed under MacOS, for which compatibility is guaranteed. It should also work under Linux and WSL 2. Native Windows support might require some adjustments.
+Currently this software was tested and developed under `MacOS`, for which compatibility is guaranteed. It should also work under Linux and WSL 2. Native Windows support might require some adjustments.
 
 ## Usage
 
-### Regression examples
+### Examples
 
 [`input/examples/`](input/examples/README.md) contains self-contained real-project
 examples for all chart types, with local reports, CSV/text data, and product images.
 Render the complete set with:
 
 ```sh
-bun app.js -m batch -i examples -e svg -f
+bun app.js -m batch -i examples -e png
 ```
 
-Use `-e png` for Inkscape-rendered previews. See the folder's README for provenance,
-coverage, and visual regression review instructions.
+For regression testing, see the folder's README for provenance, coverage, and visual regression review instructions. To force re-render, add `-f` argument. You can also choose to render svg only when changing the export argument to `-e svg`.
 
 ### General
 
