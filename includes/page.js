@@ -6,8 +6,10 @@ import { renderDisplayCALReport } from "./chart-types/displaycal";
 import { renderOSRTT } from "./chart-types/osrtt";
 import { getEmbeddedLogo, renderHeader } from "./chart-types/general-components";
 import { renderLine, renderVerticalAxis } from "./chart-types/line";
+import { renderXY } from "./chart-types/xy";
 import { renderCells } from "./chart-types/table";
 import { estimateTextWidth, renderText } from "./rendering-helpers/text";
+import { renderImage } from "./rendering-helpers/image";
 
 export class Page {
     constructor(props, inputName) {
@@ -162,7 +164,7 @@ export class Page {
         return this.props.values.map((val, index) => {
                 if (!this.isVisibleAtStep(val, currentStep))
                     return "";
-                const iconHref = val?.icon ? `<image xlink:href="data:image/png;base64,${imageToBase64("./assets/icons/"+val.icon+".png")}" x="0" y="0" width="${40 * scale}" height="${40 * scale}"/>` : undefined;
+                const iconHref = val?.icon ? renderImage({href: `data:image/png;base64,${imageToBase64("./assets/icons/"+val.icon+".png")}`, width: 40 * scale, height: 40 * scale}) : undefined;
                 const modelText = renderText({x: 95, y: 50*scale, fill: colors.general["font-secondary"], textAnchor: "start", alignBaseline: "middle", fontFamily: "Russo One", fontSize: 28*scale, dominantBaseline: "hanging", text: val.model || ""})
                 const dateText = val.date ? `
                     <text x="0" y="${50 * scale}" fill="#${colors.general["font-secondary"]}" text-anchor="start" align-baseline="middle" font-family="Russo One" font-size="${28 * scale}" dominant-baseline="hanging">${val.date}</text>
@@ -253,7 +255,7 @@ export class Page {
             <line x1="30" y1="${headLine}" x2="2130" y2="${headLine}" stroke="#${colors.general.outline}" stroke-width="2"/>
             <line x1="30" y1="${headLineHalf}" x2="${paramLine}" y2="${headLineHalf}" stroke="#${colors.general.outline}" stroke-width="2"/>
             <text x="${dimensions.specs.padding + dimensions.specs["param-line"]/2}" y="${dimensions.specs.padding + dimensions.specs["head-line"] / 4}" fill="#${colors.general.background}" text-anchor="middle" align-baseline="middle" font-family="Russo One" font-size="${40}" dominant-baseline="central">${this.props.name}</text>
-            <image xlink:href="${getEmbeddedLogo()}" x="${dimensions.specs.padding}" y="${dimensions.specs["head-line"] * 0.55 + dimensions.specs.padding}" width="${dimensions.specs["param-line"]}" height="${dimensions.specs["head-line"]/2 * 0.8}"/>
+            ${renderImage({href: getEmbeddedLogo(), x: dimensions.specs.padding, y: dimensions.specs["head-line"] * 0.55 + dimensions.specs.padding, width: dimensions.specs["param-line"], height: dimensions.specs["head-line"]/2 * 0.8})}
             ${renderCells(paramLine, headLine, this.props, this.inputName)}
             <line x1="${paramLine}" y1="30" x2="${paramLine}" y2="1050" stroke="#${colors.general.outline}" stroke-width="2"/>
         `;
@@ -265,6 +267,8 @@ export class Page {
             body = this.renderChart(currentStep);
         if (this.props.type === 'line')
             body = renderLine(this.props, this.inputName);
+        if (this.props.type === 'xy')
+            body = renderXY(this.props);
         if (this.props.type === 'specs')
             body = this.renderSpecs();
         if (this.props.type === 'brightness')

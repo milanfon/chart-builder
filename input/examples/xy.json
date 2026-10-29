@@ -1,0 +1,40 @@
+{
+    "name": "Hlučnost vs. teplota – Cinebench R24",
+    "type": "xy",
+    "info": [
+        {"title": "Verze", "value": "2024.1.0"},
+        {"title": "CPU", "value": "Ryzen 9950X"}
+    ],
+    "grid": true,
+    "legend": false,
+    "xAxis": {"name": "Teplota nad okolím", "unit": "°C", "bounds": [45, 58]},
+    "yAxis": {"name": "Hluk", "unit": "dB(A)", "bounds": [34, 70]},
+    "values": [
+        {
+            "name": "Pure Loop 3 360mm", "icon": "bequiet", "color": "e69f00",
+            "plotLabel": {"dx": 0, "dy": 78, "anchor": "middle"},
+            "val": [
+                {"x": 53.6, "y": 52.4, "label": "Standard", "labelDx": 26, "labelDy": 34},
+                {"x": 51.8, "y": 54.9, "label": "Full Speed", "labelDx": -26, "labelDy": 34, "labelAnchor": "end"}
+            ]
+        },
+        {
+            "name": "Noctua NL-LC-36 – Offset", "icon": "noctua", "color": "d55e00",
+            "plotLabel": {"point": 1, "dx": 0, "dy": 90, "anchor": "middle"},
+            "val": [
+                {"x": 47.2, "y": 45.3, "label": "Full Speed", "labelDx": -26, "labelAnchor": "end"},
+                {"x": 47.2, "y": 43.6, "label": "Balanced", "labelDx": -26, "labelDy": 34, "labelAnchor": "end"},
+                {"x": 48.0, "y": 44.2, "label": "Quiet"}
+            ]
+        },
+        {
+            "name": "Noctua NL-LC1 36 – Standard", "color": "f0e442",
+            "plotLabel": {"point": 1, "dx": 160, "dy": -100, "anchor": "middle"},
+            "val": [
+                {"x": 47.7, "y": 43.8, "label": "Full Speed", "labelDx": 14, "labelDy": 50},
+                {"x": 50.1, "y": 38.9, "label": "Balanced", "labelDx": -14, "labelDy": 34, "labelAnchor": "end"},
+                {"x": 51.6, "y": 39.9, "label": "Quiet"}
+            ]
+        }
+    ]
+}

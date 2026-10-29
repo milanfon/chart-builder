@@ -32,6 +32,7 @@ changes to the renderer or referenced data files.
 | `bars-render-time.json` | `bars` | `intel-arl-refresh/c-c-blender-beran.json` | `min` time strings, ascending sorting, custom bar start |
 | `bars-steps.json` | `bars` | `linux-distros/g-cs2.json` | Three brand-colored bars, persistent Windows baseline, eight progressive frames |
 | `line-direct.json` | `line` | `summer-pc/perf-air-percent.json` | Explicit uneven x coordinates, signed y bounds, grid and zero line |
+| `xy.json` | `xy` | Subset of `noctua-aio/temp-cinebench.json` | Independent numeric axes and titles, grid, connected points in ascending X order, equal-X points, icons and square markers, point and series labels |
 | `line-hwi.json` | `line` | `9070-gre/t-9070-gre-codbo6.json` | Real HWiNFO CSV, left/right axes, indexed columns, percentual series scaling |
 | `line-rew.json` | `line` | `fractal-scape/response.json` | Two real REW text exports, negative y bounds; exposes the existing REW x-range issue below |
 | `line-csv.json` | `line` | Derived from `amd-po-roce/d-coverage-sdr.json` | Multiple per-series CSV files, shared column names, sample-index x bounds, grid |
@@ -48,7 +49,7 @@ parser. The x axis uses sample indices 0–9, corresponding to coverage 10–100
 original data files or inline readings.
 Project header templates were resolved using each source project's `.global`.
 
-There are **12 input charts and 19 rendered slides** (the stepped bar chart emits
+There are **13 input charts and 20 rendered slides** (the stepped bar chart emits
 eight slides). Only the top-level JSON files are chart inputs; `data/` holds all
 copied reports, logs, measurements, and product images.
 

@@ -1,11 +1,12 @@
 import colors from "../../constants/colors.json" assert {type: "json"}
+import { escapeXML } from "../aux";
 
 export function verticalLine(x, y1, y2) {
     return `<line x1="${x}" y1="${y1}" x2="${x}" y2="${y2}" stroke="#${colors.general.outline}" stroke-width="2"/>`;
 }
 
-export function renderLine(x1, y1, x2, y2, stroke = colors.general["grid-line"], dash = "", strokeWidth = 2) {
-    return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#${stroke}" stroke-width="${strokeWidth}" ${dash ? `stroke-dasharray="${dash}"` : ""}/>`;
+export function renderLine(x1, y1, x2, y2, stroke = colors.general["grid-line"], dash = "", strokeWidth = 2, {dataGrid} = {}) {
+    return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#${stroke}" stroke-width="${strokeWidth}" ${dash ? `stroke-dasharray="${dash}"` : ""}${dataGrid === undefined ? '' : ` data-grid="${escapeXML(dataGrid)}"`}/>`;
 }
 
 export function renderPolyline(points, stroke, dash = "", strokeWidth = 3) {
