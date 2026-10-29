@@ -1,6 +1,7 @@
 import colors from "../../constants/colors.json";
 import { imageToBase64, getCurrentDateMonth } from "../aux";
 import { renderText } from "../rendering-helpers/text";
+import { renderImage } from "../rendering-helpers/image";
 
 export function getEmbeddedLogo() {
     return `data:image/png;base64,${imageToBase64("./assets/logo.png")}`;
@@ -31,6 +32,6 @@ export function renderHeader(props) {
 
         <text x="1975" y="90" fill="#${colors.general.outline}" text-anchor="middle" align-baseline="middle" font-family="Russo One" font-size="40" dominant-baseline="central">${getCurrentDateMonth()}</text>
 
-        <image xlink:href="${getEmbeddedLogo()}" x="30" y="47" width="210" height="90"/>
+        ${renderImage({href: getEmbeddedLogo(), x: 30, y: 47, width: 210, height: 90})}
     `;
 }

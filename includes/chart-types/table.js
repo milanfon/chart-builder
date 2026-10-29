@@ -2,6 +2,7 @@ import dimensions from "../../constants/dimensions.json" assert {type: "json"}
 import colors from "../../constants/colors.json" assert {type: "json"}
 import { verticalLine } from "../rendering-helpers/lines";
 import { renderText } from "../rendering-helpers/text";
+import { renderImage } from "../rendering-helpers/image";
 
 function parseCellProperties(cellValue){
     let [cellText, cellTextSize] = ["", dimensions.specs["font-size"].default];
@@ -95,7 +96,7 @@ export function renderCells(paramLine, headLine, props, inputName) {
             });
             params += verticalLine(paramLine + c * valUnit, dimensions.specs.padding, headLine + unitHeight);
             if (props.values[c-1].pic) {
-                params += `<image xlink:href="../../input/${inputName}/${props.values[c-1].pic.path}" x="${paramLine + (c - 0.9) * valUnit}" y="${dimensions.specs.padding + dimensions.specs["head-line"] * 0.1}" width="${valUnit * 0.8}" height="${dimensions.specs["head-line"] * 0.8}"/>`;
+                params += renderImage({href: `../../input/${inputName}/${props.values[c-1].pic.path}`, x: paramLine + (c - 0.9) * valUnit, y: dimensions.specs.padding + dimensions.specs["head-line"] * 0.1, width: valUnit * 0.8, height: dimensions.specs["head-line"] * 0.8});
             }
         }
         return params;

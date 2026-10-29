@@ -12,7 +12,7 @@ export function createPlot({x, y, width, height, xBounds, yBounds, id}) {
         scaleY,
         point: ([vx, vy]) => [scaleX(vx), scaleY(vy)],
         grid({xTicks = [], yTicks = [], stroke = colors.general['grid-line'], strokeWidth = 2} = {}) {
-            const gridLine = (orientation, x1, y1, x2, y2) => `<line data-grid="${orientation}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#${stroke}" stroke-width="${strokeWidth}"/>`;
+            const gridLine = (orientation, x1, y1, x2, y2) => renderLine(x1, y1, x2, y2, stroke, '', strokeWidth, {dataGrid: orientation});
             return yTicks.map(value => gridLine('horizontal', x, scaleY(value), x + width, scaleY(value))).join('')
                 + xTicks.map(value => gridLine('vertical', scaleX(value), y, scaleX(value), y + height)).join('');
         },

@@ -448,6 +448,54 @@ Behavior is CSV-based with fixed `headerLine: 2`.
 }
 ```
 
+### XY chart
+
+Use `type: "xy"` for connected, labeled measurements with independent numeric X/Y coordinates. It reuses the line chart header, axes, grid and footer, and adds square point markers. Single-point series are supported.
+
+```json
+{
+    "name": "Noise vs. temperature",
+    "type": "xy",
+    "grid": true,
+    "xAxis": {"name": "Temperature", "unit": "°C", "bounds": [40, 60]},
+    "yAxis": {"name": "Noise", "unit": "dB(A)", "bounds": [0, 40]},
+    "values": [
+        {
+            "name": "Cooler A",
+            "color": "d55e00",
+            "val": [
+                {"x": 43, "y": 30, "label": "Full Speed"},
+                {"x": 48, "y": 20, "label": "Quiet"}
+            ]
+        }
+    ]
+}
+```
+
+Axis `bounds` are optional and otherwise include automatic padding (including constant-value series). Points require finite numeric `x` and `y`. Lines connect points from left to right in ascending X order; equal-X points retain their input order and connect vertically. Only the path is sorted: input data, markers and `plotLabel.point` indexes are unchanged. Set series `connect: false` to draw markers only. Series `color` is six-digit hex without `#`. Series and points support `show: false`. Point `label` is optional; `labelDx`, `labelDy` (SVG pixels), and `labelAnchor` (`start`, `middle`, `end`) allow manual label placement. Set top-level `labels: false` to hide all point labels. Series `legendWidth` overrides the usual line-legend spacing.
+
+Set series `icon` to a name from `assets/icons` without `.png` (for example `"icon": "noctua"`) to replace its square markers with centered 36-pixel brand icons. Icons are embedded in the SVG so exports are self-contained. Labels default to wider offsets for icon markers; explicit point offsets still take precedence. Series without an icon retain square markers.
+
+Real-data example: `input/noctua-aio/xy-avg-standard-temp.json`. Missing cooler modes are not interpolated or fabricated.
+
+To label coolers directly inside the plot, set `plotLabel` on each series and top-level `legend: false` to hide the footer legend (the X-unit box remains). These name labels are independent of point/mode labels and top-level `labels: false`. Names use the usual foreground color; mode labels retain their series colors.
+
+```json
+{
+    "name": "Noctua NL-LC-36",
+    "plotLabel": {"point": 1, "dx": 0, "dy": 90, "anchor": "middle"},
+    "icon": "noctua",
+    "color": "d55e00",
+    "val": [
+        {"x": 43.0, "y": 11.2, "label": "Full Speed"},
+        {"x": 43.2, "y": 7.4, "label": "Balanced"},
+        {"x": 44.1, "y": 7.8, "label": "Quiet"}
+    ]
+}
+```
+
+`plotLabel: true` uses the first visible point, with offsets `dx: 26`, `dy: -65` and `anchor: "start"`. The object form chooses a zero-based visible `point` index, pixel offsets (`dy` positive is down), and text alignment (`start`, `middle`, `end`). Each series gets one name label; adjust offsets manually to avoid nearby measurements. Omit `plotLabel` to keep existing behavior. The legend is shown unless explicitly disabled.
+
 ### Table
 
 Right now tables are called 'SPECS'

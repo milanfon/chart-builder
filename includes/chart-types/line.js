@@ -196,14 +196,14 @@ function renderSeries(vals, series, canvas, xBounds, xValues = {}) {
     return ret;
 }
 
-function renderGrid(primaryAxis, canvas, xBounds, zeroPositions) {
+export function renderGrid(primaryAxis, canvas, xBounds, zeroPositions) {
     const plot = createPlot({...canvas, xBounds, yBounds: primaryAxis?.bounds || [0, 1]});
     const yTicks = primaryAxis ? getVerticalTicks(primaryAxis.bounds).major.filter(value =>
         !zeroPositions.some(zeroY => Math.abs(zeroY - plot.scaleY(value)) < 1e-6)) : [];
     return plot.grid({xTicks: getHorizontalTicks(canvas.width, xBounds).major, yTicks, strokeWidth: 1});
 }
 
-function renderLineFooter(props, series) {
+export function renderLineFooter(props, series) {
     let letAcc = 240;
     const legend = series.reduce((a, s, i) => {
         const x = letAcc;
@@ -219,8 +219,8 @@ function renderLineFooter(props, series) {
     return `
             ${legend}
             <line x1="30" y1="1010" x2="2130" y2="1010" stroke="#${colors.general.outline}" stroke-width="2"/>
-            <line x1="240" y1="1010" x2="240" y2="1050" stroke="#${colors.general.outline}" stroke-width="2"/>
-            <text x="135" y="1030" fill="#${colors.general.outline}" text-anchor="middle" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">Legenda</text>
+            ${props.legend === false ? '' : `<line x1="240" y1="1010" x2="240" y2="1050" stroke="#${colors.general.outline}" stroke-width="2"/>
+            <text x="135" y="1030" fill="#${colors.general.outline}" text-anchor="middle" align-baseline="middle" font-family="Russo One" font-size="20" dominant-baseline="central">Legenda</text>`}
             <line x1="1830" y1="1010" x2="1830" y2="1050" stroke="#${colors.general.outline}" stroke-width="2"/>
             <line x1="1980" y1="1010" x2="1980" y2="1050" stroke="#${colors.general.outline}" stroke-width="2"/>
             <line x1="2130" y1="1010" x2="2130" y2="1050" stroke="#${colors.general.outline}" stroke-width="2"/>

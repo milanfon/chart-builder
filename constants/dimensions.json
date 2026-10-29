@@ -74,6 +74,11 @@
         "legend": {"titleWidthRatio": 0.4, "missingPatchWidth": 140},
         "fontSize": {"default": 22, "heatmapTitle": 29, "axisLabel": 19, "heatmapCell": 27, "info": 20, "legendTitle": 24, "legendValue": 23}
     },
+    "xy": {
+        "leftAxisWidth": 150,
+        "yTitleWidth": 60,
+        "plot": {"horizontalInset": 30, "top": 150, "height": 820}
+    },
     "brightness": {
         "padding": 80,
         "top": 180,
